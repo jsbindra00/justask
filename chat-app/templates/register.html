@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Login Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        .well {
+          margin-top: 40px;
+        }
+        .container{
+          background-color: rgb(94, 196, 239);
+        }
+        body {
+        background-color: rgb(94, 196, 239);
+        }
+        .row{
+          margin: auto;
+          width: 50%;
+          border: 3mm ridge rgb(160, 192, 205);
+          padding: 10px;
+          text-align: center;
+          align-items: center;
+          background-color: rgb(183, 222, 238);
+        }
+      </style>  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center">JustAsk</h1>
+      <h4 class="text-center">Enter your details below to register</h1>
+      <br>
+      <div class ="row">
+      <form action="/home">
+        <p>
+        <br>
+        <input type="text" placeholder="First Name" name="firstname"><br><br>
+        <input type="text" placeholder="Last Name" name="lastname"><br><br>
+        <input type="text" placeholder="Username" name="username"><br><br>
+        <input type="text" placeholder="Email" name="email"><br><br>
+        <input type="password" placeholder="Password" name="password"><br><br>
+        <input type="radio" name="type" id="speaker" value="Speaker">
+        <label for="speaker">Speaker</label><br>
+        <input type="radio" name="type" id="listener" value="Listener">
+        <label for="listener">Listener</label><br><br>
+        <input class="btn btn-default" type="submit"><br><br>
+      </p>
+      </form>
+      <!-- {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %} -->
+    </div>
+    </div>
+  </body>
+</html>

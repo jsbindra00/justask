@@ -5,8 +5,11 @@ from datetime import datetime
 app = Flask(__name__)
 socketio = SocketIO(app)
 
+@app.route('/register')
+def register():
+    return render_template('register.html')
 
-@app.route('/')
+@app.route('/home')
 def home():
     return render_template("index.html")
 
@@ -20,8 +23,8 @@ def chat():
         return render_template('chat.html', username=username, room=room)
     else:
         return redirect(url_for('home'))
-    
-    
+
+
 @socketio.on('send_message')
 def handle_send_message_event(data):
     app.logger.info("{} has sent message to the room {}: {}".format(data['username'],
