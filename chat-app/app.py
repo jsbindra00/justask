@@ -20,8 +20,8 @@ def chat():
         return render_template('chat.html', username=username, room=room)
     else:
         return redirect(url_for('home'))
-
-
+    
+    
 @socketio.on('send_message')
 def handle_send_message_event(data):
     app.logger.info("{} has sent message to the room {}: {}".format(data['username'],
