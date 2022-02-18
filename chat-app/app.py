@@ -8,7 +8,7 @@ socketio = SocketIO(app)
 
 @app.route('/')
 def login():
-    return render_template('login.html')
+    return render_template('testsite.html')
 
 
 @app.route('/register')
