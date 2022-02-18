@@ -14,7 +14,7 @@
         box-sizing: border-box;
         }
         body{
-        background-color: #080710;
+        background-color: #4884b6;
         }
         .background{
         width: 430px;
@@ -23,43 +23,30 @@
         transform: translate(-50%,-50%);
         left: 50%;
         top: 50%;
-        }
-        .background .shape{
-        height: 200px;
-        width: 200px;
-        position: absolute;
-        border-radius: 50%;
-        }
-        .shape:first-child{
-        background: linear-gradient(
-          #7487b4,
-          #1f2224
-        );
-        left: -80px;
-        top: -90px;
-        }
-        .shape:last-child{
-        background: linear-gradient(
-          to right,
-          #8d8583,
-          #413f3d
-        );
-        right: -80px;
-        bottom: -85px;
+         }
+        .logo{
+        font-family: 'Geneva';
+        margin-top: 60px;
+        font-size: 35px;
+        line-height: 42px;
+        text-align: center;
+        color:  #0a2031;
+        letter-spacing: 4px;
         }
         form{
-        height: 520px;
+        height: 500px;
         width: 400px;
         box-shadow: 0 0 40px rgba(8,7,16,0.6);
         background-color: rgba(97, 99, 206, 0.13);
-        backdrop-filter:blur(20px);
+        backdrop-filter:blur(30px);
         border: 1px solid rgba(255,255,255,0.1);
         position: absolute;
         transform: translate(-50%,-50%);
-        top: 50%;
+        top: 53%;
         left: 50%;
         border-radius: 10px;
         padding: 50px 35px;
+        background:  #174368;
         }
         form *{
         font-family: 'Poppins',sans-serif;
@@ -110,22 +97,21 @@
 
 </head>
 <body>
-    <div class="background">
-        <div class="shape"></div>
-        <div class="shape"></div>
+    <div class="logo"> 
+        <h1>justask.</h1>
     </div>
     <form action="/home">
         <h3>Log In</h3>
 
         <label for="username">Email</label>
-        <input type="text" placeholder="Email: @bath.ac.uk" onfocus="this.placeholder = ''" onblur="this.placeholder ='Email: @bath.ac.uk'" id="username" required>
+        <input type="text" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder ='Email'" id="username" required>
 
         <label for="password">Password</label>
         <input type="password" placeholder="********" id="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='********'" required>
 
         <button>Log In</button>
 
-        <br><a href="{{ url_for('register') }}">New? Sign up here!</a>
+        <br><br><a href="{{ url_for('register') }}">New? Sign up here!</a>
     </form>
 </body>
 </html>
