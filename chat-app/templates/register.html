@@ -106,33 +106,34 @@
         border-radius: 5px;
         cursor: pointer;
         }
-      </style></head>
+      </style>
+      </head>
 
   <body>
       <div class="logo"> 
         <h1>justask.</h1>
       </div>
-      <form action="/">
+      <form action="/register" method = "post">
         <h3>Create Account</h3>
         <label for="firstname">First Name</label>
-        <input type="text" placeholder="First Name" onfocus="this.placeholder = ''" onblur="this.placeholder ='First Name'" id="firstname" required>
+        <input name = "first_name" type="text" placeholder="First Name" onfocus="this.placeholder = ''" onblur="this.placeholder ='First Name'" id="firstname" required>
        
         <label for="lastname">Last Name</label>
-        <input type="text" placeholder="Last Name" onfocus="this.placeholder = ''" onblur="this.placeholder ='Last Name'" id="lastname" required>
+        <input name = "last_name" type="text" placeholder="Last Name" onfocus="this.placeholder = ''" onblur="this.placeholder ='Last Name'" id="lastname" required>
         
         <label for="username">Username</label>
-        <input type="text" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder ='Username'" id="username" required>
+        <input name = "username" type="text" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder ='Username'" id="username" required>
         
         <label for="email">Email</label>
-        <input type="text" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder ='Email'" id="email" required>
+        <input name = "email" type="text" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder ='Email'" id="email" required>
         
         <label for="password">Password</label>
-        <input type="password" placeholder="********" id="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='********'" required>
+        <input name = "password" type="password" placeholder="********" id="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='********'" required>
         
         <div class="radio-items">
-        <input type="radio" name="type" id="speaker" value="Speaker">
+        <input type="radio" name="role" id="speaker" value="Speaker">
         <label for="speaker">Speaker</label>
-        <input type="radio" name="type" id="listener" value="Listener">
+        <input type="radio" name="role" id="listener" value="Listener">
         <label for="listener">Listener</label>
         </div>
         
