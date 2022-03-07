@@ -156,7 +156,7 @@
 <body>
     <header>
         justask.
-        <a href="">
+        <a href="/logout">
             <button>Logout</button>
         </a>  
     </header>
@@ -179,14 +179,14 @@
                     </div>
                     <div class="info">     
                         <div class="name" style="font-size: 16px;">
-                            Tom Jones
+                            {{ session["first_name"] }} {{ session["last_name"] }}
                         </div>
                         <div class="username-primary">
                             <div style="font-weight: bold; padding-right: 10px;">
                                 Username:    
                             </div>
                             <div class="username">
-                                tj123
+                                {{ session["username"] }}
                             </div>
                         </div>
                         <div class="email-primary">
@@ -194,7 +194,7 @@
                                 Email:    
                             </div>
                             <div class="email">
-                                tj123@bath.ac.uk
+                                {{ session["email"] }}
                             </div>
                         </div>              
                     </div>    
