@@ -2,8 +2,14 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://kit.fontawesome.com/0260874841.js" crossorigin="anonymous"></script> <!--Used for icons -->
 <style>
-body {font-family: Arial, Helvetica, sans-serif;}
+
+*{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
 
 /* The Modal (background) */
 .modal {
@@ -13,7 +19,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   padding-top: 100px; /* Location of the box */
   left: 0;
   top: 0;
-  width: 90%; /* Full width */
+  width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
@@ -26,7 +32,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 800px;
+  border-radius: 8px;
+  max-width: 50%;
 }
 
 /* The Close Button */
@@ -36,7 +44,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
   font-size: 28px;
   font-weight: bold;
 }
-
 .close:hover,
 .close:focus {
   color: #000;
@@ -44,108 +51,65 @@ body {font-family: Arial, Helvetica, sans-serif;}
   cursor: pointer;
 }
 
-{box-sizing: border-box;}
-
-/* The popup form - hidden by default */
-.form-popup {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  right: 15px;
-  border: 3px solid #f1f1f1;
-  z-index: 9;
-}
-
-/* Add styles to the form container */
-.form-container {
-  width: 100%;
-  padding: 10px;
-  background-color: white;
-}
-
-/* Full-width input fields */
-.form-container input[type=text], .form-container input[type=password] {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  border: none;
-  background: #f1f1f1;
-}
-
-/* When the inputs get focus, do something */
-.form-container input[type=text]:focus, .form-container input[type=password]:focus {
-  background-color: #ddd;
-  outline: none;
-}
-
-/* Set a style for the submit/login button */
-.form-container .btn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
-  opacity: 0.8;
-}
-
-/* Add a red background color to the cancel button */
-.form-container .cancel {
-  background-color: red;
-}
-
-/* Add some hover effects to buttons */
-.form-container .btn:hover, .open-button:hover {
-  opacity: 1;
-}
-
-
-
+/* The modal internals*/
 /* Add styles to the form container */
 .form-container {
   max-width: 99%;
   padding: 10px;
+  align-items: center;
+  margin: 25px 0 18px 0;
   background-color:  #4884b6;
+  border-radius: 8px;
+  margin-top:40px;
 }
 
 /* Full-width input fields */
-.form-container input[type=text], .form-container input[type=password] {
+.form-container input[type=text], .form-container textarea {
   width: 90%;
   padding: 15px;
-  margin: 22px 0 22px 0;
+  margin: 16px 0 16px 20px;
   border: none;
-  background: #f1f1f1;
+  background: #95b3ce;
+  border-radius: 5px;
+  resize: none;
 }
 
 /* When the inputs get focus, do something */
-.form-container input[type=text]:focus, .form-container input[type=password]:focus {
-  background-color: #ddd;
+.form-container input[type=text]:focus, .form-container textarea:focus {
+  background-color: #bdc9d3;
   outline: none;
 }
 
 /* Set a style for the submit/login button */
 .form-container .btn {
-  background-color: #04AA6D;
+  background-color: #174368;
   color: white;
   padding: 16px 20px;
   border: none;
   cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
+  width: 20%;
+  margin-top:15px;
+  margin-bottom:20px;
+  margin-left: 20px;
   opacity: 0.8;
-}
-
-/* Add a red background color to the cancel button */
-.form-container .cancel {
-  background-color: red;
+  border-radius: 8px;
 }
 
 /* Add some hover effects to buttons */
 .form-container .btn:hover, .open-button:hover {
   opacity: 1;
 }
+
+::placeholder{
+  color: #174368;
+}
+
+/* .form-container a{
+  
+} */
+
 </style>
+
 </head>
 <body>
 
@@ -160,14 +124,15 @@ body {font-family: Arial, Helvetica, sans-serif;}
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
-    <form action="/action_page.php" class="form-container">
-        <h1>Login</h1>
-    
+    <form action="/action_page.php" class="form-container">    
         <input type="text" placeholder="Enter your question" name="question" required></input>
     
-        <textarea placeholder="Add a description" class="form-control" id="exampleFormControlTextarea3" rows="9" maxlength="5000" ></textarea>
+        <textarea placeholder="Add a description" class="form-control" id="exampleFormControlTextarea3" rows="8 "maxlength="5000" ></textarea>
     
         <button type="submit" class="btn">Post</button>
+
+        <!-- <a href=""><i class="fa-solid fa-pen"></i>whiteboard</a> -->
+        
       </form>
   </div>
 
