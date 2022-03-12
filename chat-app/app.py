@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_session import Session
 from flask_socketio import SocketIO, join_room, leave_room
 import sqlite3
+from datetime import datetime
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -60,7 +62,8 @@ def login():
     # If the user provided details stored in the database, add these details to the session, 
     # and send them to their profile page
     user = cursor.execute("SELECT * FROM users WHERE email= ? AND password = ?",(email, password)).fetchone()
-    if user == []:
+    print(user)
+    if  user == None:
         #todo handle this. Invalid login credentials.
         return render_template("login.html")
 
@@ -72,7 +75,10 @@ def login():
 
     return redirect("/profile")
 
-
+@app.route("/chat_logout")
+def chat_logout():
+    session["room"] = None
+    return redirect("/chat_login")
 
 @app.route("/logout")
 def logout():
@@ -112,20 +118,27 @@ def register():
     return redirect("/login")
 
 
-@app.route('/home')
-def home():
-    return render_template("index.html")
+@app.route('/chat_login' , methods = ["GET", "POST"])
+def chat_login():
+    print("HERE")
+    if request.method == "GET":
+        return render_template("chat_login.html")
+
+    room = request.form.get("room")
+    print("ROOM ",room)
+    session["room"] = room
+
+    return redirect(url_for("chat"))
 
 
-@app.route('/chat')
+@app.route('/chat', methods = ["GET", "POST"])
 def chat():
-    username = request.args.get('username')
-    room = request.args.get('room')
-
+    username = session.get('username')
+    room = session.get('room')
     if username and room:
         return render_template('chat.html', username=username, room=room)
     else:
-        return redirect(url_for('home'))
+        return redirect(url_for('chat_login'))
 
 
 @socketio.on('send_message')
@@ -133,6 +146,7 @@ def handle_send_message_event(data):
     app.logger.info("{} has sent message to the room {}: {}".format(data['username'],
                                                                     data['room'],
                                                                     data['message']))
+    data["time"] = datetime.now().strftime("[%H:%M]")                                                               
     socketio.emit('receive_message',data, room=data['room'])
 
 
@@ -140,6 +154,7 @@ def handle_send_message_event(data):
 def handle_join_room_event(data):
     app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
     join_room(data['room'])
+    data["time"] = datetime.now().strftime("[%H:%M]")
     socketio.emit('join_room_announcement',data, room=data['room'])
 
 
