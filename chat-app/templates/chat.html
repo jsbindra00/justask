@@ -93,7 +93,7 @@
         }
 
             /* The Modal (background) */
-            .modal {
+        .modal {
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
             z-index: 1; /* Sit on top */
@@ -105,10 +105,10 @@
             overflow: auto; /* Enable scroll if needed */
             background-color: rgb(0,0,0); /* Fallback color */
             background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-            }
+        }
 
             /* Modal Content */
-            .modal-content {
+        .modal-content {
             background-color: #174368;
             margin: auto;
             padding: 20px;
@@ -116,25 +116,25 @@
             width: 800px;
             border-radius: 8px;
             max-width: 50%;
-            }
+        }
 
             /* The Close Button */
-            .close {
+        .close {
             color: #aaaaaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
-            }
-            .close:hover,
-            .close:focus {
+        }
+        .close:hover,
+        .close:focus {
             color: #000;
             text-decoration: none;
             cursor: pointer;
-            }
+        }
 
             /* The modal internals*/
             /* Add styles to the form container */
-            .form-container {
+        .form-container {
             max-width: 99%;
             padding: 10px;
             align-items: center;
@@ -142,10 +142,10 @@
             background-color:  #4884b6;
             border-radius: 8px;
             margin-top:40px;
-            }
+        }
 
             /* Full-width input fields */
-            .form-container input[type=text], .form-container textarea {
+        .form-container input[type=text], .form-container textarea {
             width: 90%;
             padding: 15px;
             margin: 16px 0 16px 20px;
@@ -153,16 +153,19 @@
             background: #95b3ce;
             border-radius: 5px;
             resize: none;
-            }
+        }
 
             /* When the inputs get focus, do something */
-            .form-container input[type=text]:focus, .form-container textarea:focus {
+        .form-container input[type=text]:focus, .form-container textarea:focus {
             background-color: #bdc9d3;
             outline: none;
-            }
-
-            /* Set a style for the submit/login button */
-            .form-container .btn, .Mbutton {
+        }
+        .form-container ::placeholder{
+            color:#174368;
+            opacity: 0.8;
+        }
+            /* Set a style for the submit button */
+        .form-container .btn, .Mbutton {
             background-color: #174368;
             color: white;
             padding: 16px 20px;
@@ -174,22 +177,22 @@
             margin-left: 20px;
             opacity: 0.8;
             border-radius: 8px;
-            }
-            .Mbutton{
-                position: fixed;
-                bottom: 30px;
-                right: 30px;
-                width: 150px;
-            }
+        }
+        .Mbutton{
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 150px;
+        }
 
             /* Add some hover effects to buttons */
-            .form-container .btn:hover, .open-button:hover, .Mbutton{
+        .form-container .btn:hover, .open-button:hover, .Mbutton{
             opacity: 1;
-            }
+        }
 
-            ::placeholder{
-            color: #174368;
-            }
+        ::placeholder{
+            color:#4884b6;
+        }
             
         .container{
             height:80%;
@@ -211,7 +214,7 @@
         h2 {
             background-color: #174368;
             color: white;
-            position: absolute;
+            position: fixed;
             width: 70%;
             border-radius: 6mm;
             top: 8%;
@@ -220,15 +223,29 @@
             padding: 1%;
         }
         
-        .messages{
-            border-color:#4884b6;
-            border-radius: 4px;
+        .card{
+            display: inline-block;
+            border-color:#174368;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 20px;
             background-color: #174368;
+            color:#ffffff;
             width: 80%;
-            text-align: center;
-            align-items: center;
-            margin-bottom: 70px;
+            height: auto;
+            text-align: left;
+            margin: 10px;
+            padding: 10px 20px 30px 20px;
         }
+        .message{
+            background-color:  #33658d;
+            margin: 10px 80px 10px 40px;
+            width: 90%;
+            padding: 10px 20px 30px 20px;
+            border-radius: 10px;
+        }
+
+       
     </style>
 </head>
 <body>
@@ -254,12 +271,12 @@
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close">&times;</span>
-            <form action="/action_page.php" class="form-container">    
-                <input type="text" placeholder="Enter your question" name="question" required></input>
+            <form id="message_input_form" class="form-container">    
+                <input type="text" id="message_input" placeholder="Enter your question" name="question" required></input>
             
-                <textarea placeholder="Add a description" class="form-control" id="exampleFormControlTextarea3" rows="8 "maxlength="5000" ></textarea>
+                <textarea placeholder="Add a description" id="message_description" class="form-control" id="exampleFormControlTextarea3" rows="8 "maxlength="5000" ></textarea>
             
-                <button type="submit" class="btn">Post</button>
+                <button type="submit" id="post" class="btn">Post</button>
 
                 <!-- <a href=""><i class="fa-solid fa-pen"></i>whiteboard</a> -->
                 
@@ -271,10 +288,6 @@
 
         <div class="container"> 
         <div class="messages" id="messages"></div>
-        <form id="message_input_form">
-            <input type="text" id="message_input" placeholder="Enter your message here">
-            <button type="submit">Send</button>
-        </form>
         </div>
         
 </body>
@@ -293,15 +306,19 @@
         document.getElementById('message_input_form').onsubmit = function (e) {
             e.preventDefault();
             let message = message_input.value.trim();
+            let description = message_description.value.trim();
             if (message.length) {
                 socket.emit('send_message', {
                     username: "{{ username }}",
                     room: "{{ room }}",
-                    message: message
+                    message: message,
+                    description: description,
                 })
             }
             message_input.value = '';
             message_input.focus();
+            message_description.value = '';
+            message_description.focus();
         }
     });
 
@@ -315,8 +332,8 @@
     socket.on('receive_message', function (data) {
         console.log(data);
         const newNode = document.createElement('div');
-        newNode.className = 'card'
-        newNode.innerHTML = `${data.time} ${data.username}: ${data.message} `;
+        newNode.className = 'card';
+        newNode.innerHTML = `${data.time} <b>${data.username}</b> </br> <div class= 'message'> <b><h4>${data.message}</h4></b> </br> ${data.description} </div>`;
         document.getElementById('messages').appendChild(newNode);
     });
 
@@ -354,7 +371,10 @@
     span.onclick = function() {
     modal.style.display = "none";
     }
-
+    // When the user posts question, close the modal
+    post.onclick  = function() {
+    modal.style.display = "none";
+    }
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
     if (event.target == modal) {

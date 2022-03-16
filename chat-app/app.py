@@ -29,6 +29,17 @@ cursor.execute("""
         role TEXT NOT NULL);
     """)
 
+
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS messages (
+        email TEXT NOT NULL PRIMARY KEY,
+        message TEXT NOT NULL,
+        username TEXT NOT NULL,
+        first_name TEXT NOT NULL,
+        last_name TEXT NOT NULL,
+        role TEXT NOT NULL);
+    """)
+
 # Save (commit) the changes
 connect.commit()
 
@@ -146,8 +157,10 @@ def handle_send_message_event(data):
     app.logger.info("{} has sent message to the room {}: {}".format(data['username'],
                                                                     data['room'],
                                                                     data['message']))
-    data["time"] = datetime.now().strftime("[%H:%M]")                                                               
+    data["time"] = datetime.now().strftime("%H:%M")                                                               
     socketio.emit('receive_message',data, room=data['room'])
+
+    
 
 
 @socketio.on('join_room')
