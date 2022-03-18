@@ -2,11 +2,7 @@
 {
     color: blueviolet;
 }
-#brushes
-{
-    position: relative;
-    top:0;
-}
+
 
 .toolkit {
     display: flex;
@@ -14,5 +10,6 @@
     justify-content: center;
   }
   .tool {
-    width: 100px;
+    width:50px;
+    display:inline-block;
   }

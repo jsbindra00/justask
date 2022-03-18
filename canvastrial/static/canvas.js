@@ -120,7 +120,6 @@
         var m = confirm("Want to clear");
         if (m) {
             ctx.clearRect(0, 0, w, h);
-            document.getElementById("canvasimg").style.display = "none";
         }
     }
 
@@ -130,8 +129,8 @@
         if (res == 'down') {
             prevX = currX;
             prevY = currY;
-            currX = e.clientX - canvas.offsetLeft;
-            currY = e.clientY - canvas.offsetTop;
+            currX = e.pageX - canvas.offsetLeft;
+            currY = e.pageY - canvas.offsetTop;
     
             flag = true;
             dot_flag= true;
@@ -154,8 +153,8 @@
             if (flag) {
                 prevX = currX;
                 prevY = currY;
-                currX = e.clientX - canvas.offsetLeft;
-                currY = e.clientY - canvas.offsetTop;
+                currX = e.pageX - canvas.offsetLeft;
+                currY = e.pageY - canvas.offsetTop ;
                 draw();
             }
         }
