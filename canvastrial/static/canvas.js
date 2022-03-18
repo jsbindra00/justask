@@ -50,11 +50,12 @@ $(document).ready(function(){
 
     const onMouseMove = (e) =>
     {
-        ccctx.strokeStyle = "#FF0000";
+        ccctx.strokeStyle = x;
         ccctx.strokeWidth = 2;
         ccctx.clearRect(0,0, cursorCanvas.width, cursorCanvas.height);
+        ccctx.fillStyle = x;
         ccctx.beginPath();
-        ccctx.arc(e.pageX , e.pageY -25, 50, 0, 2 * Math.PI);
+        ccctx.arc(e.pageX , e.pageY, strokeWidth, 0, 2 * Math.PI);
         ccctx.stroke();  
     }
 
