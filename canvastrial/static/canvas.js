@@ -1,5 +1,4 @@
 
-
     var canvas, ctx, flag = false,
     prevX = 0,
     currX = 0,
@@ -131,3 +130,16 @@
         }
     }
  
+
+
+
+    function textrenderer()
+    {
+        var textbox = document.getElementById("textbox");
+        const newelt = document.createElement("p");
+        const node = document.createTextNode(textbox.value);
+        newelt.appendChild(node);
+        document.body.appendChild(newelt);
+
+
+    }
