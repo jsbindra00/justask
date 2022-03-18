@@ -2,3 +2,17 @@
 {
     color: blueviolet;
 }
+#brushes
+{
+    position: relative;
+    top:0;
+}
+
+.toolkit {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .tool {
+    width: 100px;
+  }

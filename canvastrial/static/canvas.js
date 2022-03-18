@@ -6,13 +6,54 @@
     currY = 0,
     dot_flag = false;
 
+
+    var gridLineWidth = 1;
+    var gridSpacing = 30;
+    function DrawGrid()
+    {
+        p = 0;
+        // grid = document.getElementById('grid');
+        // gridctx = grid.getContext('2d');
+        ctx.lineWidth = 1
+
+        bw = canvas.width;
+        bh = canvas.height;
+
+        for (var x = 0; x <= canvas.width; x += 40) {
+            ctx.moveTo(0.5 + x + p, p);
+            ctx.lineTo(0.5 + x + p, bh + p);
+        }
+    
+        for (var x = 0; x <= canvas.height; x += 40) {
+            ctx.moveTo(p, 0.5 + x + p);
+            ctx.lineTo(bw + p, 0.5 + x + p);
+        }
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+    }
+
+
+    function OnWindowResize()
+    {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        console.log(canvas.width)
+        DrawGrid();
+    }
     
     var x = "black",
         y = 2;
 
+
+
+
     function init() {
         canvas = document.getElementById('can');
         ctx = canvas.getContext("2d");
+
+        OnWindowResize();
+        window.onresize = OnWindowResize
+
         w = canvas.width;
         h = canvas.height;
     
@@ -28,8 +69,13 @@
         canvas.addEventListener("mouseout", function (e) {
             findxy('out', e)
         }, false);
+  
+
     }
-    
+
+
+
+
     function color(obj) {
         switch (obj.id) {
             case "green":
@@ -78,44 +124,29 @@
         }
     }
 
-    function save() {
-        document.getElementById("canvasimg").style.border = "2px solid";
-        var dataURL = canvas.toDataURL();
-        document.getElementById("canvasimg").src = dataURL;
-        document.getElementById("canvasimg").style.display = "inline";
-    }
-
-
-    // sending pixels -> sending information about the pixels and their positions
 
     
     function findxy(res, e) {
         if (res == 'down') {
-            // canvas is being drawn on. 
-            // we need to render it into a a json object and send it over a socket.
-
-            let serialisation = JSON.stringify(canvas);
-            console.log(serialisation);
-
             prevX = currX;
             prevY = currY;
             currX = e.clientX - canvas.offsetLeft;
             currY = e.clientY - canvas.offsetTop;
     
             flag = true;
-            dot_flag = true;
-            
+            dot_flag= true;
             if (dot_flag) {
-            console.log("drawing");
-                // we need to get every single coordinate when the mouse was down and store it in an array.
-
-                ctx.beginPath();
-                ctx.fillStyle = x;
-                ctx.fillRect(currX, currY, 2, 2);
-                ctx.closePath();
-                dot_flag = false;
+                console.log("drawing");
+                    // we need to get every single coordinate when the mouse was down and store it in an array.
+    
+                    ctx.beginPath();
+                    ctx.fillStyle = x;
+                    ctx.fillRect(currX, currY, 2, 2);
+                    ctx.closePath();
+                    dot_flag = false;
+                }
             }
-        }
+
         if (res == 'up' || res == "out") {
             flag = false;
         }
@@ -129,17 +160,7 @@
             }
         }
     }
+
  
 
 
-
-    function textrenderer()
-    {
-        var textbox = document.getElementById("textbox");
-        const newelt = document.createElement("p");
-        const node = document.createTextNode(textbox.value);
-        newelt.appendChild(node);
-        document.body.appendChild(newelt);
-
-
-    }

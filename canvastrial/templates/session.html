@@ -3,6 +3,7 @@
   <head>
     <title>Flask_Chat_App</title>
     <script src="{{ url_for('static', filename='canvas.js') }}"></script>
+    <link rel="stylesheet" href="./static/css/main.css">
   </head>
   <body onload="init()">
 
@@ -20,20 +21,34 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='client.js') }}"></script>
-    <canvas id="can" width="400" height="400" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
-    <div style="position:absolute;top:12%;left:43%;">Choose Color</div>
-    <div style="position:absolute;top:15%;left:45%;width:10px;height:10px;background:green;" id="green" onclick="color(this)"></div>
-    <div style="position:absolute;top:15%;left:46%;width:10px;height:10px;background:blue;" id="blue" onclick="color(this)"></div>
-    <div style="position:absolute;top:15%;left:47%;width:10px;height:10px;background:red;" id="red" onclick="color(this)"></div>
-    <div style="position:absolute;top:17%;left:45%;width:10px;height:10px;background:yellow;" id="yellow" onclick="color(this)"></div>
-    <div style="position:absolute;top:17%;left:46%;width:10px;height:10px;background:orange;" id="orange" onclick="color(this)"></div>
-    <div style="position:absolute;top:17%;left:47%;width:10px;height:10px;background:black;" id="black" onclick="color(this)"></div>
-    <div style="position:absolute;top:20%;left:43%;">Eraser</div>
-    <div style="position:absolute;top:22%;left:45%;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
-    <img id="canvasimg" style="position:absolute;top:10%;left:52%;" style="display:none;">
-    <input type="button" value="Send" id="btn" size="30" onclick="save()" style="position:absolute;top:55%;left:10%;">
-    <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute;top:55%;left:15%;">
-    <input type="checkbox" id="updatecanvas">
+    <div class="toolkit">
+      <div class = "tool" style="width:10px;height:10px;background:green;" id="green" onclick="color(this)">
+        <img src="/static/Green Pen.png">
+      
+      </div>
+      <div class = "tool" style="width:10px;height:10px;background:blue;" id="blue" onclick="color(this)">
+        <img src="/static/Blue Pen.png">
+      </div>
+      <div class = "tool" style="width:10px;height:10px;background:red;" id="red" onclick="color(this)">
+        <img src="/static/Red Pen.png">
+      </div>
+      <div class = "tool" style="width:10px;height:10px;background:yellow;" id="yellow" onclick="color(this)">
+        <img src="/static/Yellow Pen.png">
+      </div>
+      <div class = "tool" style="width:10px;height:10px;background:orange;" id="orange" onclick="color(this)">
+        <img src="/static/Orange Pen.png">
+      </div>
+      <div class = "tool" style="width:10px;height:10px;background:black;" id="black" onclick="color(this)">
+        <img src="/static/Black Pen.png">
+      </div>
+      <div class = "tool" style="width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
+      <input type="checkbox" id="updatecanvas">
+    </div>
+
+    <!-- <canvas id="grid"style="position: absolute; left: 0; top: 500; z-index: 0;"></canvas> -->
+    <canvas id="can" style="position: absolute; left: 0; top: 500; z-index: 1;"></canvas>
+
+
 
 
 </body>
