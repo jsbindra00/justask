@@ -10,10 +10,17 @@ function OnFormSubmit(OnFormSubmitEvent)
     OnFormSubmitEvent.preventDefault();
     let user_name = $( 'input.username' ).val();
     let user_input = $( 'input.message' ).val();
+    let canvas = $('#can').get(0)
+    let context = canvas.getContext('2d');
+
+    var canvasContents = canvas.toDataURL();
+    var data = JSON.stringify(canvasContents);
+
+
     socket.emit( 'clientmsg', {
       user_name : user_name,
       message : user_input,
-      canvas: $('#can')});
+      canvasData: data});
 
     $( 'input.message' ).val( '' ).focus();
     
@@ -32,10 +39,31 @@ function OnServerMessage(msg)
         $( 'h3' ).remove()
         $( 'div.message_holder' ).append( '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>' )
     }
-    if($('#updatecanvas').checked)
-    {
-        console.log("updating canvas");
-        $('#can') = msg.canvas;
+    if($('#updatecanvas').get(0).checked)
+    {   
+
+        if(msg.hasOwnProperty('canvasData'))
+        {
+            console.log("updating canvas");
+            var canvas = $('#can').get(0);
+            var ctx = canvas.getContext('2d');
+    
+            var data = JSON.parse(msg.canvasData);
+            var image = new Image();
+            image.src = data;
+
+            image.onload = function(){
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(image, 0, 0);
+            }
+
+            console.log("set context")
+            $('#can').replaceWith(canvas);
+
+        }
+
+     
     }
 }
 
