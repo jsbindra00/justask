@@ -2,12 +2,19 @@
 // jQueryScript.setAttribute('src','https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js');
 // document.head.appendChild(jQueryScript);
 
-
+var x = "black",
+y = 2;
 function AdjustToolkit()
 {
     toolbar = $('#toolkit')
     toolbarHeight = toolbar.css("height");
     toolbar.css("top", 60 / 2);
+    colorPicker = document.getElementById('colorPicker');
+
+    colorPicker.onchange = function()
+    {
+        x = colorPicker.value;
+    }
 
 }
 
@@ -76,8 +83,7 @@ $(document).ready(function(){
      
     }
     
-    var x = "black",
-        y = 2;
+
 
 
 
