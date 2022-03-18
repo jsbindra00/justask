@@ -13,7 +13,7 @@ function OnFormSubmit(OnFormSubmitEvent)
     socket.emit( 'clientmsg', {
       user_name : user_name,
       message : user_input,
-      canvas: "hello world"});
+      canvas: $('#can')});
 
     $( 'input.message' ).val( '' ).focus();
     
@@ -23,10 +23,20 @@ var form = $( 'form' ).on( 'submit',OnFormSubmit);
 socket.on( 'connect', OnSocketConnect);
 
 
-      socket.on( 'servermsg', function( msg ) {
-        console.log( msg )
-        if( typeof msg.user_name !== 'undefined' ) {
-          $( 'h3' ).remove()
-          $( 'div.message_holder' ).append( '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>' )
-        }
-      })
+
+
+function OnServerMessage(msg)
+{
+    console.log( msg )
+    if( typeof msg.user_name !== 'undefined' ) {
+        $( 'h3' ).remove()
+        $( 'div.message_holder' ).append( '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>' )
+    }
+    if($('#updatecanvas').checked)
+    {
+        console.log("updating canvas");
+        $('#can') = msg.canvas;
+    }
+}
+
+socket.on( 'servermsg', OnServerMessage);
