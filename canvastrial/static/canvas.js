@@ -1,10 +1,44 @@
+// var jQueryScript = document.createElement('script');  
+// jQueryScript.setAttribute('src','https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js');
+// document.head.appendChild(jQueryScript);
 
+
+function AdjustToolkit()
+{
+    toolbar = $('#toolkit')
+    toolbarHeight = toolbar.css("height");
+    toolbar.css("top", 60 / 2);
+
+}
+
+$(document).ready(function(){
+    AdjustToolkit();
+})
+    
+    
     var canvas, ctx, flag = false,
     prevX = 0,
     currX = 0,
     prevY = 0,
     currY = 0,
     dot_flag = false;
+
+
+
+
+    const canvasColor = "rgb(250,250,250)";
+
+
+
+
+    // function AdjustToolkit()
+    // {
+    //     toolbar = $('#toolkit');
+    //     let toolbarHeight = css("height");
+    //     toolbar.css("top", toolbarHeight / 2);
+
+
+    // }
 
 
     var gridLineWidth = 1;
@@ -38,7 +72,8 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         console.log(canvas.width)
-        DrawGrid();
+        // DrawGrid();
+     
     }
     
     var x = "black",
@@ -71,35 +106,12 @@
         }, false);
   
 
+        ctx.fillStyle = canvasColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-
-
-
     function color(obj) {
-        switch (obj.id) {
-            case "green":
-                x = "green";
-                break;
-            case "blue":
-                x = "blue";
-                break;
-            case "red":
-                x = "red";
-                break;
-            case "yellow":
-                x = "yellow";
-                break;
-            case "orange":
-                x = "orange";
-                break;
-            case "black":
-                x = "black";
-                break;
-            case "white":
-                x = "white";
-                break;
-        }
+        x = obj.id;
         if (x == "white") y = 14;
         else y = 2;
     
@@ -135,9 +147,6 @@
             flag = true;
             dot_flag= true;
             if (dot_flag) {
-                console.log("drawing");
-                    // we need to get every single coordinate when the mouse was down and store it in an array.
-    
                     ctx.beginPath();
                     ctx.fillStyle = x;
                     ctx.fillRect(currX, currY, 2, 2);
