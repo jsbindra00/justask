@@ -3,7 +3,17 @@
 // document.head.appendChild(jQueryScript);
 
 var x = "black",
+strokeWidth = 50,
 y = 2;
+
+
+
+
+function PrintSlider()
+{
+    console.log("CHANGING");
+
+}
 function AdjustToolkit()
 {
     toolbar = $('#toolkit')
@@ -15,6 +25,31 @@ function AdjustToolkit()
     {
         x = colorPicker.value;
     }
+//     $('#strokeSlider').on('input', function()
+//     {
+//         PrintSlider(slider);
+//     }
+// );
+
+    // slider = $('#strokeSlider');
+    // slider.oninput = function()
+    // {
+    //     PrintSlider(slider);
+    // }
+
+
+
+
+    
+    // strokeSlider = $('#strokeSlider').slider();
+    // strokeSlider.on("slide", function(sliderEvent)
+    // {
+    //     // strokepx.html(strokeSlider.value + " px")
+    //     strokeWidth = sliderEvent.value;
+
+    // })
+    // strokeSlider.slider({tooltip:'always'});
+
 
 }
 
@@ -124,11 +159,11 @@ $(document).ready(function(){
     }
     
     function draw() {
+        ctx.lineWidth = strokeWidth;
         ctx.beginPath();
         ctx.moveTo(prevX, prevY);
         ctx.lineTo(currX, currY);
         ctx.strokeStyle = x;
-        ctx.lineWidth = y;
         ctx.stroke();
         ctx.closePath();
     }

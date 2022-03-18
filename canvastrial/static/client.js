@@ -35,12 +35,9 @@ socket.on( 'connect', OnSocketConnect);
 function OnServerMessage(msg)
 {
     console.log( msg )
-    if( typeof msg.user_name !== 'undefined' ) {
-        $( 'h3' ).remove()
-        $( 'div.message_holder' ).append( '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>' )
-    }
-    if($('#updatecanvas').get(0).checked)
-    {   
+
+    // if($('#updatecanvas').get(0).checked)
+    // {   
 
         if(msg.hasOwnProperty('canvasData'))
         {
@@ -64,7 +61,7 @@ function OnServerMessage(msg)
         }
 
      
-    }
+  //  }
 }
 
 socket.on( 'servermsg', OnServerMessage);

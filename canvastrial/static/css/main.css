@@ -18,6 +18,12 @@
   border-radius: 20px;
 
 }
+
+#strokeSilder
+{
+  position: relative;
+  top:300px;
+}
 #toolkit
 {
 
