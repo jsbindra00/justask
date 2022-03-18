@@ -1,10 +1,86 @@
+// var jQueryScript = document.createElement('script');  
+// jQueryScript.setAttribute('src','https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js');
+// document.head.appendChild(jQueryScript);
 
+var x = "black",
+strokeWidth = 50,
+y = 2;
+
+
+
+
+function PrintSlider()
+{
+    console.log("CHANGING");
+
+}
+function AdjustToolkit()
+{
+    toolbar = $('#toolkit')
+    toolbarHeight = toolbar.css("height");
+    toolbar.css("top", 60 / 2);
+    colorPicker = document.getElementById('colorPicker');
+
+    colorPicker.onchange = function()
+    {
+        x = colorPicker.value;
+    }
+//     $('#strokeSlider').on('input', function()
+//     {
+//         PrintSlider(slider);
+//     }
+// );
+
+    // slider = $('#strokeSlider');
+    // slider.oninput = function()
+    // {
+    //     PrintSlider(slider);
+    // }
+
+
+
+
+    
+    // strokeSlider = $('#strokeSlider').slider();
+    // strokeSlider.on("slide", function(sliderEvent)
+    // {
+    //     // strokepx.html(strokeSlider.value + " px")
+    //     strokeWidth = sliderEvent.value;
+
+    // })
+    // strokeSlider.slider({tooltip:'always'});
+
+
+}
+
+$(document).ready(function(){
+    AdjustToolkit();
+})
+    
+    
     var canvas, ctx, flag = false,
     prevX = 0,
     currX = 0,
     prevY = 0,
     currY = 0,
     dot_flag = false;
+
+
+
+
+    const canvasColor = "rgb(250,250,250)";
+
+
+
+
+    // function AdjustToolkit()
+    // {
+    //     toolbar = $('#toolkit');
+    //     let toolbarHeight = css("height");
+    //     toolbar.css("top", toolbarHeight / 2);
+
+
+    // }
 
 
     var gridLineWidth = 1;
@@ -38,11 +114,11 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         console.log(canvas.width)
-        DrawGrid();
+        // DrawGrid();
+     
     }
     
-    var x = "black",
-        y = 2;
+
 
 
 
@@ -71,46 +147,23 @@
         }, false);
   
 
+        ctx.fillStyle = canvasColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-
-
-
     function color(obj) {
-        switch (obj.id) {
-            case "green":
-                x = "green";
-                break;
-            case "blue":
-                x = "blue";
-                break;
-            case "red":
-                x = "red";
-                break;
-            case "yellow":
-                x = "yellow";
-                break;
-            case "orange":
-                x = "orange";
-                break;
-            case "black":
-                x = "black";
-                break;
-            case "white":
-                x = "white";
-                break;
-        }
+        x = obj.id;
         if (x == "white") y = 14;
         else y = 2;
     
     }
     
     function draw() {
+        ctx.lineWidth = strokeWidth;
         ctx.beginPath();
         ctx.moveTo(prevX, prevY);
         ctx.lineTo(currX, currY);
         ctx.strokeStyle = x;
-        ctx.lineWidth = y;
         ctx.stroke();
         ctx.closePath();
     }
@@ -135,9 +188,6 @@
             flag = true;
             dot_flag= true;
             if (dot_flag) {
-                console.log("drawing");
-                    // we need to get every single coordinate when the mouse was down and store it in an array.
-    
                     ctx.beginPath();
                     ctx.fillStyle = x;
                     ctx.fillRect(currX, currY, 2, 2);
