@@ -49,7 +49,14 @@
     <canvas id="can" style="position: absolute; left: 0; top: 500; z-index: 1;"></canvas>
 
 
-
+    let p = document.getElementById("val")
+    let range = document.getElementById("slide")
+    let changeVal = () => {
+      p.textContent = range.value
+    }
+    changeVal()
+    
+    range.onchange = changeVal
 
 </body>
 </html>
