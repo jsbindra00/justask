@@ -8,6 +8,18 @@ var cursorCanvas, ccctx;
 var x = "black",
 strokeWidth = 50,
 y = 2;
+lastScroll = 0;
+currentScroll = 0;
+
+
+
+function AdjustStrokeWidth(amount)
+{
+    strokeWidth += amount;
+}
+
+
+
 
 function PrintSlider()
 {
@@ -20,9 +32,22 @@ function UpdateStrokeWidth(newWidth)
     let p = document.getElementById("val")
     p.textContent = newWidth;
     strokeWidth = newWidth;
+    // RenderBrushCursor(ccctx, e)
+
+    
 
 }
+function RenderBrushCursor(context, e)
+{
 
+    context.strokeStyle = x;
+    context.strokeWidth = 2;
+    context.clearRect(0,0, cursorCanvas.width, cursorCanvas.height);
+    context.fillStyle = x;
+    context.beginPath();
+    context.arc(e.pageX , e.pageY, strokeWidth, 0, 2 * Math.PI);
+    context.stroke(); 
+}
 function AdjustToolkit()
 {
     toolbar = $('#toolkit')
@@ -50,17 +75,26 @@ $(document).ready(function(){
 
     const onMouseMove = (e) =>
     {
-        ccctx.strokeStyle = x;
-        ccctx.strokeWidth = 2;
-        ccctx.clearRect(0,0, cursorCanvas.width, cursorCanvas.height);
-        ccctx.fillStyle = x;
-        ccctx.beginPath();
-        ccctx.arc(e.pageX , e.pageY, strokeWidth, 0, 2 * Math.PI);
-        ccctx.stroke();  
+        RenderBrushCursor(ccctx, e)
+   
     }
 
 
 document.addEventListener('mousemove', onMouseMove);
+
+
+
+cursorCanvas.addEventListener("wheel", function(evnt){
+    console.log("SCROLL");
+    RAD_INCREASE = 5;
+    if(evnt.deltaY > 0)
+    {
+        UpdateStrokeWidth(strokeWidth - RAD_INCREASE);
+    }
+    else{
+        UpdateStrokeWidth(strokeWidth + RAD_INCREASE);
+    }
+})
 
 })
     
