@@ -15,7 +15,6 @@ class ApiTest(unittest.TestCase):
     DATABASE_NAME = "justaskdatabase.db"
     TEST_DATABASE_NAME = "test_" + DATABASE_NAME
 
-
     connect = None
     cursor = None
     SETUP_DATA = [['email@gmail.com', 'JS0109', 'John', 'Smith', 'password123', 'Listener']]
