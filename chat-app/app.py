@@ -139,7 +139,7 @@ class Application:
             #todo handle this. User is already registered.
             return render_template("register.html")
 
-        self.cursor.execute("INSERT INTO users VALUES (?,?,?,?, ?, ?)", data)
+        self.cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)", data)
         self.clientsDB.commit()
 
         # maybe we should have a registration succesful page, that can then link to the login?

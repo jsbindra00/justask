@@ -25,7 +25,7 @@ class ApiTest(unittest.TestCase):
     
     # setup db with the setup data
     def setUp(self):
-        self.connect, self.cursor = connect_db('test_justaskdatabase.db')
+        self.connect, self.cursor = connect_db(self.TEST_DATABASE_NAME)
         self.cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)", self.SETUP_DATA[0])
         self.connect.commit()
 
@@ -33,7 +33,7 @@ class ApiTest(unittest.TestCase):
     def tearDown(self):
         self.cursor.close()
         self.connect.close()
-        os.remove('test_justaskdatabase.db')
+        os.remove(self.TEST_DATABASE_NAME)
 
 
     def test_register_user_with_correct_details(self):
