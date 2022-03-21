@@ -229,20 +229,24 @@
             border-style: solid;
             border-width: 1px;
             border-radius: 20px;
-            background-color: #174368;
+            background-color:#174368;
             color:#ffffff;
             width: 80%;
             height: auto;
             text-align: left;
             margin: 10px;
             padding: 10px 20px 30px 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 10px rgba(8,7,16,0.6);
         }
         .message{
-            background-color:  #33658d;
-            margin: 10px 80px 10px 40px;
+            background-color:#33658d;
+            margin: 10px 0px 10px 70px;
             width: 90%;
+            height: fit-content;
             padding: 10px 20px 30px 20px;
             border-radius: 10px;
+            font-size:smaller; 
         }
 
        
@@ -333,7 +337,7 @@
         console.log(data);
         const newNode = document.createElement('div');
         newNode.className = 'card';
-        newNode.innerHTML = `${data.time} <b>${data.username}</b> </br> <div class= 'message'> <b><h4>${data.message}</h4></b> </br> ${data.description} </div>`;
+        newNode.innerHTML = `${data.time} <b>${data.username}</b> </br> <div class= 'message'> <b><h4>${data.message}</h4></b>${data.description} </div>`;
         document.getElementById('messages').appendChild(newNode);
     });
 
