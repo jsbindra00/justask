@@ -44,6 +44,10 @@ cursor.execute("""
 connect.commit()
 
 
+class Application:
+    def __init__(self):
+        pass
+
 @app.route('/')
 @app.route('/profile')
 def profile():
@@ -177,6 +181,12 @@ def handle_leave_room_event(data):
     leave_room(data['room'])
     socketio.emit('leave_room_announcement', data, room=data['room'])
 
+
+
+
+def ValidateSessionID():
+
+    pass
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
