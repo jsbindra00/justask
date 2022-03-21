@@ -5,74 +5,221 @@ import sqlite3
 from datetime import datetime
 
 
-
-
-class Application:
-    def __init__(self):
-        pass
-
-
-    def ConnectToDatabase(self, dbName):
-        connection =  None
-        try:
-            connection = sqlite3.connect(dbName, check_same_thread=False)
-        except Exception as e:
-            print("FAILED TO CONNECT TO DATABASE, ASSHOLE")
-        return connection
-    def InitialiseDatabase(self, connectionObj):
-        cursor = connectionObj.cursor()
-        cursor.execute("""
-    CREATE TABLE IF NOT EXISTS clients (
-        clientJSON TEXT NOT NULL PRIMARY KEY
-
-    "")
-           
-
-
+from flask_classful import FlaskView, route
 
 
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-# Configure session. Store on filesystem, and delete cookie when user closes browser.
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
-
-# The check same thread here is a temp fix to an error where the same object is used in different threads.
-# https://stackoverflow.com/questions/48218065/programmingerror-sqlite-objects-created-in-a-thread-can-only-be-used-in-that-sa
+    
 
 
-# create an interface for connecting to the DB
-connect = sqlite3.connect('justaskdatabase.db', check_same_thread=False)
-
-# create an interface for interacting with the DB
-cursor = connect.cursor()
-
-# Create table
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS clients (
-        clientJSON TEXT NOT NULL PRIMARY KEY
-
-    """)
 
 
-# Save (commit) the changes
-connect.commit()
-class Application:
+
+class JustAsk:
+
+
     def __init__(self):
-        pass
+        
+        self.CLIENT_SQL_INJECTION = """
+            CREATE TABLE IF NOT EXISTS clients (
+                clientJSON TEXT NOT NULL PRIMARY KEY);
 
-@app.route('/')
-@app.route('/profile')
-def profile():
-    # If no user session, redirect to login page. Else render the user profile page.
-    if not session.get("email"):
+            """
+
+        self.CLIENT_SQL_INJECTION = """
+    CREATE TABLE IF NOT EXISTS messages (
+        email TEXT NOT NULL PRIMARY KEY,
+        message TEXT NOT NULL,
+        username TEXT NOT NULL,
+        first_name TEXT NOT NULL,
+        last_name TEXT NOT NULL,
+        role TEXT NOT NULL);
+    """
+
+    def Start(self):
+
+        # render and connect to the clientsdatabase.
+
+
+
+        # Configure session. Store on filesystem, and delete cookie when user closes browser.
+        app.config["SESSION_PERMANENT"] = False
+        app.config["SESSION_TYPE"] = "filesystem"
+        Session(app)
+
+        app.add_url_rule(rule="/", view_func=JustAsk.login)
+        app.add_url_rule(rule="/", endpoint="login", view_func=JustAsk.login, methods=["GET", "POST"])
+        app.add_url_rule(rule="/", endpoint="register", view_func=JustAsk.register,methods = ["GET", "POST"])
+
+        app.add_url_rule(rule="/", endpoint="chat_logout", view_func=JustAsk.chat_logout)
+        app.add_url_rule(rule="/", endpoint="logout", view_func=JustAsk.logout)
+        app.add_url_rule(rule="/", endpoint="chat_login", view_func=JustAsk.register,methods = ["GET", "POST"])
+        app.add_url_rule(rule="/", endpoint="chat", view_func=JustAsk.register,methods = ["GET", "POST"])
+
+        # socketio.on_event("send_message", JustAsk.handle_send_message_event)
+        # socketio.on_event("join_room", JustAsk.handle_join_room_event)
+        # socketio.on_event("leave_room", JustAsk.handle_leave_room_event)
+
+
+        self.clientsDB = self.__ConnectToDatabase("clients.db")
+        self.__InitialiseDatabase(self.clientsDB, self.CLIENT_SQL_INJECTION)
+
+
+
+
+
+
+    def __ConnectToDatabase(self, dbName):
+        connection =  None
+        try:
+            connection = sqlite3.connect(dbName, check_same_thread=False)
+        except Exception as e:
+            print("FAILED TO CONNECT TO DATABASE, ASSHOLE")
+        return connection
+
+
+    def __InitialiseDatabase(self, connectionObj, SQL_INJECTION):
+
+        # pull the db interaction interface from the connection.
+        self.cursor = connectionObj.cursor()
+
+        # create the sql table in the db. 
+            # we're just storing a single text column with 
+
+        self.cursor.execute(SQL_INJECTION)
+        connectionObj.commit()
+
+
+
+
+
+
+    def profile():
+        # If no user session, redirect to login page. Else render the user profile page.
+        if not session.get("email"):
+            print("REDIRECTING TO LOGIN")
+            return redirect("/login")
+
+        return render_template("profile.html")
+
+    def login():
+        print("IN LOGIN")
+        if request.method == "GET":
+            return render_template("login.html")
+
+        # Get user login details
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        # Validate submission
+        login_details = [email, password]
+        for field in login_details:
+            if not field:
+                #todo handle this
+                return render_template("login.html")
+
+        # If the user provided details stored in the database, add these details to the session, 
+        # and send them to their profile page
+
+
+        # user = self.cursor.execute("SELECT * FROM users WHERE email= ? AND password = ?",(email, password)).fetchone()
+        # print("USER " + user)
+        # if  user == None:  
+
+        #     print("USER IS NONE")
+        #     #todo handle this. Invalid login credentials.
+        #     return render_template("login.html")
+
+        # session["email"] = user[0]
+        # session["username"] = user[1]
+        # session["first_name"] = user[2]
+        # session["last_name"] = user[2]
+        # session["role"] = user[4]
+
+        return redirect("/profile")
+        
+    def chat_logout():
+        session["room"] = None
+        return redirect("/chat_login")
+
+    def logout():
+        session["email"] = None
         return redirect("/login")
 
-    return render_template("profile.html")
+    def register():
+        print("IN REGISTER")
+        if request.method == "GET":
+            return render_template("register.html")
 
+        # Get user submission
+
+        email = request.form.get("email")
+        username = request.form.get("username")
+        first_name = request.form.get("first_name")
+        last_name = request.form.get("last_name")
+        password = request.form.get("password")
+        role = request.form.get("role")
+
+        # Validate submission
+        data = [email, username,first_name,last_name,password, role]
+        for field in data:
+            if not field:
+                #todo handle this
+                return render_template("register.html")
+
+        # If the user provided valid info, and they were not already registered, store data in database
+        # email_present = self.cursor.execute("SELECT * FROM users WHERE email= ?",(email,)).fetchall()
+        # if email_present != []:
+        #     #todo handle this. User is already registered.
+        #     return render_template("register.html")
+
+        # self.cursor.execute("INSERT INTO users VALUES (?,?,?,?, ?, ?)", data)
+        # self.clientsDB.commit()
+
+        # maybe we should have a registration succesful page, that can then link to the login?
+        return redirect("/login")
+
+
+    def chat_login():
+        if request.method == "GET":
+            return render_template("chat_login.html")
+
+        # store the session ID into a database consisting of active session ids.
+        room = request.form.get("room")
+        print("ROOM ",room)
+        session["room"] = room
+
+        return redirect(url_for("chat"))
+
+
+    def chat():
+        username = session.get('username')
+        room = session.get('room')
+        if username and room:
+            return render_template('chat.html', username=username, room=room)
+        else:
+            return redirect(url_for('chat_login'))
+
+    def handle_send_message_event(data):
+        app.logger.info("{} has sent message to the room {}: {}".format(data['username'],
+                                                                        data['room'],
+                                                                        data['message']))
+        data["time"] = datetime.now().strftime("%H:%M")                                                               
+        socketio.emit('receive_message',data, room=data['room'])
+
+    def handle_join_room_event(data):
+        app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
+        join_room(data['room'])
+        data["time"] = datetime.now().strftime("[%H:%M]")
+        socketio.emit('join_room_announcement',data, room=data['room'])
+
+    def handle_leave_room_event(data):
+        app.logger.info("{} has left the room {}".format(data['username'], data['room']))
+        leave_room(data['room'])
+        socketio.emit('leave_room_announcement', data, room=data['room'])
 
 
 def ValidateLoginDetails(clientObject):
@@ -97,143 +244,15 @@ def ValidateLoginDetails(clientObject):
 
 
 
-@app.route('/login', methods = ["GET", "POST"])
-def login():
-    if request.method == "GET":
-        return render_template("login.html")
-
-    # Get user login details
-    email = request.form.get("email")
-    password = request.form.get("password")
-
-    # Validate submission
-    login_details = [email, password]
-    for field in login_details:
-        if not field:
-            #todo handle this
-            return render_template("login.html")
-
-    # If the user provided details stored in the database, add these details to the session, 
-    # and send them to their profile page
-    user = cursor.execute("SELECT * FROM users WHERE email= ? AND password = ?",(email, password)).fetchone()
-    print("USER " + user)
-    if  user == None:
-        #todo handle this. Invalid login credentials.
-        return render_template("login.html")
-
-    session["email"] = user[0]
-    session["username"] = user[1]
-    session["first_name"] = user[2]
-    session["last_name"] = user[2]
-    session["role"] = user[4]
-
-    return redirect("/profile")
-
-@app.route("/chat_logout")
-def chat_logout():
-    session["room"] = None
-    return redirect("/chat_login")
-
-@app.route("/logout")
-def logout():
-    session["email"] = None
-    return redirect("/login")
-
-@app.route('/register', methods = ["GET", "POST"])
-def register():
-    if request.method == "GET":
-        return render_template("register.html")
-
-    # Get user submission
-
-    email = request.form.get("email")
-    username = request.form.get("username")
-    first_name = request.form.get("first_name")
-    last_name = request.form.get("last_name")
-    password = request.form.get("password")
-    role = request.form.get("role")
-
-    # Validate submission
-    data = [email, username,first_name,last_name,password, role]
-    for field in data:
-        if not field:
-            #todo handle this
-            return render_template("register.html")
-
-    # If the user provided valid info, and they were not already registered, store data in database
-    email_present = cursor.execute("SELECT * FROM users WHERE email= ?",(email,)).fetchall()
-    if email_present != []:
-        #todo handle this. User is already registered.
-        return render_template("register.html")
-
-    cursor.execute("INSERT INTO users VALUES (?,?,?,?, ?, ?)", data)
-    connect.commit()
-
-    # maybe we should have a registration succesful page, that can then link to the login?
-    return redirect("/login")
-
-
-@app.route('/chat_login' , methods = ["GET", "POST"])
-def chat_login():
-    print("HERE")
-    if request.method == "GET":
-        return render_template("chat_login.html")
-
-
-    # store the session ID into a database consisting of active session ids.
-    room = request.form.get("room")
-    print("ROOM ",room)
-    session["room"] = room
-
-    return redirect(url_for("chat"))
-
-
-@app.route('/chat', methods = ["GET", "POST"])
-def chat():
-    username = session.get('username')
-    room = session.get('room')
-    if username and room:
-        return render_template('chat.html', username=username, room=room)
-    else:
-        return redirect(url_for('chat_login'))
-
-
-@socketio.on('send_message')
-def handle_send_message_event(data):
-    app.logger.info("{} has sent message to the room {}: {}".format(data['username'],
-                                                                    data['room'],
-                                                                    data['message']))
-    data["time"] = datetime.now().strftime("%H:%M")                                                               
-    socketio.emit('receive_message',data, room=data['room'])
-
-    
-
-
-@socketio.on('join_room')
-def handle_join_room_event(data):
-    app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
-    join_room(data['room'])
-    data["time"] = datetime.now().strftime("[%H:%M]")
-    socketio.emit('join_room_announcement',data, room=data['room'])
-
-
-@socketio.on('leave_room')
-def handle_leave_room_event(data):
-    app.logger.info("{} has left the room {}".format(data['username'], data['room']))
-    leave_room(data['room'])
-    socketio.emit('leave_room_announcement', data, room=data['room'])
 
 
 
 
-def CreateSession():
-    pass
-def ValidateSessionID():
 
-    # search through the database of active sessions.
+# if __name__ == '__main__':
+#     application = JustAsk()
+#     application.Start()
 
 
-    pass
+#     socketio.run(app, debug=True)
 
-if __name__ == '__main__':
-    socketio.run(app, debug=True)
