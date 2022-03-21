@@ -2,6 +2,8 @@ import email
 import unittest
 import requests
 import sqlite3
+import os
+from app import connect_db
 
 class ApiTest(unittest.TestCase):
     
@@ -10,11 +12,13 @@ class ApiTest(unittest.TestCase):
     LOGIN_URL = "http://127.0.0.1:5000/login"
     PROFILE_URL= "http://127.0.0.1:5000/profile"
 
+    DATABASE_NAME = "justaskdatabase.db"
+    TEST_DATABASE_NAME = "test_" + DATABASE_NAME
+
 
     connect = None
     cursor = None
-    # SETUP_DATA_DICT = dict(email='email@gmail.com', first_name='John', last_name = 'Smith', username = 'JS0109', password = 'password123', role = 'Listener')
-    SETUP_DATA = ['email@gmail.com', 'JS0109', 'John', 'Smith', 'password123', 'Listener']
+    SETUP_DATA = [['email@gmail.com', 'JS0109', 'John', 'Smith', 'password123', 'Listener']]
 
     # test data:
     same_email = dict(email='email@gmail.com', first_name='value2', last_name = 'v', username = 'a', password = 'a', role = 'Speaker')
@@ -22,18 +26,15 @@ class ApiTest(unittest.TestCase):
     
     # setup db with the setup data
     def setUp(self):
-        self.connect = sqlite3.connect('justaskdatabase.db', check_same_thread=False)
-        self.cursor = self.connect.cursor()
-        self.cursor.execute("INSERT INTO users VALUES (?,?,?,?, ?, ?)", self.SETUP_DATA)
+        self.connect, self.cursor = connect_db('test_justaskdatabase.db')
+        self.cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)", self.SETUP_DATA[0])
         self.connect.commit()
 
     # remove the setup data from db
     def tearDown(self):
-        self.cursor.execute("DELETE FROM users WHERE email= ?", (self.SETUP_DATA[0],))
-        self.cursor.execute("DELETE FROM users WHERE email= ?", (self.SETUP_DATA[0],))
-        self.connect.commit()
+        self.cursor.close()
         self.connect.close()
-        
+        os.remove('test_justaskdatabase.db')
 
 
     def test_register_user_with_correct_details(self):
@@ -66,3 +67,16 @@ class ApiTest(unittest.TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.status_code, 200)
+    
+    def test_database_creation(self):
+        self.connect, self.cursor = connect_db(self.TEST_DATABASE_NAME)
+        self.cursor.close()
+        self.connect.close()
+        self.assertEqual(os.path.exists(self.TEST_DATABASE_NAME), True)
+        os.remove(self.TEST_DATABASE_NAME)
+        self.assertEqual(os.path.exists(self.TEST_DATABASE_NAME), False)
+        self.connect, self.cursor = connect_db(self.TEST_DATABASE_NAME)
+        self.cursor.close()
+        self.connect.close()
+        self.assertEqual(os.path.exists(self.TEST_DATABASE_NAME), True)
+
