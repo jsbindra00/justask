@@ -31,7 +31,7 @@ def setup_db():
 
     cur.close()
     con.close()
-    #os.remove(database_name)
+    os.remove(database_name)
 
 @pytest.fixture()
 def client(app):

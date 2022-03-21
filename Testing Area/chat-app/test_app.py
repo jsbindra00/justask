@@ -1,5 +1,4 @@
 import unittest
-import requests
 from app import create_app, connect_db, app_run
 import os
 import sqlite3
@@ -10,6 +9,7 @@ import sqlite3
 class MyTestCase(unittest.TestCase):
     API_URL = "127.0.0.1:5000/"
     database_name = "justaskdatabase.db"
+    """
     def test_DatabaseCreation(self):
         database_name = "justaskdatabase.db"
         if os.path.exists(database_name):
@@ -33,6 +33,7 @@ class MyTestCase(unittest.TestCase):
                 self.assertEqual(columns[i][j], table_information[i][j])
 
     def testDatabaseConnection(self):
+        
         database_name = "justaskdatabase.db"
         self.test_DatabaseCreation()
         os.rename(database_name, "database_test_rename.db")
@@ -52,7 +53,7 @@ class MyTestCase(unittest.TestCase):
         for i in range(len(data)):
             cur.execute("INSERT INTO users VALUES (?,?,?,?, ?, ?)", data[i])
         # Save (commit) the changes
-        con.commit()
+        con.commit()"""
 
     def test_something(self):
         database_name = "test_database.db"
