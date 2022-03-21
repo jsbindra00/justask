@@ -15,10 +15,10 @@ def create_app():
 
     return app, socketio
 
-def connect_db():
+def connect_db(database_name):
     # The check same thread here is a temp fix to an error where the same object is used in different threads.
     # https://stackoverflow.com/questions/48218065/programmingerror-sqlite-objects-created-in-a-thread-can-only-be-used-in-that-sa
-    connect = sqlite3.connect('justaskdatabase.db', check_same_thread=False)
+    connect = sqlite3.connect(database_name, check_same_thread=False)
     cursor = connect.cursor()
 
     # Create table
@@ -186,5 +186,5 @@ def app_run(app, socketio, connect, cursor):
 
 if __name__ == '__main__':
     app, socketio = create_app()
-    connect, cursor = connect_db()
+    connect, cursor = connect_db('justaskdatabase.db')
     socketio.run(app, debug=True)
