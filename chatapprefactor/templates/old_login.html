@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <title>Login</title>
+    <style>
+        .container {
+            text-align: center;
+        }
+        .row{
+            margin: auto;
+            width: 50%;
+            border: 3mm ridge rgb(160, 192, 205);
+            padding: 10px;
+            text-align: center;
+            align-items: center;
+            background-color: rgb(183, 222, 238);
+        }
+        body {
+            background-color: rgb(94, 196, 239);
+        }
+    </style>
+</head>
+
+<body class="body">
+    <div class="container">
+        <h1>JustAsk</h1>
+        <h2>Login</h2><br>
+        <div class="row">          
+            <form action="/home">
+                <div>
+                    <br><input type="text" placeholder="Email" name="email"><br><br>
+                    <input type="password" placeholder="Password" name="password"><br>
+                </div> 
+                    <br><button type="submit">Login</button><br>   
+            </form>   
+        </div>
+        <br><a href="{{ url_for('register') }}">New? Sign up here!</a> <!-- link to register page -->
+    </div>
+</body>
+</html>
