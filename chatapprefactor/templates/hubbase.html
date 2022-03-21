@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/0260874841.js" crossorigin="anonymous"></script> <!--Used for icons -->
+    <link rel="stylesheet" href="./static/css/styles.css">
+    
+</head>
+<body>
+    <header>
+        justask.
+        <a href="/logout">
+            <button>Logout</button>
+        </a>  
+    </header>
+
+    <div class="sidebar">
+        <ul>
+            <li><a href=""><i class="fa-regular fa-user"></i>Profile</a></li>
+            <li><a href="{{ url_for('chat_login') }}"><i class="fa-solid fa-comments"></i>Chat</a></li>
+            <li><a href=""><i class="fa-solid fa-question"></i>MCQ</a></li>
+            <li><a href=""><i class="fa-regular fa-comment-dots"></i>Feedback</a></li>
+        </ul>
+    </div>
+    </div>
+</body>
+</html>

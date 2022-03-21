@@ -4,6 +4,9 @@ from app import create_app, connect_db, app_run
 import os
 import sqlite3
 
+
+
+
 class MyTestCase(unittest.TestCase):
     API_URL = "127.0.0.1:5000/"
     database_name = "justaskdatabase.db"
@@ -50,6 +53,19 @@ class MyTestCase(unittest.TestCase):
             cur.execute("INSERT INTO users VALUES (?,?,?,?, ?, ?)", data[i])
         # Save (commit) the changes
         con.commit()
+
+    def test_something(self):
+        database_name = "test_database.db"
+        con, cur = connect_db(database_name)
+        #data = [['email@gmail.com', 'JS0109', 'John', 'Smith', 'password123', 'Listener']]
+        #for i in range(len(data)):
+         #   cur.execute("INSERT INTO users VALUES (?,?,?,?, ?, ?)", data[i])
+
+        con.commit()
+
+        cur.close()
+        con.close()
+        os.remove(database_name)
 
 if __name__ == '__main__':
     unittest.main()
