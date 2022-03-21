@@ -5,6 +5,33 @@ import sqlite3
 from datetime import datetime
 
 
+
+
+class Application:
+    def __init__(self):
+        pass
+
+
+    def ConnectToDatabase(self, dbName):
+        connection =  None
+        try:
+            connection = sqlite3.connect(dbName, check_same_thread=False)
+        except Exception as e:
+            print("FAILED TO CONNECT TO DATABASE, ASSHOLE")
+        return connection
+    def InitialiseDatabase(self, connectionObj):
+        cursor = connectionObj.cursor()
+        cursor.execute("""
+    CREATE TABLE IF NOT EXISTS clients (
+        clientJSON TEXT NOT NULL PRIMARY KEY
+
+    "")
+           
+
+
+
+
+
 app = Flask(__name__)
 socketio = SocketIO(app)
 
@@ -15,34 +42,27 @@ Session(app)
 
 # The check same thread here is a temp fix to an error where the same object is used in different threads.
 # https://stackoverflow.com/questions/48218065/programmingerror-sqlite-objects-created-in-a-thread-can-only-be-used-in-that-sa
+
+
+# create an interface for connecting to the DB
 connect = sqlite3.connect('justaskdatabase.db', check_same_thread=False)
+
+# create an interface for interacting with the DB
 cursor = connect.cursor()
 
 # Create table
 cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        email TEXT NOT NULL PRIMARY KEY,
-        username TEXT NOT NULL,
-        first_name TEXT NOT NULL,
-        last_name TEXT NOT NULL,
-        password TEXT NOT NULL,
-        role TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS clients (
+        clientJSON TEXT NOT NULL PRIMARY KEY
+
     """)
 
-
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS messages (
-        email TEXT NOT NULL PRIMARY KEY,
-        message TEXT NOT NULL,
-        username TEXT NOT NULL,
-        first_name TEXT NOT NULL,
-        last_name TEXT NOT NULL,
-        role TEXT NOT NULL);
-    """)
 
 # Save (commit) the changes
 connect.commit()
-
+class Application:
+    def __init__(self):
+        pass
 
 @app.route('/')
 @app.route('/profile')
@@ -52,6 +72,29 @@ def profile():
         return redirect("/login")
 
     return render_template("profile.html")
+
+
+
+def ValidateLoginDetails(clientObject):
+
+    # no restrictions on first name and last name, should not be blank tho
+
+    # username 
+        # the username should not already be taken.
+
+    # password
+        # should be N characters long.
+        # should contain a number.
+        # should contain a capital letter.
+    
+    # email 
+        # apply regex to the email, see what remains.
+
+    
+
+
+    return True
+
 
 
 @app.route('/login', methods = ["GET", "POST"])
@@ -73,7 +116,7 @@ def login():
     # If the user provided details stored in the database, add these details to the session, 
     # and send them to their profile page
     user = cursor.execute("SELECT * FROM users WHERE email= ? AND password = ?",(email, password)).fetchone()
-    print(user)
+    print("USER " + user)
     if  user == None:
         #todo handle this. Invalid login credentials.
         return render_template("login.html")
@@ -102,6 +145,7 @@ def register():
         return render_template("register.html")
 
     # Get user submission
+
     email = request.form.get("email")
     username = request.form.get("username")
     first_name = request.form.get("first_name")
@@ -135,6 +179,8 @@ def chat_login():
     if request.method == "GET":
         return render_template("chat_login.html")
 
+
+    # store the session ID into a database consisting of active session ids.
     room = request.form.get("room")
     print("ROOM ",room)
     session["room"] = room
@@ -177,6 +223,17 @@ def handle_leave_room_event(data):
     leave_room(data['room'])
     socketio.emit('leave_room_announcement', data, room=data['room'])
 
+
+
+
+def CreateSession():
+    pass
+def ValidateSessionID():
+
+    # search through the database of active sessions.
+
+
+    pass
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
