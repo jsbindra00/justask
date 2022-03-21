@@ -76,7 +76,7 @@ def app_run(app, socketio, connect, cursor):
                 #todo handle this
                 return render_template("login.html")
 
-        # If the user provided details stored in the database, add these details to the session,
+        # If the user provided details stored in the database, add these details to the session, 
         # and send them to their profile page
         user = cursor.execute("SELECT * FROM users WHERE email= ? AND password = ?",(email, password)).fetchone()
         print(user)
@@ -163,10 +163,10 @@ def app_run(app, socketio, connect, cursor):
         app.logger.info("{} has sent message to the room {}: {}".format(data['username'],
                                                                         data['room'],
                                                                         data['message']))
-        data["time"] = datetime.now().strftime("%H:%M")
+        data["time"] = datetime.now().strftime("%H:%M")                                                               
         socketio.emit('receive_message',data, room=data['room'])
 
-
+        
 
 
     @socketio.on('join_room')
