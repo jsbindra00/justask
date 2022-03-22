@@ -13,8 +13,6 @@
 
     // });
 
-
-
     const MAX_PARTICLE_VELOCITY = 1.5;
     const particleRadius = 4;
     const particleDistanceThreshold = 170;

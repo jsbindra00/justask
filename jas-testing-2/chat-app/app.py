@@ -13,8 +13,8 @@ CLIENT_SQL_INJECTION = """
     CREATE TABLE IF NOT EXISTS users (
         email TEXT NOT NULL PRIMARY KEY,
         username TEXT NOT NULL,
-        first_name TEXT NOT NULL,
-        last_name TEXT NOT NULL,
+        firstname TEXT NOT NULL,
+        lastname TEXT NOT NULL,
         password TEXT NOT NULL);
     """
 connection = sqlite3.connect(dbName, check_same_thread=False)
@@ -44,19 +44,15 @@ class JustAsk(FlaskView):
     def landingpage(self):
         return render_template("landingpage.html")
 
-    @route("/", endpoint="/")
+    # @route("/", endpoint="/")
     @route("/profile", endpoint="profile",methods=["GET", "POST"])
     def profile(self):
         # If no user session, redirect to login page. Else render the user profile page.
         if not session.get("email"):
             return redirect("/login")
-        
-
         return render_template("profile.html")
 
-
-
-    # @route("/", endpoint="/")
+    @route("/", endpoint="/")
     @route("/login/", endpoint="login", methods=['POST', 'GET'])
     def login(self):
         if request.method == "GET":
@@ -87,9 +83,9 @@ class JustAsk(FlaskView):
 
         session["email"] = user[0]
         session["username"] = user[1]
-        session["first_name"] = user[2]
-        session["last_name"] = user[2]
-        session["role"] = user[4]
+        session["firstname"] = user[2]
+        session["lastname"] = user[3]
+        session["password"] = user[4]
 
         return redirect("/profile")
 
@@ -102,15 +98,14 @@ class JustAsk(FlaskView):
         # Get user submission
         email = request.form.get("email")
         username = request.form.get("username")
-        first_name = request.form.get("first_name")
-        last_name = request.form.get("last_name")
+        first_name = request.form.get("firstname")
+        last_name = request.form.get("lastname")
         password = request.form.get("password")
-        role = request.form.get("role")
 
 
         print("VALIDATING DETAILS")
         # Validate submission
-        data = [email, username,first_name,last_name,password, role]
+        data = [email, username,first_name,last_name,password]
         for field in data:
             if not field:
                 #todo handle this
@@ -124,7 +119,7 @@ class JustAsk(FlaskView):
             #todo handle this. User is already registered.
             return render_template("404.html")
 
-        cursor.execute("INSERT INTO users VALUES (?,?,?,?, ?, ?)", data)
+        cursor.execute("INSERT INTO users VALUES (?,?,?,?, ?)", data)
         connection.commit()
 
         # maybe we should have a registration succesful page, that can then link to the login?
