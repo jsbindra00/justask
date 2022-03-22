@@ -1,5 +1,4 @@
 from enum import IntEnum
-from flask import Flask
 import json
 
 class ClientAttribute(IntEnum):
