@@ -147,6 +147,11 @@ class JustAsk(FlaskView):
     def chat_login(self):
         if request.method == "GET":
             return render_template("chat_login.html")
+    
+    @route("/MCQ", endpoint="MCQ", methods = ["GET", "POST"])
+    def MCQ(self):
+        if request.method == "GET":
+            return render_template("MCQ.html")
 
         # store the session ID into a database consisting of active session ids.
 
