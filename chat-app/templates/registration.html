@@ -116,10 +116,10 @@
       <form action="/registration/" method = "post">
         <h3>Create Account</h3>
         <label for="firstname">First Name</label>
-        <input name = "first_name" type="text" placeholder="First Name" onfocus="this.placeholder = ''" onblur="this.placeholder ='First Name'" id="firstname" required>
+        <input name = "firstname" type="text" placeholder="First Name" onfocus="this.placeholder = ''" onblur="this.placeholder ='First Name'" id="firstname" required>
        
         <label for="lastname">Last Name</label>
-        <input name = "last_name" type="text" placeholder="Last Name" onfocus="this.placeholder = ''" onblur="this.placeholder ='Last Name'" id="lastname" required>
+        <input name = "lastname" type="text" placeholder="Last Name" onfocus="this.placeholder = ''" onblur="this.placeholder ='Last Name'" id="lastname" required>
         
         <label for="username">Username</label>
         <input name = "username" type="text" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder ='Username'" id="username" required>
@@ -129,13 +129,6 @@
         
         <label for="password">Password</label>
         <input name = "password" type="password" placeholder="********" id="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='********'" required>
-        
-        <div class="radio-items">
-        <input type="radio" name="role" id="speaker" value="Speaker">
-        <label for="speaker">Speaker</label>
-        <input type="radio" name="role" id="listener" value="Listener">
-        <label for="listener">Listener</label>
-        </div>
         
         <button>Submit</button>
         <br><br><a href="{{ url_for('login') }}">Already have an account? Log in here!</a>
