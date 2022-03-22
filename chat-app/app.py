@@ -11,41 +11,31 @@ from flask_classful import FlaskView, route
 
 app = Flask(__name__)
 socketio = SocketIO(app)
+def db_connect(dbName):
+    CLIENT_SQL_INJECTION = """
+        CREATE TABLE IF NOT EXISTS users (
+            email TEXT NOT NULL PRIMARY KEY,
+            username TEXT NOT NULL,
+            first_name TEXT NOT NULL,
+            last_name TEXT NOT NULL,
+            password TEXT NOT NULL,
+            role TEXT NOT NULL);
+        """
+    connection = sqlite3.connect(dbName, check_same_thread=False)
 
-dbName = "clients.db"
-CLIENT_SQL_INJECTION = """
-    CREATE TABLE IF NOT EXISTS users (
-        email TEXT NOT NULL PRIMARY KEY,
-        username TEXT NOT NULL,
-        first_name TEXT NOT NULL,
-        last_name TEXT NOT NULL,
-        password TEXT NOT NULL,
-        role TEXT NOT NULL);
-    """
-connection = sqlite3.connect(dbName, check_same_thread=False)
+    cursor = connection.cursor()
+    cursor.execute(CLIENT_SQL_INJECTION)
+    connection.commit()  
 
-cursor = connection.cursor()
-cursor.execute(CLIENT_SQL_INJECTION)
-connection.commit()  
+    return connection, cursor
 
 class JustAsk(FlaskView):
     default_methods = ['GET', 'POST']
     route_base = "/"
-    def __init__(self):
-        # self.CLIENT_SQL_INJECTION = """
-        #     CREATE TABLE IF NOT EXISTS clients (
-        #         clientJSON TEXT NOT NULL PRIMARY KEY);
-        #     """
-    #     self.CLIENT_SQL_INJECTION = """
-    # CREATE TABLE IF NOT EXISTS clients (
-    #     email TEXT NOT NULL PRIMARY KEY,
-    #     username TEXT NOT NULL,
-    #     first_name TEXT NOT NULL,
-    #     last_name TEXT NOT NULL,
-    #     password TEXT NOT NULL,
-    #     role TEXT NOT NULL);
-    # """
-        pass
+    def __init__(self, connection, cursor):
+        self.connection = connection
+        self.cursor = cursor
+
     def Start(self):
         app.config["SESSION_PERMANENT"] = False
         app.config["SESSION_TYPE"] = "filesystem"
@@ -90,7 +80,7 @@ class JustAsk(FlaskView):
 
         # If the user provided details stored in the database, add these details to the session, 
         # and send them to their profile page
-        user = cursor.execute("SELECT * FROM users WHERE email= ? AND password = ?",(email, password)).fetchone()
+        user = self.cursor.execute("SELECT * FROM users WHERE email= ? AND password = ?",(email, password)).fetchone()
         print(user)
         if  user == None:
             #todo handle this. Invalid login credentials.
@@ -131,13 +121,13 @@ class JustAsk(FlaskView):
         print("VALIDATED")
 
         # If the user provided valid info, and they were not already registered, store data in database
-        email_present = cursor.execute("SELECT * FROM users WHERE email= ?",(email,)).fetchall()
+        email_present = self.cursor.execute("SELECT * FROM users WHERE email= ?",(email,)).fetchall()
         if email_present != []:
             #todo handle this. User is already registered.
             return render_template("404.html")
 
-        cursor.execute("INSERT INTO users VALUES (?,?,?,?, ?, ?)", data)
-        connection.commit()
+        self.cursor.execute("INSERT INTO users VALUES (?,?,?,?, ?, ?)", data)
+        self.connection.commit()
 
         # maybe we should have a registration succesful page, that can then link to the login?
         return redirect("/login")
@@ -203,7 +193,8 @@ JustAsk.register(app)
 
 
 if __name__ == '__main__':
-    application = JustAsk()
+    connection, cursor = db_connect("clients.db")
+    application = JustAsk(connection, cursor)
     application.Start()
     socketio.run(app, debug=True)
 
