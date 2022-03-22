@@ -22,42 +22,28 @@
     </header>
 
 
-
-    <div class="sidebar">
-
-        <!-- list of lists. each button may be expanded and contracted. -->
-        <ul>    
-
-                <li>
-                    <!-- list of buttons for element 1 -->
-                    <ul>
-                        <!-- element 1 of list 1 -->
-                        <li>
-                            <a href=""><i class="fa-regular fa-user"></i>Profile</a>
-                        </li>
-                     
-                    </ul>
-             
-                </li>
-        </ul>
-        <ul>    
+<div id="sidebarBG">
+    <div id="sidebar">
+        <ul id="sidebarColumn">
             <li>
-                <!-- list of buttons for element 1 -->
-                <ul>
-                    <!-- element 1 of list 1 -->
-                    <li>
-                        <a href="{{ url_for('chat_login') }}"><i class="fa-solid fa-comments"></i>Session</a>
-
-                    </li>
-                 
-                </ul>
-         
+                
+                <a href="" class="navbutton">
+                    <i class="navbutton icon fa-regular fa-user fa-2xl"></i>
+                    Profile
+                </a>
             </li>
-            
-
+           
+            <li>
+                
+                <a href="{{ url_for('chat_login') }}">
+                    <i class="navbutton icon fa-regular fa-comments fa-2xl"></i>
+                    Session
+                </a>
+            </li>
         </ul>
     </div>
       
+</div>
 
 
 

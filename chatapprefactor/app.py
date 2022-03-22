@@ -19,8 +19,7 @@ CLIENT_SQL_INJECTION = """
         username TEXT NOT NULL,
         first_name TEXT NOT NULL,
         last_name TEXT NOT NULL,
-        password TEXT NOT NULL,
-        role TEXT NOT NULL);
+        password TEXT NOT NULL);
     """
 connection = sqlite3.connect(dbName, check_same_thread=False)
 
@@ -44,7 +43,7 @@ class JustAsk(FlaskView):
         socketio.on_event("leave_room", self.handle_leave_room_event)
 
 
-
+    @route("/", endpoint="/")
     @route("/profile", endpoint="profile",methods=["GET", "POST"])
     def profile(self):
         # If no user session, redirect to login page. Else render the user profile page.
@@ -56,7 +55,7 @@ class JustAsk(FlaskView):
 
 
 
-    @route("/", endpoint="/")
+    # @route("/", endpoint="/")
     @route("/login/", endpoint="login", methods=['POST', 'GET'])
     def login(self):
         if request.method == "GET":
@@ -150,8 +149,6 @@ class JustAsk(FlaskView):
 
         # store the session ID into a database consisting of active session ids.
 
-
-
         room = request.form.get("room")
         print("ROOM ",room)
         session["room"] = room
@@ -189,9 +186,6 @@ class JustAsk(FlaskView):
 
 
 JustAsk.register(app)
-
-
-
 
 if __name__ == '__main__':
     application = JustAsk()
