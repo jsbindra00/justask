@@ -31,8 +31,8 @@ class JustAsk(FlaskView):
     default_methods = ['GET', 'POST']
     route_base = "/"
     def __init__(self):
-
         pass
+
     def Start(self):
         app.config["SESSION_PERMANENT"] = False
         app.config["SESSION_TYPE"] = "filesystem"
