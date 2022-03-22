@@ -43,7 +43,11 @@ class JustAsk(FlaskView):
         socketio.on_event("leave_room", self.handle_leave_room_event)
 
 
-    @route("/", endpoint="/")
+    @route("/landingpage", endpoint="/")
+    @route("/", endpoint="landingpage")
+    def landingpage(self):
+        return render_template("landingpage.html")
+
     @route("/profile", endpoint="profile",methods=["GET", "POST"])
     def profile(self):
         # If no user session, redirect to login page. Else render the user profile page.
