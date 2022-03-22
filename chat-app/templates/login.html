@@ -101,18 +101,19 @@
     <div class="logo"> 
         <h1>justask.</h1>
     </div>
-    <form action="/login" method = "post">
+    <form action="/login/" method = "post"> 
         <h3>Log In</h3>
 
-        <label for="username">Email</label>
-        <input name = "email" type="text" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder ='Email'" id="username" required>
+        <label for="username">Email</label> 
+       <input name = "email" type="text" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder ='Email'" id="username" required> 
 
-        <label for="password">Password</label>
-        <input name = "password" type="password" placeholder="********" id="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='********'" required>
+        <label for="password">Password</label> 
+        <input name = "password" type="password" placeholder="********" id="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='********'" required> 
 
-        <button>Log In</button>
-
-        <br><br><a href="{{ url_for('register') }}">New? Sign up here!</a>
-    </form>
+       <button>Log In</button>
+       
+       <br><br><a href="{{ url_for('registration') }}">New? Sign up here!</a>
+  
+  </form>
 </body>
 </html>

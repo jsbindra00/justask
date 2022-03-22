@@ -4,7 +4,6 @@ from flask_socketio import SocketIO, join_room, leave_room
 import sqlite3
 from datetime import datetime
 
-from Client import JAClient
 
 
 app = Flask(__name__)
