@@ -31,8 +31,8 @@ class JustAsk(FlaskView):
     default_methods = ['GET', 'POST']
     route_base = "/"
     def __init__(self):
-
         pass
+
     def Start(self):
         app.config["SESSION_PERMANENT"] = False
         app.config["SESSION_TYPE"] = "filesystem"
@@ -67,24 +67,15 @@ class JustAsk(FlaskView):
         email = request.form.get("email")
         password = request.form.get("password")
 
+        data = (email, password)
+        user = cursor.execute("SELECT * FROM users WHERE email= ? AND password = ?", data).fetchone()
+
         print("VALIDATING SUBMISSION")
         # Validate submission
-        login_details = [email, password]
-        for field in login_details:
-            if not field:
-                #todo handle this
-                return render_template("login.html")
+        if not (self.empty_field_validation(data) and self.existence_validation(user)):
+            return render_template("login.html")
 
         print("SUBMISSION VALIDATED")
-
-        # If the user provided details stored in the database, add these details to the session, 
-        # and send them to their profile page
-        user = cursor.execute("SELECT * FROM users WHERE email= ? AND password = ?",(email, password)).fetchone()
-        print(user)
-        if  user == None:
-            #todo handle this. Invalid login credentials.
-            print("INVALID LOGIN CREDENTIALS")
-            return render_template("login.html")
 
         session["email"] = user[0]
         session["username"] = user[1]
@@ -94,6 +85,22 @@ class JustAsk(FlaskView):
 
         return redirect("/profile")
 
+    def empty_field_validation(self, data):
+        for field in data:
+            if not field:
+                #todo handle this
+                return False
+        return True
+    
+    def existence_validation(self, user):
+        # If the user provided details stored in the database, add these details to the session, 
+        # and send them to their profile page
+        print(user)
+        if  user == None:
+            #todo handle this. Invalid login credentials.
+            print("INVALID")
+            return False
+        return True
 
     @route("/registration/",endpoint="registration", methods = ["GET", "POST"])
     def registration(self):
@@ -107,24 +114,20 @@ class JustAsk(FlaskView):
         last_name = request.form.get("lastname")
         password = request.form.get("password")
 
+        # If the user provided valid info, and they were not already registered, store data in database
+        if cursor.execute("SELECT * FROM users WHERE email= ?", email).fetchall() != []:
+            user = None
+
 
         print("VALIDATING DETAILS")
         # Validate submission
-        data = [email, username,first_name,last_name,password]
-        for field in data:
-            if not field:
-                #todo handle this
-                return render_template("404.html")
+        data = (email,username,first_name,last_name,password)
+        if not (self.empty_field_validation(data) and self.existence_validation(user)):
+            return render_template("404.html")
 
         print("VALIDATED")
 
-        # If the user provided valid info, and they were not already registered, store data in database
-        email_present = cursor.execute("SELECT * FROM users WHERE email= ?",(email,)).fetchall()
-        if email_present != []:
-            #todo handle this. User is already registered.
-            return render_template("404.html")
-
-        cursor.execute("INSERT INTO users VALUES (?,?,?,?, ?)", data)
+        cursor.execute("INSERT INTO users VALUES (?,?,?,?,?)", data)
         connection.commit()
 
         # maybe we should have a registration succesful page, that can then link to the login?
