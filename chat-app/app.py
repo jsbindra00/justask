@@ -43,6 +43,7 @@ class JustAsk(FlaskView):
         socketio.on_event("clientmsg", self.handle_my_custom_event)
 
 
+
     @route("/landingpage", endpoint="landingpage")
     @route("/", endpoint="landingpage")
     def landingpage(self):
@@ -91,10 +92,6 @@ class JustAsk(FlaskView):
 
         return redirect("/profile")
 
-
-
-
-
     @route("/registration/",endpoint="registration", methods = ["GET", "POST"])
     def registration(self):
         if request.method == "GET":
@@ -128,18 +125,15 @@ class JustAsk(FlaskView):
         # maybe we should have a registration succesful page, that can then link to the login?
         return redirect("/login")
 
-
     @route("/chat_logout/", endpoint="chat_logout")
     def chat_logout(self):
         session["room"] = None
         return redirect("/newsession")
 
-
     @route("/logout", endpoint="logout")
     def logout():
         session["email"] = None
         return redirect("/login")
-
 
     @route("/joinsession", endpoint="joinsession", methods = ["GET", "POST"])
     def joinsession(self):
@@ -147,30 +141,32 @@ class JustAsk(FlaskView):
         if request.method == "GET":
             return render_template("joinsession.html")
 
-        print("joining session")
-
+        # get the room id from the form.
         roomID = request.form.get("room")
-        roomIDExists = cursor.execute("SELECT * FROM users WHERE active_session= ?",(roomID,)).fetchall()
-        if roomIDExists != []:
+
+        # clients = cursor.execute("SELECT * FROM users WHERE username = ?",("jas",)).fetchall()
+
+        matchingRoomClients = cursor.execute("SELECT * FROM users WHERE active_session= ?",(roomID,)).fetchall()
+        # if the room ID does not exist among any other user, then we cannot join the session.
+        if matchingRoomClients == []:
             return "room id does not exist"
 
-        # sql_update_query = "UPDATE set active_session from users where " + " = 10000 where id = 4"
-
-        # # fetch the username for the current user.
-        # sql_update_query = "UPDATE set active_session = " + roomID + " where " 
-    
-        # cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)", roomID)
-        # connection.commit()
-
-
-        # print("ROOM ",roomID)
         session["active_session"] = roomID
+
+        cursor.execute("UPDATE users SET active_session = ? WHERE username = ?", (roomID,session["username"]))
+        connection.commit()
+        print("UPDATED")
+
+
+        cursor.execute('''SELECT active_session FROM users WHERE username=?''', (session["username"],))
 
         return redirect(url_for("chat"))
 
     @route("/newsession", endpoint="newsession")
     def newsession(self):
-        return redirect(url_for("joinsession"))
+        if request.method == "GET":
+            return render_template("newsession.html")
+
 
     @route("/chat", endpoint="chat")
     def chat(self):

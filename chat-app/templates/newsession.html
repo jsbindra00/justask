@@ -6,9 +6,9 @@
 
 {% block body %}
 <div class = "background">
-    <form action="/joinsession" method = "post">
-        <h3>Join an existing session</h3>
-        <label>Enter session ID:</label>
+    <form action="/newsession" method = "post">
+        <h3>Create a new session</h3>
+        <label>Enter a session ID (make it memorable!):</label>
         <input type="text" placeholder="Session ID" onfocus="this.placeholder = ''"onblur="this.placeholder = 1234" name="room" maxlength="10">
         <button type="submit">Submit</button>
     </form>

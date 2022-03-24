@@ -10,7 +10,5 @@ class Utility:
     def LengthIsAtleastN(N, string):
         return True
     
-    
-
     def IsStrongPassword(string):
         return Utility.LengthIsAtleastN(10, string) and Utility.ContainsANumber(string)
