@@ -4,6 +4,7 @@ from flask_socketio import SocketIO, join_room, leave_room
 import sqlite3
 from datetime import datetime
 from flask_classful import FlaskView, route
+from flask import Response
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -57,7 +58,7 @@ class JustAsk(FlaskView):
     @route("/login/", endpoint="login", methods=['POST', 'GET'])
     def login(self):
         if request.method == "GET":
-            return render_template("login.html")
+            return render_template("landingpage.html")
 
         # Get user login details
         email = request.form.get("email")
@@ -76,7 +77,8 @@ class JustAsk(FlaskView):
         if  user == None:
             #todo handle this. Invalid login credentials.
             print("INVALID LOGIN CREDENTIALS")
-            return render_template("login.html")
+            return render_template("landingpage.html")
+            # return render_template("landingpage.html")
 
         session["email"] = user[0]
         session["username"] = user[1]
@@ -102,7 +104,7 @@ class JustAsk(FlaskView):
         first_name = request.form.get("firstname")
         last_name = request.form.get("lastname")
         password = request.form.get("password")
-        active_session = ""
+        active_session = "0"
 
 
         data = [email, username,first_name,last_name,password, active_session]
