@@ -9,6 +9,8 @@ from flask import Response
 app = Flask(__name__)
 socketio = SocketIO(app)
 
+
+
 dbName = "clients.db"
 CLIENT_SQL_INJECTION = """
     CREATE TABLE IF NOT EXISTS users (
@@ -29,7 +31,6 @@ class JustAsk(FlaskView):
     default_methods = ['GET', 'POST']
     route_base = "/"
     def __init__(self):
-
         pass
     def Start(self):
         app.config["SESSION_PERMANENT"] = False
@@ -140,9 +141,6 @@ class JustAsk(FlaskView):
         return redirect("/login")
 
 
-
-
-
     @route("/joinsession", endpoint="joinsession", methods = ["GET", "POST"])
     def joinsession(self):
         # need to validate the session id string.
@@ -169,9 +167,6 @@ class JustAsk(FlaskView):
         session["active_session"] = roomID
 
         return redirect(url_for("chat"))
-
-
-
 
     @route("/newsession", endpoint="newsession")
     def newsession(self):

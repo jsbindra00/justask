@@ -28,7 +28,7 @@ class JAClient:
         self.RegisterAttribute(ClientAttribute.Username, None)
         self.RegisterAttribute(ClientAttribute.Password, None)
         self.RegisterAttribute(ClientAttribute.Email, None)
-        self.RegisterAttribute(ClientAttribute.)
+        # self.RegisterAttribute(ClientAttribute.)
         self.RegisterAttribute(ClientAttribute.FirstName, None)
         self.RegisterAttribute(ClientAttribute.LastName, None)
 

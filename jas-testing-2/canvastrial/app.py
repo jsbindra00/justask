@@ -7,10 +7,11 @@ socketio = SocketIO(app)
 
 @app.route('/')
 def sessions():
-    return render_template('session.html')
+    return render_template('sketchpad.html')
 
 def messageReceived(methods=['GET', 'POST']):
     print('message was received!!!')
+
 
 @socketio.on('clientmsg')
 def handle_my_custom_event(json, methods=['GET', 'POST']):
