@@ -54,6 +54,7 @@ document.getElementById("message_input_form").onsubmit = function(e){
     e.preventDefault();
     let x = document.getElementById("question_input");
     pollDOM.question.innerHTML = x.value.trim();
+    poll.answers = [];
     for(let j = 0; j < 4; j++){
         var id = "answer" + j;
         option = document.getElementById(id).value.trim();
