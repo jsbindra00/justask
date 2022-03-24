@@ -1,10 +1,13 @@
 {% extends 'hubbase.html' %}
 
 {% block head %}
-<link rel="stylesheet" href="mcq.css">
+<link rel="stylesheet" href="../static/css/mcq.css">
 {% endblock %}
 
-{% block body %}
+
+
+
+{% block body2 %}
 <div class="background">
     <div class="poll">
         <div class="question"></div>
@@ -12,34 +15,34 @@
     </div>
 
      <!-- Trigger/Open The Modal -->
-     <button class="Mbutton" id="myBtn">Ask Question</button>
+     <button class="Mbutton" id="myBtn">Create a Question</button>
      <!-- The Modal -->
      <div id="myModal" class="modal">
      <!-- Modal content -->
-     <div class="modal-content">
-         <span class="close">&times;</span>
-         <form id="message_input_form" class="form-container">
-             <input type="text" id="question_input" placeholder="Enter your question" name="question" required>
-             <input type="text" id="answer_input" placeholder="Option A" name="question" required>
-             <input type="text" id="answer_input" placeholder="Option B" name="question" required>
-             <input type="text" id="answer_input" placeholder="Option C" name="question" required>
-             <input type="text" id="answer_input" placeholder="Option D" name="question" required>
-             <button type="submit" id="post" class="btn">Post</button>
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="message_input_form" class="form-container">
+                <input type="text" id="question_input" placeholder="Enter your question" name="question" required>
+                <input type="text" id="answer0" placeholder="Option A" name="question" required>
+                <input type="text" id="answer1" placeholder="Option B" name="question" required>
+                <input type="text" id="answer2" placeholder="Option C" name="question" required>
+                <input type="text" id="answer3" placeholder="Option D" name="question" required>
+                <button type="submit" id="post" class="btn">Post</button>
 
-             <!-- <a href=""><i class="fa-solid fa-pen"></i>whiteboard</a> -->
-             
-         </form>
+                <!-- <a href=""><i class="fa-solid fa-pen"></i>whiteboard</a> -->
+                
+            </form>
+        </div>
      </div>
-     </div>
-    </div>
+</div>
 <script>
 let poll = { 
-    question: "What's your favorite programming language?",
+    question:"",
     answers:[
-      "C", "Java", "PHP", "JavaScript"
+      //"C", "Java", "PHP", "JavaScript"
     ],
-    pollCount:20,
-    answersWeight: [4, 4, 2, 10],
+    pollCount:0,
+    answersWeight: [0, 0, 0, 0],
     selectedAnswer:-1
 };
 
@@ -47,12 +50,19 @@ let pollDOM = {
     question:document.querySelector(".poll .question"),
     answers:document.querySelector(".poll .answers")
 };
-
-pollDOM.question.innerText = poll.question;
-pollDOM.answers.innerHTML = poll.answers.map(function(answer, i){
+document.getElementById("message_input_form").onsubmit = function(e){
+    e.preventDefault();
+    let x = document.getElementById("question_input");
+    pollDOM.question.innerHTML = x.value.trim();
+    for(let j = 0; j < 4; j++){
+        var id = "answer" + j;
+        option = document.getElementById(id).value.trim();
+        poll.answers.push(option);
+    }
+    pollDOM.answers.innerHTML = poll.answers.map(function(answer, i){
     return (    
         `
-            <div class="answer" onclick="markAnswer ('${i}')">
+            <div class="answer" id="option${i}" onclick="markAnswer ('${i}')">
                 ${answer}
                 <span class="percentage-bar"></span>
                 <span class="percentage-value"></span>
@@ -61,19 +71,31 @@ pollDOM.answers.innerHTML = poll.answers.map(function(answer, i){
     );   
 }).join("");
 
+}
+
 function markAnswer(i){
-    poll.selectedAnswer = +i; 
+    poll.selectedAnswer = +i;
+    const length = document.querySelectorAll(".poll .answers .answer").length
     try {
-        document.querySelector(".poll .answers. answer.selected").classList.remove("selected");
+        document.querySelector(".poll .answers. answer.selected").classList.remove("selected"); 
     } catch(msg){}
     document.querySelectorAll(".poll .answers .answer")[+i].classList.add("selected");
     showResults();
+    for(let k = 0; k<length; k++){
+        if (k == i){
+            continue;
+        }
+        document.querySelectorAll(".poll .answers .answer")[+k].classList.add("disabledbutton");
+    }
+    
+
 }
 
 function showResults(){
     let answers = document.querySelectorAll(".poll .answers .answer");
     for (let i=0; i<answers.length; i++){
         let percentage = 0;
+        var id = "option" + i;
         if(i == poll.selectedAnswer){
             percentage = Math.round((poll.answersWeight[i]+1) * 100 / (poll.pollCount+1));
         } else {
@@ -112,4 +134,11 @@ if (event.target == modal) {
 }
 }                                                                        
 </script>
+{% endblock %}
+
+
+
+
+{% block body1 %}
+<h1>hello world</h1>
 {% endblock %}
