@@ -39,6 +39,7 @@ class JustAsk(FlaskView):
         socketio.on_event("send_message", self.handle_send_message_event)
         socketio.on_event("join_room", self.handle_join_room_event)
         socketio.on_event("leave_room", self.handle_leave_room_event)
+        socketio.on_event("clientmsg", self.handle_my_custom_event)
 
 
     @route("/landingpage", endpoint="landingpage")
@@ -139,28 +140,33 @@ class JustAsk(FlaskView):
         return redirect("/login")
 
 
+
+
+
     @route("/joinsession", endpoint="joinsession", methods = ["GET", "POST"])
     def joinsession(self):
         # need to validate the session id string.
         if request.method == "GET":
             return render_template("joinsession.html")
 
+        print("joining session")
+
         roomID = request.form.get("room")
         roomIDExists = cursor.execute("SELECT * FROM users WHERE active_session= ?",(roomID,)).fetchall()
         if roomIDExists != []:
             return "room id does not exist"
 
-        sql_update_query = "UPDATE set active_session from users where " + " = 10000 where id = 4"
+        # sql_update_query = "UPDATE set active_session from users where " + " = 10000 where id = 4"
 
-        # fetch the username for the current user.
-        sql_update_query = "UPDATE set active_session = " + roomID + " where " 
+        # # fetch the username for the current user.
+        # sql_update_query = "UPDATE set active_session = " + roomID + " where " 
     
-        cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)", roomID)
-        connection.commit()
+        # cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)", roomID)
+        # connection.commit()
 
 
-        print("ROOM ",roomID)
-        session["room"] = roomID
+        # print("ROOM ",roomID)
+        session["active_session"] = roomID
 
         return redirect(url_for("chat"))
 
@@ -174,7 +180,7 @@ class JustAsk(FlaskView):
     @route("/chat", endpoint="chat")
     def chat(self):
         username = session.get('username')
-        room = session.get('room')
+        room = session.get('active_session')
         if username and room:
             return render_template('chat.html', username=username, room=room)
         else:
@@ -198,7 +204,16 @@ class JustAsk(FlaskView):
         leave_room(data['room'])
         socketio.emit('leave_room_announcement', data, room=data['room'])
 
+    @route('/sketchpad', endpoint="sketchpad")
+    def sessions(self):
+        return render_template('sketchpad.html')
 
+    def messageReceived(self,methods=['GET', 'POST']):
+        print('message was received!!!')
+
+    def handle_my_custom_event(self,json, methods=['GET', 'POST']):
+        print('received my event: ' + str(json))
+        socketio.emit('servermsg', json, callback=self.messageReceived)
 
 JustAsk.register(app)
 

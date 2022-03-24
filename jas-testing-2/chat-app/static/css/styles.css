@@ -56,6 +56,7 @@ a:focus {
     align-items: stretch;
 }
 
+
 #sidebar {
     min-width: 250px;
     max-width: 250px;
@@ -144,8 +145,9 @@ a.article:hover {
 
 
 #content {
-    width: 100%;
-    padding: 20px;
+    position:relative;
+    width:100%;
+
     min-height: 100vh;
     transition: all 0.3s;
 }
