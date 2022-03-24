@@ -56,6 +56,15 @@ a:focus {
     align-items: stretch;
 }
 
+header{
+    background-color: #7386D5;
+    color: white;
+    padding-left: 35px;
+    height: 80px;
+    font-size: 45px;
+    font-family: sans-serif;
+    width:100%;
+}
 
 #sidebar {
     min-width: 250px;
