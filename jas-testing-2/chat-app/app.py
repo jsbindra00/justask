@@ -15,7 +15,8 @@ CLIENT_SQL_INJECTION = """
         username TEXT NOT NULL,
         firstname TEXT NOT NULL,
         lastname TEXT NOT NULL,
-        password TEXT NOT NULL);
+        password TEXT NOT NULL,
+        active_session TEXT NOT NULL);
     """
 connection = sqlite3.connect(dbName, check_same_thread=False)
 
@@ -62,16 +63,12 @@ class JustAsk(FlaskView):
         email = request.form.get("email")
         password = request.form.get("password")
 
-        print("VALIDATING SUBMISSION")
         # Validate submission
         login_details = [email, password]
         for field in login_details:
             if not field:
                 #todo handle this
                 return render_template("login.html")
-
-        print("SUBMISSION VALIDATED")
-
         # If the user provided details stored in the database, add these details to the session, 
         # and send them to their profile page
         user = cursor.execute("SELECT * FROM users WHERE email= ? AND password = ?",(email, password)).fetchone()
@@ -86,8 +83,12 @@ class JustAsk(FlaskView):
         session["firstname"] = user[2]
         session["lastname"] = user[3]
         session["password"] = user[4]
+        session["active_session"] = ""
 
         return redirect("/profile")
+
+
+
 
 
     @route("/registration/",endpoint="registration", methods = ["GET", "POST"])
@@ -101,25 +102,23 @@ class JustAsk(FlaskView):
         first_name = request.form.get("firstname")
         last_name = request.form.get("lastname")
         password = request.form.get("password")
+        active_session = ""
 
 
-        print("VALIDATING DETAILS")
-        # Validate submission
-        data = [email, username,first_name,last_name,password]
+        data = [email, username,first_name,last_name,password, active_session]
         for field in data:
             if not field:
                 #todo handle this
                 return render_template("404.html")
 
-        print("VALIDATED")
 
         # If the user provided valid info, and they were not already registered, store data in database
         email_present = cursor.execute("SELECT * FROM users WHERE email= ?",(email,)).fetchall()
         if email_present != []:
             #todo handle this. User is already registered.
-            return render_template("404.html")
+            return render_template("userexists.html")
 
-        cursor.execute("INSERT INTO users VALUES (?,?,?,?, ?)", data)
+        cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)", data)
         connection.commit()
 
         # maybe we should have a registration succesful page, that can then link to the login?
@@ -129,7 +128,7 @@ class JustAsk(FlaskView):
     @route("/chat_logout/", endpoint="chat_logout")
     def chat_logout(self):
         session["room"] = None
-        return redirect("/chat_login")
+        return redirect("/newsession")
 
 
     @route("/logout", endpoint="logout")
@@ -138,19 +137,37 @@ class JustAsk(FlaskView):
         return redirect("/login")
 
 
-    @route("/chat_login", endpoint="chat_login", methods = ["GET", "POST"])
-    def chat_login(self):
+    @route("/joinsession", endpoint="joinsession", methods = ["GET", "POST"])
+    def joinsession(self):
+        # need to validate the session id string.
         if request.method == "GET":
-            return render_template("chat_login.html")
+            return render_template("joinsession.html")
 
-        # store the session ID into a database consisting of active session ids.
+        roomID = request.form.get("room")
+        roomIDExists = cursor.execute("SELECT * FROM users WHERE active_session= ?",(roomID,)).fetchall()
+        if roomIDExists != []:
+            return "room id does not exist"
 
-        room = request.form.get("room")
-        print("ROOM ",room)
-        session["room"] = room
+        sql_update_query = "UPDATE set active_session from users where " + " = 10000 where id = 4"
+
+        # fetch the username for the current user.
+        sql_update_query = "UPDATE set active_session = " + roomID + " where " 
+    
+        cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)", roomID)
+        connection.commit()
+
+
+        print("ROOM ",roomID)
+        session["room"] = roomID
 
         return redirect(url_for("chat"))
 
+
+
+
+    @route("/newsession", endpoint="newsession")
+    def newsession(self):
+        return redirect(url_for("joinsession"))
 
     @route("/chat", endpoint="chat")
     def chat(self):
@@ -159,7 +176,7 @@ class JustAsk(FlaskView):
         if username and room:
             return render_template('chat.html', username=username, room=room)
         else:
-            return redirect(url_for('chat_login'))
+            return redirect(url_for('newsession'))
 
     def handle_send_message_event(self,data):
         app.logger.info("{} has sent message to the room {}: {}".format(data['username'],

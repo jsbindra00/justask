@@ -10,7 +10,7 @@ margin: 0;
 box-sizing: border-box;
 }
 body{
-    background-color: #4884b6;
+    background-color: rgb(255,255,255);
 }
 .background{
 width: 430px;
@@ -26,7 +26,7 @@ top: 50%;
     left: 0;
     width: 200px;
     height: calc(100% - 65px);
-    background-color: #174368;
+    background-color: #7386D5;
 }
 
 .sidebar ul{
@@ -45,7 +45,6 @@ top: 50%;
     box-sizing: border-box;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid black;
-   
 }
 
 .sidebar ul a i{
@@ -53,7 +52,7 @@ top: 50%;
 }
 
 header{
-    background-color: #174368;
+    background-color: #7386D5;
     color: white;
     padding-left: 35px;
     height: 65px;
@@ -83,7 +82,7 @@ header button{
 form{
 height: 520px;
 width: 400px;
-background-color: #174368;;
+background-color: #7386D5;
 position: absolute;
 transform: translate(-50%,-50%);
 top: 50%;

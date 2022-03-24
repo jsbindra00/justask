@@ -1,0 +1,17 @@
+{% extends 'hubbase.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="./static/css/joinchat.css">
+{% endblock %}
+{% block body %}
+<div class = "background">
+    <form action="/chat_login" method = "post">
+        <h3>Join an existing session</h3>
+        <label>Enter session ID:</label>
+        <input type="text" placeholder="Session ID" onfocus="this.placeholder = ''"onblur="this.placeholder = 1234" name="room" maxlength="10">
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% endblock %}
+
+
