@@ -12,10 +12,6 @@ body {
     color: #000000;
 }
 
-
-
-
-
 #loginBox
 {
 height: 500px;
@@ -32,7 +28,6 @@ border-radius: 10px;
 padding: 50px 35px;
 background:  #7386D5;
 }
-
 #loginbutton
 {
     margin-bottom: 50px;
@@ -76,9 +71,7 @@ color:  #0a2031;
 letter-spacing: 4px;
 position: static;
 }
-form{
 
-}
 form *{
 font-family: 'Poppins',sans-serif;
 color: #ffffff;

@@ -110,9 +110,7 @@
       </head>
 
   <body>
-      <div class="logo"> 
-        <h1>justask.</h1>
-      </div>
+
       <form action="/registration/" method = "post">
         <h3>Create Account</h3>
         <label for="firstname">First Name</label>
@@ -131,7 +129,7 @@
         <input name = "password" type="password" placeholder="********" id="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='********'" required>
         
         <button>Submit</button>
-        <br><br><a href="{{ url_for('login') }}">Already have an account? Log in here!</a>
+        <a id="redirectToLogin">Already have an account? Log in here!</a>
       </form>
   </body>
 </html>

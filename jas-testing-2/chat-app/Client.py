@@ -6,10 +6,9 @@ class ClientAttribute(IntEnum):
     Username = 0
     Password = 1
     Email = 2
-    OwnedSessions = 3
-    JoinedSessions = 4
-    FirstName = 5
-    LastName = 6
+    FirstName = 3
+    LastName = 4
+    ActiveSession = 5
 
 class ClientDataBase:
 
@@ -29,8 +28,7 @@ class JAClient:
         self.RegisterAttribute(ClientAttribute.Username, None)
         self.RegisterAttribute(ClientAttribute.Password, None)
         self.RegisterAttribute(ClientAttribute.Email, None)
-        self.RegisterAttribute(ClientAttribute.OwnedSessions, [])
-        self.RegisterAttribute(ClientAttribute.JoinedSessions, [])
+        self.RegisterAttribute(ClientAttribute.)
         self.RegisterAttribute(ClientAttribute.FirstName, None)
         self.RegisterAttribute(ClientAttribute.LastName, None)
 
