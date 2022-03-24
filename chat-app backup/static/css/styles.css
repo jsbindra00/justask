@@ -5,7 +5,7 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
     font-family: 'Poppins', sans-serif;
-    background: #fafafa;
+    background: #ccd8f2;
 }
 
 p {
@@ -55,6 +55,36 @@ a:focus {
     width: 100%;
     align-items: stretch;
 }
+header{
+    background-color: #7386D5;
+    color: white;
+    height: 65px;
+    font-size: 45px;
+    font-family: sans-serif;
+    width: 100%;
+    float: inline-end;
+    position: sticky;
+    top: 0px;
+}
+header button{
+    float: right;
+    height: 30px;
+    font-size: 16px;
+    margin-top: 16px;
+    margin-right: 16px;
+    border-radius: 8px;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+    background-color: #4884b6;
+    width: 70px;
+    border-style: none;
+    box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    padding-top: 4px;
+    font-weight: normal;
+}
 
 #sidebar {
     min-width: 250px;
@@ -62,6 +92,7 @@ a:focus {
     background: #7386D5;
     color: #fff;
     transition: all 0.3s;
+    float:inline-end;
 }
 
 #sidebar.active {
