@@ -129,6 +129,11 @@ class JustAsk(FlaskView):
     def chat_logout(self):
         session["room"] = None
         return redirect("/newsession")
+        
+    @route("/MCQ", endpoint="MCQ", methods = ["GET", "POST"])
+    def MCQ(self):
+        if request.method == "GET":
+            return render_template("MCQ.html")
 
     @route("/logout", endpoint="logout")
     def logout():

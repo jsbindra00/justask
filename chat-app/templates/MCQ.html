@@ -53,7 +53,7 @@ document.getElementById("message_input_form").onsubmit = function(e){
     e.preventDefault();
     const quest = document.getElementById("question_input");
     var inputForm = document.getElementById("answerDiv").getElementsByTagName("input");
-    var len = inputForm.length -1
+    var len = inputForm.length
     pollDOM.question.innerHTML = quest.value.trim();
     poll.answers = [];
     for(let j = 0; j < len; j++){
@@ -73,8 +73,8 @@ document.getElementById("message_input_form").onsubmit = function(e){
         `
     );
 }).join("");
-
 }
+
 function add(){
     var answerDiv = document.getElementById("answerDiv");
     var len = answerDiv.getElementsByTagName("input").length;
