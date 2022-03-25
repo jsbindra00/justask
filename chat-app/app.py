@@ -225,11 +225,6 @@ class JustAsk(FlaskView):
         leave_room(data['room'])
         socketio.emit('leave_room_announcement', data, room=data['room'])
 
-    @route('/MCQ', endpoint="MCQ", methods = ["GET", "POST"])
-    def MCQ(self):
-        if request.method == "GET":
-            return render_template("MCQ.html")
-
     @route('/sketchpad', endpoint="sketchpad")
     def sessions(self):
         return render_template('sketchpad.html')

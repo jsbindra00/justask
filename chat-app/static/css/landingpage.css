@@ -95,7 +95,7 @@ top: 53%;
 left: 50%;
 border-radius: 10px;
 padding: 50px 35px;
-background:  #7386D5;
+background:  rgb(129,96,217);;
 
 visibility:hidden;
 opacity: 0;
@@ -212,7 +212,7 @@ top: 53%;
 left: 50%;
 border-radius: 10px;
 padding: 50px 35px;
-background:  #7386D5;
+background:  rgb(129,96,217);
 
 height: fit-content;
 block-size: fit-content;

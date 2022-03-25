@@ -26,7 +26,7 @@ top: 50%;
     left: 0;
     width: 200px;
     height: calc(100% - 65px);
-    background-color: #7386D5;
+    background-color: rgb(129,96,217);;
 }
 
 .sidebar ul{
@@ -52,7 +52,7 @@ top: 50%;
 }
 
 header{
-    background-color: #7386D5;
+    background-color: rgb(129,96,217);;
     color: white;
     padding-left: 35px;
     height: 65px;
@@ -82,7 +82,7 @@ header button{
 form{
 height: 520px;
 width: 400px;
-background-color: #7386D5;
+background-color: rgb(129,96,217);;
 position: absolute;
 transform: translate(-50%,-50%);
 top: 50%;
