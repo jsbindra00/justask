@@ -23,6 +23,18 @@ function resizeCanvas()
 
 
 
+
+
+// function testing()
+// {
+
+//     form = $('FORMID');
+//     divToTarget = $('DIVTOTARGETID');
+//     if(form.text() == ""){
+//         divToTarget.css("visibility", "hidden");
+//     }
+// }
+
 $('document').ready(function(){
 
     let loginBox = $('#loginBox');

@@ -1,6 +1,3 @@
-// var jQueryScript = document.createElement('script');  
-// jQueryScript.setAttribute('src','https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js');
-// document.head.appendChild(jQueryScript);
 
 var cursorCanvas, ccctx;
 
@@ -14,18 +11,6 @@ currentScroll = 0;
 const canvasColor = "rgb(250,250,250)";
 
 
-
-
-// function AdjustToolkit()
-// {
-//     toolbar = $('#toolkit');
-//     let toolbarHeight = css("height");
-//     toolbar.css("top", toolbarHeight / 2);
-
-
-// }
-
-
 var gridLineWidth = 1;
 var gridSpacing = 30;
 
@@ -35,7 +20,6 @@ function init() {
     ctx = canvas.getContext("2d");
     cursorCanvas = $('#cursorcanvas').get(0);
 
-    OnWindowResize();
     window.onresize = OnWindowResize
 
     w = canvas.width;
@@ -54,12 +38,11 @@ function init() {
         findxy('out', e)
     }, false);
 
-
     ctx.fillStyle = canvasColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    OnWindowResize();
+
 }
-
-
 
 
 function AdjustStrokeWidth(amount)
@@ -67,14 +50,6 @@ function AdjustStrokeWidth(amount)
     strokeWidth += amount;
 }
 
-
-
-
-function PrintSlider()
-{
-    console.log("CHANGING");
-
-}
 
 function UpdateStrokeWidth(newWidth)
 {
@@ -89,12 +64,13 @@ function UpdateStrokeWidth(newWidth)
 function RenderBrushCursor(context, e)
 {
 
+    sidebar = $('#sidebar');
     context.strokeStyle = x;
     context.strokeWidth = 2;
     context.clearRect(0,0, cursorCanvas.width, cursorCanvas.height);
     context.fillStyle = x;
     context.beginPath();
-    context.arc(e.pageX , e.pageY, strokeWidth, 0, 2 * Math.PI);
+    context.arc(e.pageX - sidebar.width(), e.pageY, strokeWidth, 0, 2 * Math.PI);
     context.stroke(); 
 }
 function AdjustToolkit()
@@ -115,7 +91,6 @@ function AdjustToolkit()
             UpdateStrokeWidth(range.value);
     }
     init();
-    alert("init done");
 }
 
 $(document).ready(function(){
@@ -196,12 +171,6 @@ cursorCanvas.addEventListener("wheel", function(evnt){
         ccctx = cursorCanvas.getContext('2d');
      
     }
-    
-
-
-
-
-
 
 
     function color(obj) {
@@ -212,11 +181,12 @@ cursorCanvas.addEventListener("wheel", function(evnt){
     }
     
     function draw() {
+        sidebar = $('#sidebar');
         console.log("drawing at " + prevX +  " : " + prevY)
         ctx.lineWidth = strokeWidth;
         ctx.beginPath();
-        ctx.moveTo(prevX, prevY);
-        ctx.lineTo(currX, currY);
+        ctx.moveTo(prevX - sidebar.width(), prevY);
+        ctx.lineTo(currX - sidebar.width(), currY);
         ctx.strokeStyle = x;
         ctx.stroke();
         ctx.closePath();
