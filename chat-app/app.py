@@ -135,6 +135,13 @@ class JustAsk(FlaskView):
         session["email"] = None
         return redirect("/login")
 
+
+    def RenderSession(self, sessionID): 
+
+        pass
+        
+
+
     @route("/joinsession", endpoint="joinsession", methods = ["GET", "POST"])
     def joinsession(self):
         # need to validate the session id string.
@@ -158,15 +165,38 @@ class JustAsk(FlaskView):
         print("UPDATED")
 
 
-        cursor.execute('''SELECT active_session FROM users WHERE username=?''', (session["username"],))
+        # cursor.execute('''SELECT active_session FROM users WHERE username=?''', (session["username"],))
 
         return redirect(url_for("chat"))
 
-    @route("/newsession", endpoint="newsession")
+    @route("/newsession", endpoint="newsession", methods = ["GET", "POST"])
     def newsession(self):
+
         if request.method == "GET":
             return render_template("newsession.html")
 
+
+        # get the room id from the form.
+        roomID = request.form.get("room")
+
+        # clients = cursor.execute("SELECT * FROM users WHERE username = ?",("jas",)).fetchall()
+
+        # see if any other client has this room id associated with them.
+
+        matchingRoomClients = cursor.execute("SELECT * FROM users WHERE active_session= ?",(roomID,)).fetchall()
+        # if the room ID does not exist among any other user, then we cannot join the session.
+        if matchingRoomClients != []:
+            return "Session with room ID already exists"
+
+
+        # the user now owns the session.
+        session["active_session"] = roomID
+
+        cursor.execute("UPDATE users SET active_session = ? WHERE username = ?", (roomID,session["username"]))
+        connection.commit()
+        print("UPDATED")
+
+        return redirect(url_for("chat"))
 
     @route("/chat", endpoint="chat")
     def chat(self):
@@ -194,6 +224,11 @@ class JustAsk(FlaskView):
         app.logger.info("{} has left the room {}".format(data['username'], data['room']))
         leave_room(data['room'])
         socketio.emit('leave_room_announcement', data, room=data['room'])
+
+    @route('/MCQ', endpoint="MCQ", methods = ["GET", "POST"])
+    def MCQ(self):
+        if request.method == "GET":
+            return render_template("MCQ.html")
 
     @route('/sketchpad', endpoint="sketchpad")
     def sessions(self):
