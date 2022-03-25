@@ -4,9 +4,6 @@
 <link rel="stylesheet" href="../static/css/mcq.css">
 {% endblock %}
 
-
-
-
 {% block content %}
 <div class="background">
     <div class="poll" id="poll">
@@ -21,14 +18,16 @@
      <!-- Modal content -->
         <div class="modal-content">
             <span class="close">&times;</span>
-            <form id="message_input_form" class="form-container">
+            <form name="modal-form" id="message_input_form" class="form-container">
                 <input type="text" id="question_input" placeholder="Enter your question" name="question" required>
-                <input type="text" id="answer0" placeholder="Option A" name="question" required>
-                <input type="text" id="answer1" placeholder="Option B" name="question" required>
-                <input type="text" id="answer2" placeholder="Option C" name="question" required>
-                <input type="text" id="answer3" placeholder="Option D" name="question" required>
+                <div class="answers" id="answerDiv">  
+                    <input type="text" id="answer0" placeholder="Option 1" name="question" required>
+                    <input type="text" id="answer1" placeholder="Option 2" name="question" required>
+                    <input type="text" id="answer2" placeholder="Option 3" name="question" required>
+                    <input type="text" id="answer3" placeholder="Option 4" name="question" required>
+                </div>
                 <button type="submit" id="post" class="btn">Post</button>
-
+                <button type="submit" id="add-option" class="btn" onclick="add()">Add Answer</button>
                 <!-- <a href=""><i class="fa-solid fa-pen"></i>whiteboard</a> -->
                 
             </form>
@@ -52,10 +51,12 @@ let pollDOM = {
 };
 document.getElementById("message_input_form").onsubmit = function(e){
     e.preventDefault();
-    let x = document.getElementById("question_input");
-    pollDOM.question.innerHTML = x.value.trim();
+    const quest = document.getElementById("question_input");
+    var inputForm = document.getElementById("answerDiv").getElementsByTagName("input");
+    var len = inputForm.length -1
+    pollDOM.question.innerHTML = quest.value.trim();
     poll.answers = [];
-    for(let j = 0; j < 4; j++){
+    for(let j = 0; j < len; j++){
         var id = "answer" + j;
         option = document.getElementById(id).value.trim();
         poll.answers.push(option);
@@ -74,6 +75,23 @@ document.getElementById("message_input_form").onsubmit = function(e){
 }).join("");
 
 }
+function add(){
+    var answerDiv = document.getElementById("answerDiv");
+    var len = answerDiv.getElementsByTagName("input").length;
+    var newEntry = document.createElement("input");
+    id = "answer" + (len-1);
+    placeholder = "Option " + (len +1);
+    newEntry.setAttribute("id", id);
+    newEntry.setAttribute("placeholder", placeholder);
+    newEntry.classList.add("answerDiv");
+    if (len < 6){
+        return(answerDiv.append(newEntry));
+    }
+    else{
+        return alert("no more than 6 possible answers");
+    }
+    poll.pollCount.push(0);
+}
 
 function markAnswer(i){
     poll.selectedAnswer = +i;
@@ -83,7 +101,7 @@ function markAnswer(i){
     } catch(msg){}
     document.querySelectorAll(".poll .answers .answer")[+i].classList.add("selected");
     showResults();
-    for(let k = 0; k<length; k++){
+    for(let k = 0; k< length; k++){
         if (k == i){
             continue;
         }
