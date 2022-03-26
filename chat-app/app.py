@@ -6,43 +6,38 @@ from datetime import datetime
 from flask_classful import FlaskView, route
 from flask import Response
 
-app = Flask(__name__)
-socketio = SocketIO(app)
+# app = Flask(__name__)
+# socketio = SocketIO(app)
 
+# def insert_data(command_SQL, data):
+#     cursor.execute(command_SQL, data)
+#     connection.commit()
 
-
-dbName = "clients.db"
-CLIENT_SQL_INJECTION = """
-    CREATE TABLE IF NOT EXISTS users (
-        email TEXT NOT NULL PRIMARY KEY,
-        username TEXT NOT NULL,
-        firstname TEXT NOT NULL,
-        lastname TEXT NOT NULL,
-        password TEXT NOT NULL,
-        active_session TEXT NOT NULL);
-    """
-connection = sqlite3.connect(dbName, check_same_thread=False)
-
-cursor = connection.cursor()
-cursor.execute(CLIENT_SQL_INJECTION)
-connection.commit()  
+# def search_data( command_SQL, data):
+#     return cursor.execute(command_SQL, data).fetchall()
 
 class JustAsk(FlaskView):
     default_methods = ['GET', 'POST']
     route_base = "/"
     def __init__(self):
         pass
-    def Start(self):
-        app.config["SESSION_PERMANENT"] = False
-        app.config["SESSION_TYPE"] = "filesystem"
-        Session(app)
 
-        socketio.on_event("send_message", self.handle_send_message_event)
-        socketio.on_event("join_room", self.handle_join_room_event)
-        socketio.on_event("leave_room", self.handle_leave_room_event)
-        socketio.on_event("clientmsg", self.handle_my_custom_event)
+    def Start(self, db_name):
+        self.app = Flask(__name__)
+        self.socketio = SocketIO(self.app)
+        JustAsk.register(self.app)
+        self.socketio.run(self.app, debug=False)
 
+        self.connection, self.cursor = self.connect_db(db_name)
 
+        self.app.config["SESSION_PERMANENT"] = False
+        self.app.config["SESSION_TYPE"] = "filesystem"
+        Session(self.app)
+
+        self.socketio.on_event("send_message", self.handle_send_message_event)
+        self.socketio.on_event("join_room", self.handle_join_room_event)
+        self.socketio.on_event("leave_room", self.handle_leave_room_event)
+        self.socketio.on_event("clientmsg", self.handle_my_custom_event)
 
     @route("/landingpage", endpoint="landingpage")
     @route("/", endpoint="landingpage")
@@ -75,7 +70,7 @@ class JustAsk(FlaskView):
                 return render_template("login.html")
         # If the user provided details stored in the database, add these details to the session, 
         # and send them to their profile page
-        user = cursor.execute("SELECT * FROM users WHERE email= ? AND password = ?",(email, password)).fetchone()
+        user = self.search_data("SELECT * FROM users WHERE email= ? AND password = ?",(email, password))[0]
         print(user)
         if  user == None:
             #todo handle this. Invalid login credentials.
@@ -114,13 +109,13 @@ class JustAsk(FlaskView):
 
 
         # If the user provided valid info, and they were not already registered, store data in database
-        email_present = cursor.execute("SELECT * FROM users WHERE email= ?",(email,)).fetchall()
+        email_present = self.search_data("SELECT * FROM users WHERE email= ?", (email,))
         if email_present != []:
             #todo handle this. User is already registered.
             return render_template("userexists.html")
 
-        cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)", data)
-        connection.commit()
+        
+        self.insert_data("INSERT INTO users VALUES (?,?,?,?,?,?)", data)
 
         # maybe we should have a registration succesful page, that can then link to the login?
         return redirect("/login")
@@ -129,23 +124,11 @@ class JustAsk(FlaskView):
     def chat_logout(self):
         session["room"] = None
         return redirect("/newsession")
-        
-    @route("/MCQ", endpoint="MCQ", methods = ["GET", "POST"])
-    def MCQ(self):
-        if request.method == "GET":
-            return render_template("MCQ.html")
 
     @route("/logout", endpoint="logout")
     def logout():
         session["email"] = None
         return redirect("/login")
-
-
-    def RenderSession(self, sessionID): 
-
-        pass
-        
-
 
     @route("/joinsession", endpoint="joinsession", methods = ["GET", "POST"])
     def joinsession(self):
@@ -158,50 +141,26 @@ class JustAsk(FlaskView):
 
         # clients = cursor.execute("SELECT * FROM users WHERE username = ?",("jas",)).fetchall()
 
-        matchingRoomClients = cursor.execute("SELECT * FROM users WHERE active_session= ?",(roomID,)).fetchall()
+        matchingRoomClients = self.search_data("SELECT * FROM users WHERE active_session= ?", (roomID,))
         # if the room ID does not exist among any other user, then we cannot join the session.
         if matchingRoomClients == []:
             return "room id does not exist"
 
         session["active_session"] = roomID
 
-        cursor.execute("UPDATE users SET active_session = ? WHERE username = ?", (roomID,session["username"]))
-        connection.commit()
+        self.insert_data("UPDATE users SET active_session = ? WHERE username = ?", (roomID, session["username"]))
         print("UPDATED")
 
-
+        # ???
         # cursor.execute('''SELECT active_session FROM users WHERE username=?''', (session["username"],))
 
         return redirect(url_for("chat"))
 
-    @route("/newsession", endpoint="newsession", methods = ["GET", "POST"])
+    @route("/newsession", endpoint="newsession")
     def newsession(self):
-
         if request.method == "GET":
             return render_template("newsession.html")
 
-
-        # get the room id from the form.
-        roomID = request.form.get("room")
-
-        # clients = cursor.execute("SELECT * FROM users WHERE username = ?",("jas",)).fetchall()
-
-        # see if any other client has this room id associated with them.
-
-        matchingRoomClients = cursor.execute("SELECT * FROM users WHERE active_session= ?",(roomID,)).fetchall()
-        # if the room ID does not exist among any other user, then we cannot join the session.
-        if matchingRoomClients != []:
-            return "Session with room ID already exists"
-
-
-        # the user now owns the session.
-        session["active_session"] = roomID
-
-        cursor.execute("UPDATE users SET active_session = ? WHERE username = ?", (roomID,session["username"]))
-        connection.commit()
-        print("UPDATED")
-
-        return redirect(url_for("chat"))
 
     @route("/chat", endpoint="chat")
     def chat(self):
@@ -213,22 +172,22 @@ class JustAsk(FlaskView):
             return redirect(url_for('newsession'))
 
     def handle_send_message_event(self,data):
-        app.logger.info("{} has sent message to the room {}: {}".format(data['username'],
+        self.app.logger.info("{} has sent message to the room {}: {}".format(data['username'],
                                                                         data['room'],
                                                                         data['message']))
         data["time"] = datetime.now().strftime("%H:%M")                                                               
-        socketio.emit('receive_message',data, room=data['room'])
+        self.socketio.emit('receive_message',data, room=data['room'])
 
     def handle_join_room_event(self,data):
-        app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
+        self.app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
         join_room(data['room'])
         data["time"] = datetime.now().strftime("[%H:%M]")
-        socketio.emit('join_room_announcement',data, room=data['room'])
+        self.socketio.emit('join_room_announcement',data, room=data['room'])
 
     def handle_leave_room_event(self,data):
-        app.logger.info("{} has left the room {}".format(data['username'], data['room']))
+        self.app.logger.info("{} has left the room {}".format(data['username'], data['room']))
         leave_room(data['room'])
-        socketio.emit('leave_room_announcement', data, room=data['room'])
+        self.socketio.emit('leave_room_announcement', data, room=data['room'])
 
     @route('/sketchpad', endpoint="sketchpad")
     def sessions(self):
@@ -239,12 +198,41 @@ class JustAsk(FlaskView):
 
     def handle_my_custom_event(self,json, methods=['GET', 'POST']):
         print('received my event: ' + str(json))
-        socketio.emit('servermsg', json, callback=self.messageReceived)
+        self.socketio.emit('servermsg', json, callback=self.messageReceived)
 
-JustAsk.register(app)
+    def insert_data(self, command_SQL, data):
+        self.cursor.execute(command_SQL, data)
+        self.connection.commit()
+
+    def search_data(self, command_SQL, data):
+        return self.cursor.execute(command_SQL, data).fetchall()
+    
+    def connect_db(self, dbName):
+        CLIENT_SQL_INJECTION = """
+        CREATE TABLE IF NOT EXISTS users (
+            email TEXT NOT NULL PRIMARY KEY,
+            username TEXT NOT NULL,
+            firstname TEXT NOT NULL,
+            lastname TEXT NOT NULL,
+            password TEXT NOT NULL,
+            active_session TEXT NOT NULL);
+        """
+        connection = sqlite3.connect(dbName, check_same_thread=False)
+
+        cursor = connection.cursor()
+        cursor.execute(CLIENT_SQL_INJECTION)
+        connection.commit()
+        return connection, cursor 
+    
+    def disconnect(self):
+        self.cursor.close()
+        self.connection.close()
+    
+    def reconnect(self, db_name):
+        self.disconnect()
+        self.connect_db(db_name)
 
 if __name__ == '__main__':
     application = JustAsk()
-    application.Start()
-    socketio.run(app, debug=True)
-
+    application.Start("clients.db")
+    #socketio.run(app, debug=True)
