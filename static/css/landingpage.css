@@ -12,6 +12,11 @@ body {
     color: #000000;
 }
 
+#redirectToLogin, #signupLink
+{
+  color:white;
+  cursor:pointer;
+}
 
 #centerpiece
 {

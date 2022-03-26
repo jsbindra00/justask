@@ -153,16 +153,17 @@ class JustAsk(FlaskView):
             matchingRoomClients = cursor.execute("SELECT * FROM users WHERE active_session= ?",(roomID,)).fetchall()
             # if the room ID does not exist among any other user, then we cannot join the session.
 
-            # if matchingRoomClients == []:
-            #     return "room id does not exist"
+            if matchingRoomClients == []:
+                # handle this.
+                return "room id does not exist"
 
             session["active_session"] = roomID
 
             cursor.execute("UPDATE users SET active_session = ? WHERE username = ?", (roomID,session["username"]))
             connection.commit()
             return redirect(url_for("chat"))
-
-        return "creating new session"
+        elif "createsession" in request.form:
+            return "creating new session"
 
         
 

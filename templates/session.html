@@ -26,12 +26,87 @@
     
 
     <div class = "sessionconfig">
-        <form class= "sessionconfig" action="/session" method = "post">
+        <div id="joinsession">
             <h3 id="sessionconfigtitle">Join an existing session</h3>
-            <label>Enter session ID:</label>
-            <input type="text" placeholder="Session ID" onfocus="this.placeholder = ''"onblur="this.placeholder = 1234" name="room" maxlength="10">
-            <button type="submit" name="joinsession">Submit</button>
-        </form>
+            <form class= "sessionconfig" action="/session" method = "post">
+                <label>Enter session ID:</label>
+                <input type="text" placeholder="Session ID" onfocus="this.placeholder = ''"onblur="this.placeholder = 1234" name="room" maxlength="10">
+                <button type="submit" name="joinsession">Submit</button>
+            </form>
+        </div>
+
+
+        <div id="createsession">
+            <h3>Create a new session</h3>
+
+
+            <form class = "sessionconfig" action="/session" method = "post">
+                <i class="fa-solid fa-coffee fa-5x"></i>
+                <label>Enter a session ID (make it memorable!):</label>
+                <input type="text" placeholder="Session ID" onfocus="this.placeholder = ''"onblur="this.placeholder = 1234" name="room" maxlength="10" id="sessionID">
+                <script>
+        
+        
+                    function GenerateSessionID() {
+                        SESSION_ID_STRING_LENGTH = 10;
+                        let result = '';
+                        var selection = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                        var selectionSize = selection.length;
+                        for ( var i = 0; i < SESSION_ID_STRING_LENGTH; i++ ) {
+                        result += selection.charAt(Math.floor(Math.random() * selectionSize));
+                    }
+                    $('#sessionID').val(result);
+                    }
+                </script>
+                <strong><a id="generateID" onclick = "GenerateSessionID()" style="cursor:pointer; font-size:15px;">Generate one for me</a></strong>
+                
+                <button name="createsession" type="submit">Submit</button>
+            </form>
+        </div>
+
+
+        
+
+    <script>
+        $('document').ready(function(){
+
+            let loginBox = $('#joinsession');
+            let registrationBox = $('#createsession');
+
+
+            function ShowLoginBox()
+            {
+                // on click, make the login box visible.
+                if (loginBox.css('opacity') == 1) return;
+                loginBox.css('visibility', "visible");
+                loginBox.css('opacity', 1)
+
+                // let welcome = $('#welcome');
+                // welcome.css('visibility', "hidden");
+                // if (registrationBox.css('opacity') == 0) return;
+                // registrationBox.css('opacity', '0')
+                // registrationBox.css('visibility', 'hidden');
+                
+            }
+
+            function ShowRegistrationBox()
+            {
+                loginBox.css('opacity', 0)
+                registrationBox.css("visibility", "visible");
+                registrationBox.css("opacity", 1);
+                loginBox.css('visibility', 'hidden');
+                
+            }
+            $(window).resize(resizeCanvas)
+
+            $('#continue').click(ShowLoginBox)
+
+            $('#signupLink').click(ShowRegistrationBox)
+            $('#redirectToLogin').click(ShowLoginBox)
+        })
+
+    </script>
+
     </div>
 </div>
 
@@ -48,29 +123,7 @@
     
 <!--     
     <div class = "background">
-        <form action="/session" method = "post">
-            <h3>Create a new session</h3>
-            <i class="fa-solid fa-coffee fa-5x"></i>
-            <label>Enter a session ID (make it memorable!):</label>
-            <input type="text" placeholder="Session ID" onfocus="this.placeholder = ''"onblur="this.placeholder = 1234" name="room" maxlength="10" id="sessionID">
-            <script>
-    
-    
-                function GenerateSessionID() {
-                    SESSION_ID_STRING_LENGTH = 10;
-                    let result = '';
-                    var selection = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                    var selectionSize = selection.length;
-                    for ( var i = 0; i < SESSION_ID_STRING_LENGTH; i++ ) {
-                    result += selection.charAt(Math.floor(Math.random() * selectionSize));
-                }
-                $('#sessionID').val(result);
-                }
-            </script>
-            <strong><a id="generateID" onclick = "GenerateSessionID()" style="cursor:pointer; font-size:15px;">Generate one for me</a></strong>
-            
-            <button type="submit">Submit</button>
-        </form>
+       
     </div> -->
 
 
