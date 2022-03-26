@@ -53,8 +53,6 @@ function AdjustStrokeWidth(amount)
 
 function UpdateStrokeWidth(newWidth)
 {
-    let p = document.getElementById("val")
-    p.textContent = newWidth;
     strokeWidth = newWidth;
     // RenderBrushCursor(ccctx, e)
 
