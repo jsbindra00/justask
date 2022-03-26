@@ -56,11 +56,9 @@ class JustAsk(FlaskView):
     def __init__(self):
         pass
 
-    def Start(self, db_name):
+    def Start(self):
         self.app = Flask(__name__)
         self.socketio = SocketIO(self.app)
-
-        reconnect(db_name)
 
         self.app.config["SESSION_PERMANENT"] = False
         self.app.config["SESSION_TYPE"] = "filesystem"
@@ -236,5 +234,5 @@ class JustAsk(FlaskView):
 
 if __name__ == '__main__':
     application = JustAsk()
-    application.Start("clientsxx_test.db")
+    application.Start()
     #socketio.run(app, debug=True)

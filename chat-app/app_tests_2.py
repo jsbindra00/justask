@@ -3,7 +3,6 @@ import requests
 import sqlite3
 import os
 from app_2 import connect_db, disconnect, reconnect, insert_data, search_data
-import threading
 
 class ApiTest(unittest.TestCase):
 
@@ -22,15 +21,11 @@ class ApiTest(unittest.TestCase):
         self.same_email = dict(email='email@gmail.com', first_name='value2', last_name = 'v', username = 'a', password = 'a')
 
         reconnect(self.TEST_DATABASE_NAME)
-        # self.connect, self.cursor = connect_db(self.TEST_DATABASE_NAME)
-        # self.cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)", self.SETUP_DATA[0])
-        # self.connect.commit()
 
     def test_register_user_with_correct_details(self):
         # email should start of not being in db
-        test_data = dict(email='value7', firstname='value2', lastname = 'v', username = 'a', password = 'a')
+        test_data = dict(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password = 'password1234')
         email_present = search_data("SELECT * FROM users WHERE email= ?", (test_data["email"],))
-        print(email_present)
         assert email_present == []
         
         # after post, user should be redirected, and data should be present in db
@@ -38,7 +33,23 @@ class ApiTest(unittest.TestCase):
         email_present = search_data("SELECT * FROM users WHERE email= ?",(test_data["email"],))
         assert email_present != []
         assert r.url == self.LOGIN_URL
+    
+    def test_registered_user_registers_again(self):
+        test_data = dict(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password = 'password1234')
+        insert_data("INSERT INTO users VALUES (?,?,?,?,?,?)", ('JohnSmith12@gmail.com', 'John', 'Smith', 'John12', 'password1234', '0'))
+        email_present = search_data("SELECT * FROM users WHERE email= ?", (test_data["email"],))
+        assert email_present != []
 
+        r = requests.post(self.REGISTER_URL, data= test_data)
+        assert r.url == "http://127.0.0.1:5000/userexists.html"
+
+        test_data['username'] = "Smith12"
+        r = requests.post(self.REGISTER_URL, data= test_data)
+        assert r.url == "http://127.0.0.1:5000/userexists.html"
+
+        test_data['email'] = "JohnSmith21@gmail.com"
+        r = requests.post(self.REGISTER_URL, data= test_data)
+        assert r.url == self.LOGIN_URL
 
 
     def test_access_home_page_unsigned_in(self):
@@ -114,8 +125,6 @@ class ApiTest(unittest.TestCase):
     # remove the setup data from db
     def tearDown(self):
         reconnect("clients.db")
-        # self.cursor.close()
-        # self.connect.close()
         os.remove(self.TEST_DATABASE_NAME)
     
 if __name__ == "__main__":
