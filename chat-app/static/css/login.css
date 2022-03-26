@@ -40,7 +40,8 @@ background:  #7386D5;
     transform: translate3d(-50%, -50%, 0); 
     left:50%;
     font-size: 15px;
-
+    margin-bottom: 10px;
+    color: white;
 }
 
 *,
@@ -111,7 +112,7 @@ margin-top: 50px;
 width: 100%;
 background-color: #ffffff;
 color: #080710;
-padding: 15px 0;
+padding: 15px 0 0;
 font-size: 18px;
 font-weight: 600;
 border-radius: 5px;

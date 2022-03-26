@@ -50,34 +50,11 @@ top: 50%;
 .sidebar ul a i{
     margin-right: 16px;
 }
-
-header{
-    background-color: rgb(129,96,217);;
-    color: white;
-    padding-left: 35px;
-    height: 65px;
-    font-size: 45px;
-    font-family: sans-serif;
-}
-
-header button{
-    float: right;
-    height: 30px;
-    font-size: 16px;
-    margin-top: 16px;
-    margin-right: 16px;
-    border-radius: 8px;
-    align-items: center;
-    cursor: pointer;
-    color: white;
-    background-color: #4884b6;
-    width: 70px;
-    border-style: none;
-    box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
-    box-sizing: border-box;
-    font-family: sans-serif;
-    padding-top: 4px;
-    font-weight: normal;
+.dropbtn{
+    background-color: transparent;
+    float:right;
+    margin-right: 10px;
+    border: none;
 }
 form{
 height: 520px;
@@ -125,11 +102,11 @@ font-weight: 300;
 ::placeholder{
 color: #e5e5e5;
 }
-button{
+.submitbtn{
 margin-top: 50px;
 width: 100%;
 background-color: #ffffff;
-color: #080710;
+color:  rgb(129,96,217);
 padding: 15px 0;
 font-size: 18px;
 font-weight: 600;

@@ -157,7 +157,7 @@ header{
     font-family: sans-serif;
     width:100%;
 }
-#dropbtn{
+.dropbtn{
     background-color: transparent;
     float:right;
     margin-right: 10px;
@@ -197,7 +197,7 @@ header{
     display: block;
 }
 
-.dropdownbtn:hover #dropbtn {
+.dropdownbtn:hover .dropbtn {
     color: #7386D5;
 }
 

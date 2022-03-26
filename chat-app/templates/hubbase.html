@@ -25,20 +25,6 @@
                 <h3>justask.</h3>
             </div>
             <ul class="list-unstyled components">
-                <li>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Account</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            <a href="#">Profile</a>
-                        </li>
-                        <li>
-                            <a href="#">Settings</a>
-                        </li>
-                        <li>
-                            <a href="#">Sign Out</a>
-                        </li>
-                    </ul>
-                </li>
                 <li class="active">
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Sessions</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
@@ -71,11 +57,11 @@
         <div id="content">
             <header> 
                 <div class="dropdownbtn">
-                <button id="dropbtn"><i class='fas fa-user-circle' style='font-size:48px;color: white;'></i></button>
+                <button class="dropbtn"><i class='fas fa-user-circle' style='font-size:48px;color: white;'></i></button>
                 <div class="dropdownbtn-content">
-                    <a href="#">Profile</a>
+                    <a href="{{ url_for('profile') }}">Profile</a>
                     <a href="#">Settings</a>
-                    <a href="#">Sign Out</a>
+                    <a href="{{ url_for('landingpage') }}">Sign Out</a>
                 </div>
                 </div>
             </header>
