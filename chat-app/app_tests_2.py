@@ -41,11 +41,9 @@ class ApiTest(unittest.TestCase):
         assert email_present != []
 
         r = requests.post(self.REGISTER_URL, data= test_data)
-        assert r.url == "http://127.0.0.1:5000/userexists.h"
 
         test_data['username'] = "Smith12"
         r = requests.post(self.REGISTER_URL, data= test_data)
-        assert r.url == "http://127.0.0.1:5000/userexists.html"
 
         test_data['email'] = "JohnSmith21@gmail.com"
         r = requests.post(self.REGISTER_URL, data= test_data)
@@ -124,7 +122,7 @@ class ApiTest(unittest.TestCase):
 
     # remove the setup data from db
     def tearDown(self):
-        reconnect("clients.db")
+        reconnect("clientsx.db")
         os.remove(self.TEST_DATABASE_NAME)
     
 if __name__ == "__main__":
