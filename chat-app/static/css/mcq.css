@@ -22,12 +22,15 @@
 }
 .poll .answers {
     padding:20px 20px 10px; 
+
+
 }
 .poll .answers .answer {
     position:relative;
     width:100%;
     height:40px;
-    padding:Opx 10px;
+    margin-left: 10px;
+    padding-left: 10px;
     line-height:40px;
     color:#111;
     margin-bottom:10px;
@@ -58,7 +61,7 @@
     left:0px;
     width:50%;
     height:100%;
-    background: #ccd8f1;
+    background: #d0ccf1;
     z-index:-1;
     transition:width 300ms ease-in-out;
 }
@@ -79,13 +82,14 @@
 }
 
     /* Modal  */
-.modal-content {
-    background-color: #174368;
+.model-content{
+    background-color: rgb(129,96,217);
+    
     margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
+    padding: 10px;
+    border: 1px solid rgb(178, 169, 204);
     width: 800px;
-    border-radius: 8px;
+    border-radius: 10px;
     max-width: 50%;
 }
 
@@ -110,7 +114,7 @@
     padding: 10px;
     align-items: center;
     margin: 25px 0 18px 0;
-    background-color:  #4884b6;
+    background-color:  rgb(129,96,217);
     border-radius: 8px;
     margin-top:40px;
 }
@@ -121,14 +125,14 @@
     padding: 15px;
     margin: 16px 0 16px 20px;
     border: none;
-    background: #95b3ce;
-    border-radius: 5px;
+    background-color: rgba(255,255,255,0.07);
+    color: #fff;
+    border-radius: 3px;
     resize: none;
 }
 
     /* When the inputs get focus, do something */
 .form-container input[type=text]:focus, .form-container textarea:focus {
-    background-color: #bdc9d3;
     outline: none;
 }
 .answerDiv{
@@ -136,20 +140,18 @@
     padding: 15px;
     margin: 16px 0 16px 20px;
     border: none;
-    background: #95b3ce;
+    background-color: rgba(255,255,255,0.07);
     border-radius: 5px;
     resize: none;
-    background-color: #bdc9d3;
     outline: none;
 }
 .form-container ::placeholder{
-    color:#174368;
-    opacity: 0.8;
+    color: white;
 }
     /* Set a style for the submit button */
 .form-container .btn, .Mbutton {
-    background-color: #174368;
-    color: white;
+    background-color: white;
+    color: rgb(129,96,217);
     padding: 16px 20px;
     border: none;
     cursor: pointer;
@@ -162,6 +164,9 @@
 }
 .Mbutton{
     position: fixed;
+    background:  rgb(129,96,217);
+    color: white;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     bottom: 30px;
     right: 30px;
     width: 150px;
@@ -170,8 +175,4 @@
     /* Add some hover effects to buttons */
 .form-container .btn:hover, .open-button:hover, .Mbutton{
     opacity: 1;
-}
-
-::placeholder{
-    color:#4884b6;
 }

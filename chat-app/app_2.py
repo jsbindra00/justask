@@ -226,7 +226,7 @@ class JustAsk(FlaskView):
         return render_template('sketchpad.html')
     
     @route('/MCQ', endpoint="MCQ")
-    def sessions(self):
+    def mcq(self):
         return render_template('MCQ.html')
 
     def messageReceived(self,methods=['GET', 'POST']):
