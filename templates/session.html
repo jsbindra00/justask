@@ -1,0 +1,81 @@
+{% extends 'hubbase.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="./static/css/session.css">
+{% endblock %}
+
+
+{% block content %}
+
+<script>
+    var isInSession;
+
+</script>
+<div id="sessionbox">
+    <div id ="sessionselector" >
+        <ul class="sessionselectorlist">
+            <li style="border-right: 1px solid rgba(0, 0, 0, 0.1)">
+                Join Session
+            </li>
+            <li style="border-left: 1px solid rgba(0, 0, 0, 0.1)">
+                Create Session
+            </li> 
+        </ul>
+    </div>
+
+    
+
+    <div class = "sessionconfig">
+        <form class= "sessionconfig" action="/session" method = "post">
+            <h3 id="sessionconfigtitle">Join an existing session</h3>
+            <label>Enter session ID:</label>
+            <input type="text" placeholder="Session ID" onfocus="this.placeholder = ''"onblur="this.placeholder = 1234" name="room" maxlength="10">
+            <button type="submit" name="joinsession">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+    
+    
+<!--     
+    <div class = "background">
+        <form action="/session" method = "post">
+            <h3>Create a new session</h3>
+            <i class="fa-solid fa-coffee fa-5x"></i>
+            <label>Enter a session ID (make it memorable!):</label>
+            <input type="text" placeholder="Session ID" onfocus="this.placeholder = ''"onblur="this.placeholder = 1234" name="room" maxlength="10" id="sessionID">
+            <script>
+    
+    
+                function GenerateSessionID() {
+                    SESSION_ID_STRING_LENGTH = 10;
+                    let result = '';
+                    var selection = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    var selectionSize = selection.length;
+                    for ( var i = 0; i < SESSION_ID_STRING_LENGTH; i++ ) {
+                    result += selection.charAt(Math.floor(Math.random() * selectionSize));
+                }
+                $('#sessionID').val(result);
+                }
+            </script>
+            <strong><a id="generateID" onclick = "GenerateSessionID()" style="cursor:pointer; font-size:15px;">Generate one for me</a></strong>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div> -->
+
+
+
+
+
+
+
