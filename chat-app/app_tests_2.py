@@ -41,7 +41,7 @@ class ApiTest(unittest.TestCase):
         assert email_present != []
 
         r = requests.post(self.REGISTER_URL, data= test_data)
-        assert r.url == "http://127.0.0.1:5000/userexists.html"
+        assert r.url == "http://127.0.0.1:5000/userexists.h"
 
         test_data['username'] = "Smith12"
         r = requests.post(self.REGISTER_URL, data= test_data)

@@ -27,11 +27,11 @@ def connect_db(dbName):
         password TEXT NOT NULL,
         active_session TEXT NOT NULL);
     """
-    connection = sqlite3.connect(dbName, check_same_thread=False)
-    cursor = connection.cursor()
-    cursor.execute(CLIENT_SQL_INJECTION)
-    connection.commit()
-    return connection, cursor 
+    xconnection = sqlite3.connect(dbName, check_same_thread=False)
+    xcursor = xconnection.cursor()
+    xcursor.execute(CLIENT_SQL_INJECTION)
+    xconnection.commit()
+    return xconnection, xcursor 
 
 connection, cursor = connect_db("clients.db")
     
@@ -40,8 +40,9 @@ def disconnect():
     connection.close()
 
 def reconnect(db_name):
+    global connection, cursor
     #disconnect()
-    connect_db(db_name)
+    connection, cursor = connect_db(db_name)
 
 def insert_data(command_SQL, data):
         cursor.execute(command_SQL, data)
