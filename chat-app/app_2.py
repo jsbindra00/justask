@@ -28,8 +28,6 @@ def connect_db(dbName):
         active_session TEXT NOT NULL);
     """
     connection = sqlite3.connect(dbName, check_same_thread=False)
-    print(dbName)
-    print(os.path.dirname(os.path.abspath(dbName)))
     cursor = connection.cursor()
     cursor.execute(CLIENT_SQL_INJECTION)
     connection.commit()
