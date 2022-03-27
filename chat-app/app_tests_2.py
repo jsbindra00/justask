@@ -36,7 +36,7 @@ class ApiTest(unittest.TestCase):
     
     def test_registered_user_registers_again(self):
         test_data = dict(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password = 'password1234')
-        insert_data("INSERT INTO users VALUES (?,?,?,?,?,?)", ('JohnSmith12@gmail.com', 'John', 'Smith', 'John12', 'password1234', '0'))
+        # insert_data("INSERT INTO users VALUES (?,?,?,?,?,?)", ('JohnSmith12@gmail.com', 'John', 'Smith', 'John12', 'password1234', '0'))
         email_present = search_data("SELECT * FROM users WHERE email= ?", (test_data["email"],))
         assert email_present != []
 

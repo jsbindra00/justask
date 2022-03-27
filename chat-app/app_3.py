@@ -17,50 +17,16 @@ import os
 # def search_data( command_SQL, data):
 #     return cursor.execute(command_SQL, data).fetchall()
 
-
-def connect_db(dbName):
-    CLIENT_SQL_INJECTION = """
-    CREATE TABLE IF NOT EXISTS users (
-        email TEXT NOT NULL PRIMARY KEY,
-        username TEXT NOT NULL,
-        firstname TEXT NOT NULL,
-        lastname TEXT NOT NULL,
-        password TEXT NOT NULL,
-        active_session TEXT NOT NULL);
-    """
-    xconnection = sqlite3.connect(dbName, check_same_thread=False)
-    xcursor = xconnection.cursor()
-    xcursor.execute(CLIENT_SQL_INJECTION)
-    xconnection.commit()
-    return xconnection, xcursor 
     
-
-connection, cursor = connect_db("clients.db")
-
-
-def disconnect( connection, cursor):
-    cursor.close()
-    connection.close()
-
-def reconnect(db_name):
-    global connection, cursor
-    # disconnect(connection, cursor)
-    connection, cursor = connect_db(db_name)
-
-def insert_data(command_SQL, data):
-    cursor.execute(command_SQL, data)
-    connection.commit()
-
-def search_data(command_SQL, data):
-    return cursor.execute(command_SQL, data).fetchall()
 
 class JustAsk(FlaskView):
     default_methods = ['GET', 'POST']
     route_base = "/"
+    
     def __init__(self):
         pass
 
-    def Start(self):
+    def create_app(self, dbname):
         self.app = Flask(__name__)
         self.socketio = SocketIO(self.app)
 
@@ -72,8 +38,42 @@ class JustAsk(FlaskView):
         self.socketio.on_event("join_room", self.handle_join_room_event)
         self.socketio.on_event("leave_room", self.handle_leave_room_event)
         self.socketio.on_event("clientmsg", self.handle_my_custom_event)
+        
+        self.connection, self.cursor = self.connect_db(dbname)
+        
         JustAsk.register(self.app)
-        self.socketio.run(self.app, debug=True)
+
+
+    def start_app(self):
+        self.socketio.run(self.app)
+
+
+    def connect_db(self, dbName):
+        CLIENT_SQL_INJECTION = """
+        CREATE TABLE IF NOT EXISTS users (
+            email TEXT NOT NULL PRIMARY KEY,
+            username TEXT NOT NULL,
+            firstname TEXT NOT NULL,
+            lastname TEXT NOT NULL,
+            password TEXT NOT NULL,
+            active_session TEXT NOT NULL);
+        """
+        connection = sqlite3.connect(dbName, check_same_thread=False)
+        cursor = connection.cursor()
+        cursor.execute(CLIENT_SQL_INJECTION)
+        connection.commit()
+        return connection, cursor     
+
+    def disconnect(self):
+        self.cursor.close()
+        self.connection.close()
+
+    def insert_data(self, command_SQL, data):
+        self.cursor.execute(command_SQL, data)
+        self.connection.commit()
+
+    def search_data(self, command_SQL, data):
+        return self.cursor.execute(command_SQL, data).fetchall()
 
     @route("/landingpage", endpoint="landingpage")
     @route("/", endpoint="landingpage")
@@ -106,7 +106,7 @@ class JustAsk(FlaskView):
                 return render_template("login.html")
         # If the user provided details stored in the database, add these details to the session, 
         # and send them to their profile page
-        user = search_data("SELECT * FROM users WHERE email= ? AND password = ?",(email, password))[0]
+        user = self.search_data("SELECT * FROM users WHERE email= ? AND password = ?",(email, password))[0]
         print(user)
         if  user == None:
             #todo handle this. Invalid login credentials.
@@ -136,7 +136,6 @@ class JustAsk(FlaskView):
         password = request.form.get("password")
         active_session = "0"
 
-
         data = [email, username,first_name,last_name,password, active_session]
         for field in data:
             if not field:
@@ -145,13 +144,13 @@ class JustAsk(FlaskView):
 
 
         # If the user provided valid info, and they were not already registered, store data in database
-        email_present = search_data("SELECT * FROM users WHERE email= ?", (email,))
+        email_present = self.cursor.execute("SELECT * FROM users WHERE email= ?", (email,)).fetchall()
         if email_present != []:
             #todo handle this. User is already registered.
             return render_template("userexists.html")
 
         
-        insert_data("INSERT INTO users VALUES (?,?,?,?,?,?)", data)
+        self.insert_data("INSERT INTO users VALUES (?,?,?,?,?,?)", data)
 
         # maybe we should have a registration succesful page, that can then link to the login?
         return redirect("/login")
@@ -177,14 +176,14 @@ class JustAsk(FlaskView):
 
         # clients = cursor.execute("SELECT * FROM users WHERE username = ?",("jas",)).fetchall()
 
-        matchingRoomClients = search_data("SELECT * FROM users WHERE active_session= ?", (roomID,))
+        matchingRoomClients = self.search_data("SELECT * FROM users WHERE active_session= ?", (roomID,))
         # if the room ID does not exist among any other user, then we cannot join the session.
         if matchingRoomClients == []:
             return "room id does not exist"
 
         session["active_session"] = roomID
 
-        insert_data("UPDATE users SET active_session = ? WHERE username = ?", (roomID, session["username"]))
+        self.insert_data("UPDATE users SET active_session = ? WHERE username = ?", (roomID, session["username"]))
         print("UPDATED")
 
         # ???
@@ -242,4 +241,5 @@ class JustAsk(FlaskView):
 
 if __name__ == '__main__':
     application = JustAsk()
-    application.Start()
+    application.create_app("clients.db")
+    application.start_app()
