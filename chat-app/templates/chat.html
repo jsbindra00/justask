@@ -22,50 +22,51 @@
     <div id="canvas-wrapper">
 
     </div>
-    <div id="divider">
-
+    <div id="divider-wrapper">
+        <div id="divider"></div>
     </div>
 
     <div id="chat-wrapper">
         <strong>
             <p id="session-id">Session ID:  {{ room }}</p>
         </strong>
-    
-            <div class="overflow-auto" id="messages">
-                
-            </div>
-       
-        <div id="texttoolbar">
+
+        <div id="messages">
             
-            <textarea id="chatbar" placeholder="Type a new message"> </textarea>
-            <div id="customisers-wrapper">
-                <div id="customisers">
-        
-                    <a>
-                        <i class="fa-solid fa-paperclip fa-lg"></i>
-                    </a>
-                    <a>
-                        <i class="fa-solid fa-tags fa-lg"></i>
-                    </a>
-                    <a>
-                        <i class="fa-solid fa-paintbrush fa-lg"></i>
-                    </a>
-                    <a>
-                        <i class="fa-solid fa-icons fa-lg"></i>
-                    </a>
-        
-                </div>
-                <div id="sendmessage">
-                    <form id="message_input_form" class="form-container">    
-                        <button type="submit" id="post" class="btn"><i class="fa-solid fa-paper-plane fa-lg"></i></button>
-                    </form>
-                  
-                </div>
-            </div>
-        
-        
-        
         </div>
+    
+            <div id="text-area-wrapper-master">
+                <div id="text-area-wrapper">
+                    <textarea id="chatbar" placeholder="Type a new message"> </textarea>
+                    <div id="customisers-wrapper">
+                        <div id="customisers">
+                            <a>
+                                <i class="fa-solid fa-paperclip fa-lg"></i>
+                            </a>
+                            <a>
+                                <i class="fa-solid fa-tags fa-lg"></i>
+                            </a>
+                            <a>
+                                <i class="fa-solid fa-paintbrush fa-lg"></i>
+                            </a>
+                            <a>
+                                <i class="fa-solid fa-icons fa-lg"></i>
+                            </a>
+                
+                        </div>
+        
+                        <div id="sendmessage">
+                            <form id="message_input_form" class="form-container">    
+                                <button type="submit" id="post" class="btn"><i class="fa-solid fa-paper-plane fa-lg"></i></button>
+                            </form>
+                        </div>
+        
+                    </div>
+                </div>
+            
+            </div>
+            
+        
     </div>
 </div>
 <script src="../static/client.js"></script>
