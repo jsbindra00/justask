@@ -86,7 +86,6 @@ socket.on('connect', function () {
                 message: message,
                 description: "none"
             })
-            alert("submitted");
         }
         message_input.value = '';
         message_input.focus();
