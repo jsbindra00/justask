@@ -1,4 +1,37 @@
 {% extends "hubbase.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/css/profile.css">
+{% endblock %}
 {% block content_name %}
 Profile
+{% endblock %}
+
+{% block content %}
+
+
+
+    <div id="user-information-wrapper">
+        <ul id="user-information">
+            <li>
+                <p>First Name: {{firstname}}</p>
+            </li>
+            <li>
+                <p>Last Name: {{lastname}}</p>
+            </li>
+            <li>
+                <p>Username: {{username}}</p>
+            </li>
+            <li>W
+                <p>Email: {{email}}</p>
+            </li>
+            <li>
+                <p>Password: {{password}}</p>
+            </li>
+            <li>
+            </li>
+        </ul>
+    </div>
+
+
 {% endblock %}

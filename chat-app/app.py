@@ -55,12 +55,12 @@ class JustAsk(FlaskView):
         # If no user session, redirect to login page. Else render the user profile page.
         if not session.get("email"):
             return redirect("/login")
-        return render_template("profile.html")
+        return render_template("profile.html", firstname=session["firstname"], lastname=session["lastname"], email=session["email"], password=session["password"], username=["username"])
 
     @route("/", endpoint="/")
     @route("/login/", endpoint="login", methods=['POST', 'GET'])
     def login(self):
-        if request.method == "GET":
+        if request.mWethod == "GET":
             return render_template("landingpage.html")
 
         # Get user login details
