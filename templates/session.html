@@ -8,104 +8,101 @@
 {% block content %}
 
 <script>
-    var isInSession;
+
+
+    let title, joinsession, createsession, submitbutton, sessionIDGenerator, joinsessionbutton, createsessionbutton;
+    $(document).ready(function(){
+        joinsession = $('#joinsessiontitle');
+        createsession = $('#createsessiontitle');
+        submitbutton = $('#submitsession');
+        sessionIDGenerator = $('#sessionidgenerator')
+
+        joinsessionbutton = $('#joinsessionselection');
+        createsessionbutton = $('#createsessionselection');
+
+        ActivateCreateNewSession();
+    })
+    function ActivateJoinSession()
+    {   
+
+        createsessionbutton.css("color", "white")
+        joinsessionbutton.css("color", "rgb(206,206,206)");
+
+        createsession.css({"opacity" : 0});
+        joinsession.css({"opacity" : 1});  
+
+        sessionIDGenerator.css("visibility", "hidden");
+        submitbutton.attr("name", "joinsession");
+        submitbutton.text("Join Session");
+
+
+    }
+    function ActivateCreateNewSession()
+    {
+
+        createsessionbutton.css("color", "rgb(206,206,206)")
+        joinsessionbutton.css("color", "white");
+
+        joinsession.css({"opacity" : 0});
+        createsession.css({"opacity" : 1});
+
+        sessionIDGenerator.css("visibility", "visible");
+
+        
+        submitbutton.attr("name", "createsession");
+        submitbutton.text("Create Session")
+    }
 
 </script>
 <div id="sessionbox">
     <div id ="sessionselector" >
-        <ul class="sessionselectorlist">
+        <ul class="sessionselectorlist" >
             <li style="border-right: 1px solid rgba(0, 0, 0, 0.1)">
-                Join Session
+                <a id="joinsessionselection" class="sessionselection" onclick="ActivateJoinSession()">Join Session</a>
+                
             </li>
             <li style="border-left: 1px solid rgba(0, 0, 0, 0.1)">
-                Create Session
+                <a class="sessionselection" id="createsessionselection" onclick="ActivateCreateNewSession()">Create Session</a>
             </li> 
         </ul>
     </div>
 
-    
 
-    <div class = "sessionconfig">
-        <div id="joinsession">
-            <h3 id="sessionconfigtitle">Join an existing session</h3>
-            <form class= "sessionconfig" action="/session" method = "post">
-                <label>Enter session ID:</label>
-                <input type="text" placeholder="Session ID" onfocus="this.placeholder = ''"onblur="this.placeholder = 1234" name="room" maxlength="10">
-                <button type="submit" name="joinsession">Submit</button>
-            </form>
-        </div>
+    <div id="sessiontitles">
+        <h3 class="sessionconfigtitle" id="joinsessiontitle">Join an existing session</h3>
+        <h3 class="sessionconfigtitle" id="createsessiontitle">Create a new session</h3>
+    </div>
 
 
-        <div id="createsession">
-            <h3>Create a new session</h3>
+    <div id="sessionform"> 
 
 
-            <form class = "sessionconfig" action="/session" method = "post">
-                <i class="fa-solid fa-coffee fa-5x"></i>
-                <label>Enter a session ID (make it memorable!):</label>
-                <input type="text" placeholder="Session ID" onfocus="this.placeholder = ''"onblur="this.placeholder = 1234" name="room" maxlength="10" id="sessionID">
-                <script>
-        
-        
-                    function GenerateSessionID() {
-                        SESSION_ID_STRING_LENGTH = 10;
-                        let result = '';
-                        var selection = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                        var selectionSize = selection.length;
-                        for ( var i = 0; i < SESSION_ID_STRING_LENGTH; i++ ) {
+
+        <form action="/session" method = "post" class="sessionconfig">
+            <label>Enter Session ID:</label>
+            <input id="sessionid" type="text" placeholder="Session ID" onfocus="this.placeholder = ''"onblur="this.placeholder = 1234" name="room" maxlength="10">
+            <script>
+                function GenerateSessionID() {
+                    SESSION_ID_STRING_LENGTH = 10;
+                    let result = '';
+                    var selection = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    var selectionSize = selection.length;
+                    for ( var i = 0; i < SESSION_ID_STRING_LENGTH; i++ )
+                    {
                         result += selection.charAt(Math.floor(Math.random() * selectionSize));
                     }
-                    $('#sessionID').val(result);
-                    }
-                </script>
-                <strong><a id="generateID" onclick = "GenerateSessionID()" style="cursor:pointer; font-size:15px;">Generate one for me</a></strong>
-                
-                <button name="createsession" type="submit">Submit</button>
-            </form>
-        </div>
+                    $('#sessionid').val(result);
+                }
+            </script>
+            <strong><a id="sessionidgenerator" onclick = "GenerateSessionID()" style="cursor:pointer; font-size:15px; visibility: hidden;">Generate one for me</a></strong>
+           
+            <button id="submitsession" type="submit">Submit</button>
 
-
+        </form>
+        
+    </div>
         
 
-    <script>
-        $('document').ready(function(){
-
-            let loginBox = $('#joinsession');
-            let registrationBox = $('#createsession');
-
-
-            function ShowLoginBox()
-            {
-                // on click, make the login box visible.
-                if (loginBox.css('opacity') == 1) return;
-                loginBox.css('visibility', "visible");
-                loginBox.css('opacity', 1)
-
-                // let welcome = $('#welcome');
-                // welcome.css('visibility', "hidden");
-                // if (registrationBox.css('opacity') == 0) return;
-                // registrationBox.css('opacity', '0')
-                // registrationBox.css('visibility', 'hidden');
-                
-            }
-
-            function ShowRegistrationBox()
-            {
-                loginBox.css('opacity', 0)
-                registrationBox.css("visibility", "visible");
-                registrationBox.css("opacity", 1);
-                loginBox.css('visibility', 'hidden');
-                
-            }
-            $(window).resize(resizeCanvas)
-
-            $('#continue').click(ShowLoginBox)
-
-            $('#signupLink').click(ShowRegistrationBox)
-            $('#redirectToLogin').click(ShowLoginBox)
-        })
-
-    </script>
 
     </div>
 </div>
@@ -119,12 +116,6 @@
 
 
 
-    
-    
-<!--     
-    <div class = "background">
-       
-    </div> -->
 
 
 

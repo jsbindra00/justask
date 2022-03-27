@@ -15,26 +15,10 @@
 {% endblock %}
 
 {% block content %}
-        <button class="Mbutton" id="myBtn">Ask Question</button>
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <form id="message_input_form" class="form-container">    
-                    <input type="text" id="message_input" placeholder="Enter your question" name="question" required></input>
-                
-                    <textarea placeholder="Add a description" id="message_description" class="form-control" id="exampleFormControlTextarea3" rows="8 "maxlength="5000" ></textarea>
-                
-                    <button type="submit" id="post" class="btn">Post</button>
-                </form>
-            </div>
-        </div>
 
-        <h2 class="room-title text-center">Welcome to chat room {{ room }}</h2>
+<input type="text" id="chatbar"> 
+</input>
+        
 
-        <div class="container"> 
-            <div class="messages" id="messages">
-
-            </div>
-        </div>
-        <script src="../static/client.js"></script>
 {% endblock %}
+

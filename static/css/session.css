@@ -18,9 +18,10 @@
     top:50%;
     left:50%;
     transform: translate(-50%,-50%);
-    border-radius: 10px;
+    border-radius: 30px;
     border: 2px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    overflow:hidden;
 
 }
 #sessionselector *
@@ -32,15 +33,16 @@
     
     
 }
-.sessionselectorlist li{
+
+.sessionselectorlist li a{
     width:100%;
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
     cursor:pointer;
+    padding:5px
+
 
 }
 .sessionselectorlist li:hover{
-    width:100%;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
     cursor:pointer;
     transition: color 0.1s linear;
     -webkit-transition: color 0.1s linear;
@@ -48,14 +50,25 @@
     color:rgb(206, 206, 206);   
 
 }
+.sessionconfigwrapper
+{
+    height:100%;
+    text-align: center;
+
+
+}
 .sessionconfig
 {
+
+    position: absolute;
+
     display:flex;
     flex-direction: column;
     list-style-type:none;
     text-align: center;
-    padding: 50px 35px;
-
+    transform: translate(-50%,-50%);
+    top:50%;
+    left:50%;
 
 
     -webkit-transition: all 0.5s ease-in-out;
@@ -65,8 +78,34 @@
     transition: all 0.5s ease-in-out;
 }
 
-#createsession
+
+#sessiontitles
 {
-    visibility:hidden;
-    opacity: 0;
+    width:100%;
+    overflow:hidden;
 }
+.sessionconfigtitle
+{
+    position:absolute;
+    transform: translate(-50%,-50%);
+    left:50%;
+    margin-top: 50px;
+
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+
+#sessionid
+{
+    border-radius: 10px;
+}
+#submitsession
+{
+    border-radius: 20px;
+}
+
+
