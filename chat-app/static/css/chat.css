@@ -1,0 +1,66 @@
+
+#session-id
+{
+
+}
+#media-wrapper
+{
+    display:flex;
+    flex-direction: row;
+    height:100%;
+}
+#canvas-wrapper
+{
+    background-color: #000;
+    width:49%;
+    height:100%;
+
+}
+#chat-wrapper
+{
+    background-color: rgb(255, 0, 0);
+    width:49%;
+    height:100%;
+
+}
+#divider
+{
+    background-color: #33658d;
+    width:2%;
+    height:100%;
+    cursor:e-resize;
+}
+
+#texttoolbar
+{
+    height:50px;
+    position:relative;
+    transform: translate(-50%,0%);
+    top:calc(95% - 40px);
+    left:50%;
+    width:50%;
+}
+#chatbar
+{
+    height:100%;
+    border-radius: 5px;
+    width:100%;
+    border-color: rgb(95, 68, 168);
+    margin-bottom: 5px;
+}
+#customisers-wrapper, #customisers
+{
+    display:flex;
+    flex-direction: row;
+    width:100%;
+}
+#customisers *
+{
+    padding-right: 10px;
+}
+
+
+
+
+
+
