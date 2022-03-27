@@ -1,8 +1,11 @@
-*{
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: rgb(206,206,206);
 }
-
-
 
 #sessionbox
 {
@@ -10,7 +13,7 @@
     flex-direction: column;
     list-style-type:none;
     text-align: center;
-    background-color:rgb(129,96,217);
+    background-color:rgb(95, 68, 168);
     color:white;
     width:430px;
     height:530px;

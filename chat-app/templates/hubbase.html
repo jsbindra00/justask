@@ -36,7 +36,7 @@
  
             <ul class="list-unstyled components">
                 <li>
-                    <a id="profile-button" class="active" href="#"><i class="fa-regular fa-user fa-lg"></i></a>
+                    <a id="profile-button" class="active" href="/profile"><i class="fa-regular fa-user fa-lg"></i></a>
                 </li>
                 <li>
                     <a id = "manage-sessions" href="/session"><i class="fa-solid fa-phone fa-lg"></i></a>
@@ -66,7 +66,9 @@
     
                 </div>
             </nav>
-
+            <div id="content-name">
+                <p>Home/{% block content_name %}{% endblock %}</p>
+            </div>
             <div id="content">
                 {% block content %}
                 {% endblock %}
@@ -88,6 +90,8 @@
             });
         });
     </script>
+
+
 
 
 

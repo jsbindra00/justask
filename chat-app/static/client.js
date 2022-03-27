@@ -103,9 +103,29 @@ window.onbeforeunload = function () {
 socket.on('receive_message', function (data) {
     console.log(data);
     const newNode = document.createElement('div');
-    newNode.className = 'card';
-    newNode.innerHTML = `${data.time} <b>${data.username}</b> </br> <div class= 'message'> <b><h4>${data.message}</h4></b>${data.description} </div>`;
+    newNode.className = 'message-wrapper';
+
+
+
+    let newMessage = `
+    <div class="message-header">
+        <p>${data.username}</p>
+        <p>${data.time}</p>
+    </div>
+    <div class="message-payload">
+        <p>${data.message}</p>
+    </div>
+
+    `
+
+    newNode.innerHTML = newMessage;
+
+ 
     document.getElementById('messages').appendChild(newNode);
+
+    // keep the scroll at the bottom.
+    var messageBody = document.querySelector('#messages');
+    messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
 });
 
 socket.on('join_room_announcement', function (data) {

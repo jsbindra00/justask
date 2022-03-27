@@ -1,4 +1,6 @@
 
+
+
 #text-toolbar-wrapper{
     width:100%;
 }
@@ -16,6 +18,7 @@
     margin:0;
 
 }
+
 #media-wrapper
 {
     display:flex;
@@ -29,17 +32,14 @@
     height:100%;
 
 }
-.card, .message
-{
-    background-color: red;
-}
+
 #chat-wrapper
 {
     position:relative;
     background-color: rgb(206, 206, 206);
     width:49.5%;
     height:100%;
-    overflow-y: scroll;
+    overflow-y: hidden;
     display:flex;
     flex-direction: column;
     padding: 20px;
@@ -52,8 +52,6 @@
     width:1%;
     height:100%;
     cursor:e-resize;
-    padding:5px;
-    padding-top:5px;
     padding-bottom: 0;
 }
 #divider
@@ -70,7 +68,7 @@
     border-radius: 10px;
     overflow-y: auto;
     display:flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
 }
 
 
