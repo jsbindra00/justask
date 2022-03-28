@@ -207,7 +207,7 @@ class JustAsk(FlaskView):
 
     @route("/chat_logout/", endpoint="chat_logout")
     def chat_logout(self):
-        session["room"] = None
+        session["active_session"] = None
         return redirect("/session")
 
     @route("/logout", endpoint="logout")
@@ -323,22 +323,20 @@ class JustAsk(FlaskView):
             return redirect(url_for('session'))
 
     def handle_send_message_event(self,data):
-        app.logger.info("{} has sent message to the room {}: {}".format(data['username'],
-                                                                        data['room'],
-                                                                        data['message']))
-        data["time"] = datetime.now().strftime("%H:%M")                                                               
-        socketio.emit('receive_message',data, room=data['room'])
+        data["time"] = datetime.now().strftime("%H:%M")   
+        data["username"] = session["username"]                                                            
+        socketio.emit('receive_message',data, room=session['active_session'])
+        print("handled event")
 
     def handle_join_room_event(self,data):
-        app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
-        join_room(data['room'])
+        join_room(session['active_session'])
         data["time"] = datetime.now().strftime("[%H:%M]")
-        socketio.emit('join_room_announcement',data, room=data['room'])
+        data["username"] = session["username"]                                                            
+        socketio.emit('join_room_announcement',data, room=session['active_session'])
 
     def handle_leave_room_event(self,data):
-        app.logger.info("{} has left the room {}".format(data['username'], data['room']))
-        leave_room(data['room'])
-        socketio.emit('leave_room_announcement', data, room=data['room'])
+        leave_room(session['active_session'])
+        socketio.emit('leave_room_announcement', data, room=session['active_session'])
 
     @route('/sketchpad', endpoint="sketchpad")
     def sessions(self):
