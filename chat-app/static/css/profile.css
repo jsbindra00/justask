@@ -1,0 +1,35 @@
+
+#user-information-wrapper{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    color:white;
+    background-color: transparent;
+    list-style-type: none;
+    padding:20px;
+    margin:0;
+}
+.user-information
+{
+    display:flex;
+    flex-direction:row;
+    padding:10px;
+}
+.user-information p
+{
+    width:200px;
+}
+#content
+{
+    overflow:hidden;
+}
+#profile-settings-wrapper
+{
+
+    background-color: red;
+    margin-left:20%;
+    margin-right:20%;
+    margin-top:100px;
+    margin-bottom:100px;
+}
+

@@ -1,0 +1,42 @@
+{% extends "hubbase.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/css/profile.css">
+{% endblock %}
+{% block content_name %}
+Profile
+{% endblock %}
+
+{% block content %}
+    <div id="profile-settings-wrapper">
+
+        <ul id="user-information-wrapper">
+            <li class = "user-information">    
+                <p>First Name: </p>
+                <input type="text" placeholder="{{firstname}}">
+            </li>
+            <li class = "user-information">    
+                <p>Last Name: </p>
+                <input type="text" placeholder="{{lastname}}">
+            </li>
+            <li class = "user-information">    
+                <p>Username: </p>
+                <input type="text" placeholder="{{username}}">
+            </li>
+            <li class = "user-information">    
+                <p>Email Address: </p>
+                <input type="text" placeholder="{{email}}">
+            </li>
+            <li class = "user-information">    
+                <p>Password: </p>
+                <input type="text" placeholder="********">
+            </li>
+
+       
+        </ul>
+    </div>
+        
+  
+
+
+{% endblock %}
