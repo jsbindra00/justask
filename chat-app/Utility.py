@@ -1,5 +1,5 @@
 import re
-
+import hashlib
 class Utility:
     def IsEmailAddress(email):
         return re.match(r"[^@]+@[^@]+\.[^@]+", email)
@@ -12,3 +12,6 @@ class Utility:
     
     def IsStrongPassword(string):
         return Utility.LengthIsAtleastN(10, string) and Utility.ContainsANumber(string)
+
+    def EncryptSHA256(string):
+        return hashlib.sha256(string.encode()).hexdigest()

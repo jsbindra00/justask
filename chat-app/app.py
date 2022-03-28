@@ -6,6 +6,20 @@ from datetime import datetime
 from flask_classful import FlaskView, route
 from flask import Response
 
+import hashlib
+from enum import IntEnum
+from Utility import Utility
+
+
+class ClientAttribute(IntEnum):
+    Email=0
+    Username=1
+    Firstname=2
+    Lastname=3
+    Password=4
+    ActiveSession=5
+    Admin=6
+
 
 
 
@@ -35,6 +49,11 @@ connection.commit()
 class JustAsk(FlaskView):
     default_methods = ['GET', 'POST']
     route_base = "/"
+
+
+
+
+
     def __init__(self):
         pass
     def Start(self):
@@ -56,7 +75,6 @@ class JustAsk(FlaskView):
 
 
 
-    # @route("/", endpoint="/")
     @route("/profile", endpoint="profile",methods=["GET", "POST"])
     def profile(self):
         
@@ -65,11 +83,6 @@ class JustAsk(FlaskView):
         if request.method == "GET":
             return render_template("profile.html", **default_args)
         
-            
-
-
-
-
         # the user can submit two types of post, change profile or change password.
 
         if "submit-profile" in request.form:
@@ -105,10 +118,9 @@ class JustAsk(FlaskView):
         elif "submit-password" in request.form:
 
 
-                old_password = request.form.get("old-password")
-                new_password = request.form.get("new-password-confirm")
-                print(old_password)
-                print(session["password"])
+                old_password = Utility.EncryptSHA256(request.form.get("old-password"))
+                new_password = Utility.EncryptSHA256(request.form.get("new-password-confirm"))
+
                 # check if old password entry matches password in db.
                 if old_password != session["password"]:
                     # HANDLE THIS
@@ -133,7 +145,7 @@ class JustAsk(FlaskView):
 
         # Get user login details
         email = request.form.get("email")
-        password = request.form.get("password")
+        password = Utility.EncryptSHA256(request.form.get("password"))
 
         # Validate submission
         login_details = [email, password]
@@ -170,7 +182,7 @@ class JustAsk(FlaskView):
         username = request.form.get("username")
         first_name = request.form.get("firstname")
         last_name = request.form.get("lastname")
-        password = request.form.get("password")
+        password = Utility.EncryptSHA256(request.form.get("password"))
         active_session = "0"
 
 
