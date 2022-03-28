@@ -130,7 +130,7 @@ socket.on('receive_message', function (data) {
 
 socket.on('join_room_announcement', function (data) {
     console.log(data);
-    if (data.username !== "{{ username }}") {
+    if (data.username !== "{{username}}") {
         const newNode = document.createElement('div');
         newNode.innerHTML = `<b>${data.time} ${data.username} has joined the room</b>`;
         document.getElementById('messages').appendChild(newNode);

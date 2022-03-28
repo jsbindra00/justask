@@ -6,6 +6,10 @@ from datetime import datetime
 from flask_classful import FlaskView, route
 from flask import Response
 
+
+
+
+
 app = Flask(__name__)
 socketio = SocketIO(app)
 
@@ -21,8 +25,9 @@ CLIENT_SQL_INJECTION = """
         password TEXT NOT NULL,
         active_session TEXT NOT NULL);
     """
-connection = sqlite3.connect(dbName, check_same_thread=False)
 
+# auto commit <=> isolation_level = None
+connection = sqlite3.connect(dbName, check_same_thread=False, isolation_level=None)
 cursor = connection.cursor()
 cursor.execute(CLIENT_SQL_INJECTION)
 connection.commit()  
@@ -49,13 +54,76 @@ class JustAsk(FlaskView):
     def landingpage(self):
         return render_template("landingpage.html")
 
+
+
     # @route("/", endpoint="/")
     @route("/profile", endpoint="profile",methods=["GET", "POST"])
     def profile(self):
-        # If no user session, redirect to login page. Else render the user profile page.
-        if not session.get("email"):
-            return redirect("/login")
-        return render_template("profile.html", firstname=session["firstname"], lastname=session["lastname"], email=session["email"], password=session["password"], username=session["username"])
+        
+
+        default_args = {"firstname" : session["firstname"], "lastname" : session["lastname"], "email": session["email"], "password": session["password"], "username": session["username"]}
+        if request.method == "GET":
+            return render_template("profile.html", **default_args)
+        
+            
+
+
+
+
+        # the user can submit two types of post, change profile or change password.
+
+        if "submit-profile" in request.form:
+
+            email = request.form.get("email")
+            username = request.form.get("username")
+
+
+            email_exists = cursor.execute("SELECT * FROM users WHERE email= ?",(email,)).fetchall() != []
+            username_exists = cursor.execute("SELECT * FROM users WHERE username = ?",(username,)).fetchall() != []
+
+
+            if not email_exists:
+                cursor.execute("UPDATE users SET email = ? WHERE email = ?", (email,default_args["email"],))
+                session["email"] = email
+                default_args["email"] = email
+            else:
+                # email exists.
+                pass
+                
+            if not username_exists:
+                cursor.execute("UPDATE users SET username = ? WHERE username = ?", (email,default_args["username"],))
+                session["username"] = username
+                default_args["username"] = username
+            else:
+                # username exists already
+                pass
+
+
+            default_args["email_exists"] = email_exists 
+            default_args["username_exists"] = username_exists
+
+        elif "submit-password" in request.form:
+
+
+                old_password = request.form.get("old-password")
+                new_password = request.form.get("new-password-confirm")
+                print(old_password)
+                print(session["password"])
+                # check if old password entry matches password in db.
+                if old_password != session["password"]:
+                    # HANDLE THIS
+                    return "pw mismatch"
+
+                cursor.execute("UPDATE users SET password = ? WHERE username = ?", (new_password,default_args["username"],))
+                session["password"] = new_password
+                default_args["password"] = new_password
+
+
+
+        return render_template("profile.html", **default_args)
+        
+
+    
 
     @route("/", endpoint="/")
     @route("/login/", endpoint="login", methods=['POST', 'GET'])

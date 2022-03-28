@@ -25,7 +25,7 @@ Profile
             </ul>
         </div>
         <div id="settings">
-            <form action="/profile/" method = "post" id="profile-form">
+            <form action="/profile" method = "post" id="profile-form">
 
                 <div class="information-wrapper">
                     <ul class="form-elements" id="edit-profile-wrapper">
@@ -46,28 +46,28 @@ Profile
                             <input name="email" type="text" placeholder="{{email}}">
                         </li>
                     </ul>
-                    <button id="submit-profile" class="submit">Submit</button>
+                    <button name="submit-profile" id="submit-profile" class="submit">Submit</button>
                 </div>
 
             </form>
 
-            <form action="/profile/" method = "post" id="password-form">
+            <form action="/profile" method = "post" id="password-form">
                 <div class="information-wrapper">
                     <ul class = "form-elements" id="change-password-wrapper">
                         <li class = "information password-information">    
                             <p>Old Password: </p>
-                            <input name="firstname" type="text">
+                            <input name="old-password" type="password" required>
                         </li>
                         <li class = "information password-information">    
                             <p>New Password: </p>
-                            <input name="firstname" type="text">
+                            <input name="new-password" type="password" required>
                         </li>
                         <li class = "password-information">    
                             <p>Confirm New Password: </p>
-                            <input name="firstname" type="text">
+                            <input name="new-password-confirm" type="password" required>
                         </li>
                     </ul>
-                    <button id="submit-password" class="submit">Submit</button>
+                    <button name="submit-password" id="submit-password" class="submit">Submit</button>
 
                 </div>
                
@@ -80,6 +80,9 @@ Profile
   
 
     <script>
+
+
+        var name = '{{email_exists}}';
 
         $(document).ready(function(){
             
@@ -110,6 +113,8 @@ Profile
             ShowProfileSettings();
         });
 
+
+        
 
     </script>
 
