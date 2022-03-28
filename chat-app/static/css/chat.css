@@ -145,6 +145,36 @@
 {
     padding-right: 5px;
 }
+.message-wrapper{
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+.message-wrapper.native .message-payload{
+    background-color: rgb(95, 68, 168);
+
+}
+.message-wrapper.foreign .message-payload{
+    background-color: rgb(129,96,217);
+}
+.message-wrapper.native *{
+    float:left;
+}
+.message-wrapper.foreign *{
+    float:right
+}
+.message-wrapper p{
+    padding:0;
+    margin:0;
+    padding-right:3px;
+}
+.message-header{
+    background-color: transparent;
+    font-size:10px;
+
+}
+.message-payload{
+    border: 1px solid black;
+    border-radius: 5px;
+}
 
 
 

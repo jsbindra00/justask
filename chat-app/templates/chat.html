@@ -7,6 +7,7 @@
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>My Chat App</title>
+    <meta id="username-metadata" username="{{username}}">
 
 
     <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"></script>
@@ -21,6 +22,7 @@ Chat
 
 {% block content %}
 
+
 <div id="media-wrapper">
     <div id="canvas-wrapper">
 
@@ -34,22 +36,7 @@ Chat
             <p id="session-id">Session ID:  {{ room }}</p>
         </strong>
 
-        <div id="flair-popup">
-            <ul id="flairs">
-                <li class = "flair">
-                    Question
-                </li>
-                <li class = "flair">
-                    Message
-                </li>
-                <li class = "flair">
-                    Request
-                </li>
-                <li class="flair">
-                    Canvas
-                </li>
-            </ul>
-        </div>
+
         <div id="messages">
         </div>
         

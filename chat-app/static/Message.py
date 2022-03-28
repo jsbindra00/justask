@@ -7,7 +7,6 @@ class MessageAttribute(IntEnum):
     Date = 2
 
 
-
 class Message:
 
     def __init__(self, flairs, upvotes, date):

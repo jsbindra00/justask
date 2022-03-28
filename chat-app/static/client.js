@@ -36,9 +36,6 @@ socket.on('connect', function () {
             socket.emit('send_message', {
                 message: message
             })
-            alert("sent");
-
-            
         }
         message_input.value = '';
         message_input.focus();
@@ -54,15 +51,19 @@ window.onbeforeunload = function () {
 
 socket.on('receive_message', function (data) {
     console.log(data);
+
     const newNode = document.createElement('div');
-    newNode.className = 'message-wrapper';
+
+    let owned_message = ((data.username == $('#username-metadata').attr("username"))? "native" : "foreign")
+    newNode.className = 'message-wrapper ' + owned_message;
+
 
     console.log(data.username);
-
 
     let newMessage = `
     <div class="message-header">
         <p>${data.username}</p>
+        <p>at</p>
         <p>${data.time}</p>
     </div>
     <div class="message-payload">
