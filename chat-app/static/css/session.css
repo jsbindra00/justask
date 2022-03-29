@@ -64,7 +64,6 @@ body {
 {
 
     position: absolute;
-
     display:flex;
     flex-direction: column;
     list-style-type:none;

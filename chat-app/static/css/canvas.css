@@ -1,13 +1,4 @@
 
-
-#header
-{
-  z-index:2;
-}
-#content{
-  /* padding-left:0px; */
-  padding-top:0px;
-}
 #cursorcanvas
 {
   position:absolute;

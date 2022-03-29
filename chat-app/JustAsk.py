@@ -27,14 +27,10 @@ class JustAsk(FlaskView):
         socketio.on_event("leave_room", self.handle_leave_room_event)
         socketio.on_event("clientmsg", self.handle_my_custom_event)
 
-
-
     @route("/landingpage", endpoint="landingpage")
     @route("/", endpoint="landingpage")
     def landingpage(self):
         return render_template("landingpage.html")
-
-
 
     @route("/profile", endpoint="profile",methods=["GET", "POST"])
     def profile(self):
@@ -76,8 +72,6 @@ class JustAsk(FlaskView):
                 ClientModel.query.filter_by(email=session['email']).first().password = new_password
                 session["password"] = new_password
                 default_args["password"] = new_password
-
-
         try:
             clientsDB.session.commit()
         except(Exception):
@@ -85,6 +79,13 @@ class JustAsk(FlaskView):
         return render_template("profile.html", **default_args)
         
 
+
+
+
+    @route("/testing", endpoint="testing")
+    def testing(self):
+        return render_template("testing.html")
+        
     @route("/", endpoint="/")
     @route("/login/", endpoint="login", methods=['POST', 'GET'])
     def login(self):
