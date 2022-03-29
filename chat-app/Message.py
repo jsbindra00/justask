@@ -31,9 +31,8 @@ from enum import IntEnum
 class MessageModel(clientsDB.Model):
 
 
-    messageid = clientsDB.Column(clientsDB.String(120), unique=True, nullable=False, primary_key=True)
+    # messageid = clientsDB.Column(clientsDB.String(120), unique=True, nullable=False, primary_key=True)
 
-    messageid = 
     email = clientsDB.Column(clientsDB.String(120), unique=True, nullable=False, primary_key=True)
     username = clientsDB.Column(clientsDB.String(80), unique=True, nullable=False)
     firstname = clientsDB.Column(clientsDB.String(80), unique=False, nullable=False)
