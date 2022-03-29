@@ -4,25 +4,29 @@ $(document).ready(function(){
   var canvas = new fabric.Canvas('c');
   canvas_parent = $('#canvas-master-wrapper');
 
+  function RenderGridLines(canvas_width, canvas_height){
+    var grid_size = 50;
 
-
-
-
-
-  function RenderGridLines(){
-    var gridsize = 5;
-    for(var x=1;x<(canvas.width/gridsize);x++)
-    {
-        canvas.add(new fabric.Line([100*x, 0, 100*x, 600],{ stroke: "#000000", strokeWidth: 1, selectable:false, strokeDashArray: [5, 5]}));
-        canvas.add(new fabric.Line([0, 100*x, 600, 100*x],{ stroke: "#000000", strokeWidth: 1, selectable:false, strokeDashArray: [5, 5]}));
+    for(var y = 0; y < canvas_height; y+=grid_size){
+      canvas.add(new fabric.Line([0, y, canvas_width, y], { stroke: "#000000", strokeWidth: 1, selectable:false}));
     }
+    for(var x = 0; x < canvas_width; x+=grid_size){
+      canvas.add(new fabric.Line([x, 0, x, canvas_height], { stroke: "#000000", strokeWidth: 1, selectable:false}));
+    }
+
+
   };
   
   function AdjustCanvasDimensions(){
-    canvas.setDimensions({width:canvas_parent.width(), height:canvas_parent.height()});
-    RenderGridLines();
+    let canvas_width = canvas_parent.width();
+    let canvas_height = canvas_parent.height();
+
+    canvas.setDimensions({width:canvas_width, height:canvas_height});
+    RenderGridLines(canvas_width, canvas_height);
+  
 
   }
+
   $(window).resize(function(){
     AdjustCanvasDimensions();
   })
@@ -34,8 +38,7 @@ $(document).ready(function(){
   var drawingModeEl = document.getElementById('drawing-mode'),
         drawingOptionsEl = document.getElementById('drawing-mode-options'),
         drawingColorEl = document.getElementById('drawing-color'),
-        drawingLineWidthEl = document.getElementById('drawing-line-width'),
-        drawingShadowWidth = document.getElementById('drawing-shadow-width');
+        drawingLineWidthEl = document.getElementById('drawing-line-width')
     drawingModeEl.onclick = function() {
       canvas.isDrawingMode = !canvas.isDrawingMode;
       if (canvas.isDrawingMode) {
@@ -47,9 +50,7 @@ $(document).ready(function(){
         drawingOptionsEl.style.display = 'none';
       }
     };
-    // canvas.on('path:created', function() {
-    //   updateComplexity();
-    // });
+
     if (fabric.PatternBrush) {
       var vLinePatternBrush = new fabric.PatternBrush(canvas);
       vLinePatternBrush.getPatternSrc = function() {
@@ -106,10 +107,7 @@ $(document).ready(function(){
         rect.render(ctx);
         return patternCanvas;
       };
-      var img = new Image();
-      img.src = '../assets/honey_im_subtle.png';
-      var texturePatternBrush = new fabric.PatternBrush(canvas);
-      texturePatternBrush.source = img;
+
     }
     document.getElementById('drawing-mode-selector').addEventListener('change', function() {
       if (this.value === 'hline') {
@@ -133,26 +131,26 @@ $(document).ready(function(){
       if (canvas.freeDrawingBrush) {
         canvas.freeDrawingBrush.color = drawingColorEl.value;
         canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
-        canvas.freeDrawingBrush.shadowBlur = parseInt(drawingShadowWidth.value, 10) || 0;
       }
     });
+
+
     drawingColorEl.onchange = function() {
       canvas.freeDrawingBrush.color = drawingColorEl.value;
     };
     drawingLineWidthEl.onchange = function() {
       canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
     };
-    drawingShadowWidth.onchange = function() {
-      canvas.freeDrawingBrush.shadowBlur = parseInt(drawingShadowWidth.value, 10) || 0;
-    };
+
+    
     if (canvas.freeDrawingBrush) {
       canvas.freeDrawingBrush.color = drawingColorEl.value;
       canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
       canvas.freeDrawingBrush.shadowBlur = 0;
     }
-    document.getElementById('canvas-background-picker').addEventListener('change', function() {
-      canvas.backgroundColor = this.value;
-      canvas.renderAll();
-    });
+
+    $('.canvas-container').css("overflow", "hidden");
+    $('.canvas-container *').css({"overflow":"hidden"});
+
 
 })

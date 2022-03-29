@@ -1,32 +1,30 @@
 {% extends 'hubbase.html' %}
 
 {% block head %}
- <link rel="stylesheet" href="../static/css/chat.css">
+<link rel="stylesheet" href="../static/css/chat.css">
 
-    <meta charset="UTF-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>My Chat App</title>
-    <meta id="username-metadata" username="{{username}}">
-
-
-    <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"></script>
-    <script src="https://kit.fontawesome.com/191b087c0a.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<meta charset="UTF-8">
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<title>My Chat App</title>
+<meta id="username-metadata" username="{{username}}">
 
 
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <!-- <link rel="stylesheet" href="./static/css/canvas.css"> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="https://cdn.socket.io/3.1.3/socket.io.min.js"></script>
+<script src="https://kit.fontawesome.com/191b087c0a.js" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- <link rel="stylesheet" href="./static/css/canvas.css"> -->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script
-      type="text/javascript"
-      src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.2.0/fabric.all.min.js"
-    ></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.2.0/fabric.all.min.js"></script>
 
 {% endblock %}
 
@@ -39,52 +37,72 @@ Chat
 
 <div id="media-wrapper">
     <div id="canvas-master-wrapper">
-        <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+        <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+            integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous">
+        </script>
         <script type="text/javascript" src="{{ url_for('static', filename='client.js') }}"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/521/fabric.min.js" integrity="sha512-nPzvcIhv7AtvjpNcnbr86eT6zGtiudLiLyVssCWLmvQHgR95VvkLX8mMpqNKWs1TG3Hnf+tvHpnGmpPS3yJIgw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/521/fabric.min.js"
+            integrity="sha512-nPzvcIhv7AtvjpNcnbr86eT6zGtiudLiLyVssCWLmvQHgR95VvkLX8mMpqNKWs1TG3Hnf+tvHpnGmpPS3yJIgw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- <script>
         init();
         </script> -->
 
 
-        <script
-        type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.2.0/fabric.all.min.js"
-      ></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.2.0/fabric.all.min.js">
+        </script>
 
-        <!-- <div id="toolkit">
-            <input type="color" id="colorPicker">
-            <label id="strokePx" ></label>
-            <input type="range" id="slide" min = "1" max = "100" value="3">
-        </div> -->
+        <div id="canvas-wrapper">
 
-        <canvas style="left: -300px; border: 2px solid; " height="485" width="632" id="c"></canvas>
-        <li style="margin-top:10px;">
-                  <button id="drawing-mode" class="btn btn-info">Enter drawing mode</button>
-                  <div style="display: none;" id="drawing-mode-options">
-                    <label for="drawing-mode-selector">Mode:</label>
+            <canvas style="left: -300px; border: 2px solid; " height="485" width="632" id="c"></canvas>
+            <button id="drawing-mode" class="btn btn-info">Enter drawing mode</button>
+
+
+            <div style="display: none;" id="drawing-mode-options">
+                <a><i class="fa-solid fa-arrow-pointer fa-lg"></i></a>
+                <a id="brush">
+                    <i class="fa-solid fa-paintbrush fa-lg"></i>
+
                     <select id="drawing-mode-selector">
-                      <option>Pencil</option>
-                      <option>Circle</option>
-                      <option>Spray</option>
-                      <option>Pattern</option>
-                      <option>hline</option>
-                      <option>vline</option>
-                      <option>square</option>
-                      <option>diamond</option>
-                      <option>texture</option>
-                    </select><br>
-                    <label for="drawing-line-width">Line width:</label>
-                    <input type="range" value="30" min="0" max="150" id="drawing-line-width"><br>
-                    <label for="drawing-color">Line color:</label>
-                    <input type="color" value="#005E7A" id="drawing-color"><br>
-                    <label for="drawing-shadow-width">Line shadow width:</label>
-                    <input type="range" value="0" min="0" max="50" id="drawing-shadow-width"><br>
-                  </div>
-          </li>
-          <script src="../static/canvas.js"></script>
-         
+                        <ul id="brushes">
+                            <li class="brush">
+                                <option>Pencil</option>
+                            </li>
+                            <li class="brush">
+                                <option>Circle</option>
+                            </li>
+                            <li class="brush">
+                                <option>Spray</option>
+                            </li>
+                            <li class="brush">
+                                <option>Pattern</option>
+                            </li>
+                            <li class="brush">
+                                <option>diamond</option>
+                            </li>
+                            <li class="brush">
+                                <option>square</option>
+                            </li>
+                        </ul>
+                    </select>
+                </a>
+            </div>
+
+            <input type="color" value="#005E7A" id="drawing-color"><br>
+
+
+
+            <label for="drawing-line-width">Line width:</label>
+            <input type="range" value="30" min="0" max="150" id="drawing-line-width">
+
+        </div>
+
+
+
+
+        <script src="../static/canvas.js"></script>
+
     </div>
 
 
@@ -94,30 +112,34 @@ Chat
 
     <div id="chat-wrapper">
         <strong>
-            <p id="session-id">Session ID:  {{ room }}</p>
+            <div id="session-id-wrapper">
+                <p id="session-id">Session ID: {{ room }}</p>
+
+            </div>
         </strong>
 
 
         <div id="messages">
         </div>
-        
-            <div id="text-area-wrapper" >
-                <textarea class="text-widget" id="chatbar" placeholder="Type a new message"> </textarea>
-                <div id="widgets-wrapper" class="text-widget">
-                    <div id="widgets">
-                        <a><i class="fa-solid fa-paperclip fa-lg"></i></a>
-                        <a><i class="fa-solid fa-tags fa-lg"></i></a>
-                        <a><i class="fa-solid fa-paintbrush fa-lg"></i></a>
-                        <a><i class="fa-solid fa-icons fa-lg"></i></a>
-                    </div>
-                    <div id="sendmessage">
-                        <form id="message_input_form" class="form-container" action="">    
-                            <button type="submit" id="post" class="btn"><i class="fa-solid fa-paper-plane fa-lg"></i></button>
-                        </form>
-                    </div>
-    
+
+        <div id="text-area-wrapper">
+            <textarea class="text-widget" id="chatbar" placeholder="Type a new message"> </textarea>
+            <div id="widgets-wrapper" class="text-widget">
+                <div id="widgets">
+                    <a><i class="fa-solid fa-paperclip fa-lg"></i></a>
+                    <a><i class="fa-solid fa-tags fa-lg"></i></a>
+                    <a><i class="fa-solid fa-paintbrush fa-lg"></i></a>
+                    <a><i class="fa-solid fa-icons fa-lg"></i></a>
                 </div>
+                <div id="sendmessage">
+                    <form id="message_input_form" class="form-container" action="">
+                        <button type="submit" id="post" class="btn"><i
+                                class="fa-solid fa-paper-plane fa-lg"></i></button>
+                    </form>
+                </div>
+
             </div>
+        </div>
     </div>
 </div>
 
@@ -125,15 +147,21 @@ Chat
 
 
 <script src="../static/client.js"></script>
-        
+
 
 {% endblock %}
 
 
 {% block body %}
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+</script>
 
 
 
