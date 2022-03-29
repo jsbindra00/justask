@@ -17,7 +17,7 @@ class JustAsk(FlaskView):
     route_base = "/"
 
     def __init__(self):
-        clientsDB.create_all()
+        db.create_all()
     def Start(self):
         app.config["SESSION_PERMANENT"] = False
         app.config["SESSION_TYPE"] = "filesystem"
@@ -74,7 +74,7 @@ class JustAsk(FlaskView):
                 session["password"] = new_password
                 default_args["password"] = new_password
         try:
-            clientsDB.session.commit()
+            db.session.commit()
         except(Exception):
             pass
         return render_template("profile.html", **default_args)
@@ -132,8 +132,8 @@ class JustAsk(FlaskView):
         if user_exists != None :
             #todo handle this. User is already registered.
             return "user exists already"
-        clientsDB.session.add(ClientModel(username = form_username, firstname = form_first_name, lastname = form_last_name, email = form_email, password = form_password, active_session = "0"))
-        clientsDB.session.commit()
+        db.session.add(ClientModel(username = form_username, firstname = form_first_name, lastname = form_last_name, email = form_email, password = form_password, active_session = "0"))
+        db.session.commit()
 
         return redirect("/login")
 
@@ -164,7 +164,7 @@ class JustAsk(FlaskView):
 
             session["active_session"] = roomID
             ClientModel.query.filter_by(username = session["username"]).first().active_session = roomID
-            clientsDB.session.commit()            
+            db.session.commit()            
             return redirect(url_for("chat"))
         elif "createsession" in request.form:
             return "creating new session"

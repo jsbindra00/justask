@@ -3,20 +3,40 @@ from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 import os
 
-file_path = os.path.abspath(os.getcwd())+"\clients.db"
+
+
+dbFilepath = os.path.abspath(os.getcwd())
+clientsDBLeaf = "\clients.db"
+messagesDBLeaf = "\messages.db"
+
+clientsDB = dbFilepath + clientsDBLeaf
+messagesDB = dbFilepath + messagesDBLeaf
+
 
 
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+file_path
-socketio = SocketIO(app)
+
+
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + clientsDB
+SQLALCHEMY_BINDS = {
+    'clients' : 'sqlite:///' + clientsDB,
+    'messages' : 'sqlite:///' + messagesDB
+}
+
+
+
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+app.config['SQLALCHEMY_BINDS'] = SQLALCHEMY_BINDS
 
 options = {
 }
+socketio = SocketIO(app)
+db = SQLAlchemy(app, session_options=options)
 
-clientsDB = SQLAlchemy(app, session_options=options)
-messageDB = SQLAlchemy(app, session_options=options)
+
 
 
 

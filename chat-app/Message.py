@@ -1,4 +1,5 @@
 from enum import IntEnum
+from ModelBase import ModelBase
 
 
 class MessageAttribute(IntEnum):
@@ -23,27 +24,34 @@ class Message:
         self.messageID = id
 
 
-from app import clientsDB
+from app import db
 from enum import IntEnum
 
 
 
-class MessageModel(clientsDB.Model):
+class MessageModel(db.Model):
+    __bind_key__ = "messages"
 
+    # messageid = db.Column(db.String(120), unique=True, nullable=False, primary_key=True)
 
-    # messageid = clientsDB.Column(clientsDB.String(120), unique=True, nullable=False, primary_key=True)
-
-    email = clientsDB.Column(clientsDB.String(120), unique=True, nullable=False, primary_key=True)
-    username = clientsDB.Column(clientsDB.String(80), unique=True, nullable=False)
-    firstname = clientsDB.Column(clientsDB.String(80), unique=False, nullable=False)
-    lastname = clientsDB.Column(clientsDB.String(80), unique=False, nullable=False)
-    password = clientsDB.Column(clientsDB.String(80), unique=False, nullable=False)
-    active_session = clientsDB.Column(clientsDB.String(80), unique=False, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    firstname = db.Column(db.String(80), unique=False, nullable=False)
+    lastname = db.Column(db.String(80), unique=False, nullable=False)
+    password = db.Column(db.String(80), unique=False, nullable=False)
+    active_session = db.Column(db.String(80), unique=False, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.username
     def __init__(self, **kwargs):
         super(MessageModel, self).__init__(**kwargs)
+
+
+    
+    def SaveDatabase(filePath):
+        # pull all clients.
+        ModelBase.ProcessDatabase(MessageModel.query.all(), filePath)
+        print("SAVED MESSAGES DB TO {}".format(filePath))
 
 
 

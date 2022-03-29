@@ -1,7 +1,8 @@
-from app import socketio, app, clientsDB
+from app import socketio, app, db
 from JustAsk import *
 from threading import Thread
 from Client import ClientModel
+from Message import MessageModel
 
 
 
@@ -9,21 +10,24 @@ from Client import ClientModel
 
 def DebugMode():
     while True:
-        arg = input().upper()
+        arg = input("Enter Server Command").upper()
 
         if arg == "SAVE_CLIENTS_DB":
             ClientModel.SaveDatabase("./database.txt")
-            continue
+        elif arg == "SAVE_MESSAGES_DB":
+            MessageModel.SaveDatabase("./messages.txt")
 
 
 if __name__ == '__main__':
     Session()
     application = JustAsk()
     from Client import ClientModel
-    clientsDB.create_all()
+    db.create_all()
     application.Start()
+
     debugMode = Thread(target=DebugMode)
     debugMode.start()
+    
     socketio.run(app, debug=True)
     debugMode.join()
 
