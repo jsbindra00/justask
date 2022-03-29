@@ -151,23 +151,26 @@ class JustAsk(FlaskView):
     def session(self):
         if request.method == "GET":
             return render_template("session.html")
+        roomID = request.form.get("room")
+        matchingRoomClients = ClientModel.query.filter_by(active_session = roomID).all()
         
         if "joinsession" in request.form:
-            roomID = request.form.get("room")
             matchingRoomClients = ClientModel.query.filter_by(active_session = roomID).all()
 
-            # if the room ID does not exist among any other user, then we cannot join the session.
+            if matchingRoomClients == []:
+                # handle this.
+                return "room id does not exist"
 
-            # if matchingRoomClients == []:
-            #     # handle this.
-            #     return "room id does not exist"
-
-            session["active_session"] = roomID
-            ClientModel.query.filter_by(username = session["username"]).first().active_session = roomID
-            db.session.commit()            
-            return redirect(url_for("chat"))
+        
         elif "createsession" in request.form:
-            return "creating new session"
+            if matchingRoomClients != []:
+                return "session id already exists"
+
+        session["active_session"] = roomID
+        ClientModel.query.filter_by(username = session["username"]).first().active_session = roomID
+        db.session.commit()    
+        return redirect(url_for("chat"))
+
 
     @route("/chat", endpoint="chat")
     def chat(self):
