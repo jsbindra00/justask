@@ -8,6 +8,7 @@ from flask_classful import FlaskView, route
 from Client import ClientModel
 from Utility import Utility
 
+from Message import Message
 from app import *
 
 
@@ -181,7 +182,17 @@ class JustAsk(FlaskView):
         data["time"] = datetime.now().strftime("%H:%M")   
         data["username"] = session["username"]                                                         
         socketio.emit('receive_message',data, room=session['active_session'])
-        print("handled event")
+
+
+        
+
+
+        
+        message = Message(flairs = data["flairs"], upvotes = data["upvotes"], date = data["date"], messageID = data["messageID"])
+         
+        # store this object into our messages database.
+        # construct a message object and store the message in a database.
+        
 
     def handle_join_room_event(self,data):
         join_room(session['active_session'])
@@ -193,9 +204,6 @@ class JustAsk(FlaskView):
         leave_room(session['active_session'])
         socketio.emit('leave_room_announcement', data, room=session['active_session'])
 
-    @route('/sketchpad', endpoint="sketchpad")
-    def sessions(self):
-        return render_template('sketchpad.html')
 
     def messageReceived(self,methods=['GET', 'POST']):
         print('message was received!!!')
@@ -203,5 +211,8 @@ class JustAsk(FlaskView):
     def handle_my_custom_event(self,json, methods=['GET', 'POST']):
         print('received my event: ' + str(json))
         socketio.emit('servermsg', json, callback=self.messageReceived)
+
+
+    
 
 JustAsk.register(app)

@@ -45,7 +45,7 @@ body {
   -moz-filter: blur(5px);
   -o-filter: blur(5px);
   -ms-filter: blur(5px); */
-  filter: blur(3px);
+  /* filter: blur(3px); */
 
   
 }

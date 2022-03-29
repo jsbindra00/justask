@@ -2,6 +2,9 @@
 
 
 
+
+
+
 function AdjustDivider()
 {
     divider = $('#divider');

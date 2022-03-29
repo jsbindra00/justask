@@ -6,8 +6,7 @@ $(document).ready(function () {
 
   function RenderGridLines(canvas_width, canvas_height) {
     var grid_size = 50;
-
-    for (var y = 0; y < canvas_height; y += grid_size) {
+    for (var y = 0; y < canvas_height; y += grid_size){
       canvas.add(new fabric.Line([0, y, canvas_width, y], {
         stroke: "#000000",
         strokeWidth: 1,
@@ -78,8 +77,6 @@ $(document).ready(function () {
   drawing_color.on('change', function () {
     AdjustColor(this.value)
   });
-
-
 
   $('.canvas-container').css("overflow", "hidden");
   $('.canvas-container *').css({

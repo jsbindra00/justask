@@ -108,3 +108,57 @@ document.getElementById("myForm").style.display = "none";
 }
 
 
+
+
+
+function RequestSessionMessages(){
+    // we can't store the flair in the raw html.
+
+    // client sends message.
+        // message contains header and payload.
+            // header consists of flairs, upvotes, date sent.
+}
+
+
+
+function GenerateMessageID(){
+    // returns a unique message id for a given message.
+
+    let current_date = Date();
+    console.log(current_date)
+}
+
+
+
+
+$(document).ready(function(){
+
+
+
+
+
+    socket.on('connect', function () {
+        socket.emit('join_room', {
+            username: "{{ username }}",
+            room: "{{ room }}"
+        });
+    
+        let message_input = document.getElementById('chatbar');
+    
+        document.getElementById('message_input_form').onsubmit = function (e) {
+            e.preventDefault();
+            let message = message_input.value.trim();
+            if (message.length) {
+                socket.emit('send_message', {
+                    message: message
+                })
+            }
+            message_input.value = '';
+            message_input.focus();
+    
+        }
+    });
+    // apply a sort to the chat.
+
+    // request the messages for this session from socket io server.
+})
