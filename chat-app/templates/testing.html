@@ -138,6 +138,8 @@ var drawingModeEl = document.getElementById('drawing-mode'),
       canvas.freeDrawingBrush.shadowBlur = parseInt(drawingShadowWidth.value, 10) || 0;
     }
   });
+
+  
   drawingColorEl.onchange = function() {
     canvas.freeDrawingBrush.color = drawingColorEl.value;
   };

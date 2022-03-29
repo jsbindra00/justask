@@ -188,7 +188,7 @@
     padding:10px;
     border-radius: 10px;
     width:40%;
-    margin:5px;
+    margin:10px;
 }
 
 
@@ -202,10 +202,11 @@
 
 }
 .message-wrapper.native{
-    float:left;
+
 }
 .message-wrapper.foreign{
-    float:right
+    margin-left: auto;
+    order: 2;
 }
 .message-wrapper p{
 
@@ -226,8 +227,17 @@
     padding:5px;
 }
 
+#brush-palette{
 
-#drawing-mode-options{
+}
+
+#brushes{
+    list-style-type: none;
     display:flex;
     flex-direction: row;
+    
+}
+#brushes li{
+    margin:2px;
+    cursor:pointer;
 }

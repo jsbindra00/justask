@@ -56,51 +56,36 @@ Chat
         <div id="canvas-wrapper">
 
             <canvas style="left: -300px; border: 2px solid; " height="485" width="632" id="c"></canvas>
-            <button id="drawing-mode" class="btn btn-info">Enter drawing mode</button>
+            <div id="drawing-mode-options">
 
+                <div id="brush-palette">
 
-            <div style="display: none;" id="drawing-mode-options">
-                <a><i class="fa-solid fa-arrow-pointer fa-lg"></i></a>
-                <a id="brush">
-                    <i class="fa-solid fa-paintbrush fa-lg"></i>
+                    <ul id="brushes">
+                        <li class="brush" id="Pointer">
+                            <i class="fa-solid fa-arrow-pointer fa-lg"></i>
+                        </li>
+                        <li class="brush" id="Pencil">
+                            <i class="fa-solid fa-pencil fa-lg"></i>
+                        </li>
+                        <li class="brush" id="Circle">
+                            <i class="fa-solid fa-circle fa-lg"></i>
+                        </li>
+                        <li class="brush" id="Spray">
+                            <i class="fa-solid fa-spray-can fa-lg"></i>
+                        </li>
+                        <li class="brush-manipulator">
+                            <input type="color" value="#005E7A" id="drawing-color">
+                        </li>
+                        <li class="brush-manipulator">
+                            <input type="range" value="30" min="0" max="150" id="drawing-line-width">
 
-                    <select id="drawing-mode-selector">
-                        <ul id="brushes">
-                            <li class="brush">
-                                <option>Pencil</option>
-                            </li>
-                            <li class="brush">
-                                <option>Circle</option>
-                            </li>
-                            <li class="brush">
-                                <option>Spray</option>
-                            </li>
-                            <li class="brush">
-                                <option>Pattern</option>
-                            </li>
-                            <li class="brush">
-                                <option>diamond</option>
-                            </li>
-                            <li class="brush">
-                                <option>square</option>
-                            </li>
-                        </ul>
-                    </select>
-                </a>
+                        </li>
+                    </ul>
+                </div>
+                
+               
             </div>
-
-            <input type="color" value="#005E7A" id="drawing-color"><br>
-
-
-
-            <label for="drawing-line-width">Line width:</label>
-            <input type="range" value="30" min="0" max="150" id="drawing-line-width">
-
         </div>
-
-
-
-
         <script src="../static/canvas.js"></script>
 
     </div>
