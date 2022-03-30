@@ -34,7 +34,8 @@ socket.on('connect', function () {
         let message = message_input.value.trim();
         if (message.length) {
             socket.emit('send_message', {
-                message: message
+                message: message,
+                m_session_id: "m_sessionid"
             })
         }
         message_input.value = '';
@@ -137,27 +138,27 @@ $(document).ready(function(){
 
 
 
-    socket.on('connect', function () {
-        socket.emit('join_room', {
-            username: "{{ username }}",
-            room: "{{ room }}"
-        });
+    // socket.on('connect', function () {
+    //     socket.emit('join_room', {
+    //         username: "{{ username }}",
+    //         room: "{{ room }}"
+    //     });
     
-        let message_input = document.getElementById('chatbar');
+    //     let message_input = document.getElementById('chatbar');
     
-        document.getElementById('message_input_form').onsubmit = function (e) {
-            e.preventDefault();
-            let message = message_input.value.trim();
-            if (message.length) {
-                socket.emit('send_message', {
-                    message: message
-                })
-            }
-            message_input.value = '';
-            message_input.focus();
+    //     document.getElementById('message_input_form').onsubmit = function (e) {
+    //         e.preventDefault();
+    //         let message = message_input.value.trim();
+    //         if (message.length) {
+    //             socket.emit('send_message', {
+    //                 message: message
+    //             })
+    //         }
+    //         message_input.value = '';
+    //         message_input.focus();
     
-        }
-    });
+    //     }
+    // });
     // apply a sort to the chat.
 
     // request the messages for this session from socket io server.

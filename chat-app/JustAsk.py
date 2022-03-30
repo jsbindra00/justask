@@ -8,9 +8,10 @@ from flask_classful import FlaskView, route
 from Client import ClientModel
 from Utility import Utility
 
-from Message import Message
+from Message import Message, MessageModel
 from app import *
 
+import time
 
 class JustAsk(FlaskView):
     default_methods = ['GET', 'POST']
@@ -186,20 +187,21 @@ class JustAsk(FlaskView):
         data["username"] = session["username"]                                                         
         socketio.emit('receive_message',data, room=session['active_session'])
 
+        # message_id = db.Column(db.String(120), unique=False, nullable=False, primary_key=True)
+        # message_flairs = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+        # date_sent = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+        # num_upvotes = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
+        # payload = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+        # from_session_id = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+            
+        db.session.add(MessageModel(message_id = str(int(time.time())), message_flairs="flairs", date_sent = data["time"], num_upvotes="0",payload=data["message"], from_session_id=data["m_session_id"]))
+        db.session.commit()
+   
 
-        
-
-
-        
-        message = Message(flairs = data["flairs"], upvotes = data["upvotes"], date = data["date"], messageID = data["messageID"])
-         
-        # store this object into our messages database.
-        # construct a message object and store the message in a database.
-        
 
     def handle_join_room_event(self,data):
         join_room(session['active_session'])
-        data["time"] = datetime.now().strftime("[%H:%M]")
+        data["time"] = datetime.now().strftime("[%H:%M:%S]")
         data["username"] = session["username"]                                                            
         socketio.emit('join_room_announcement',data, room=session['active_session'], username=session["username"])
 
