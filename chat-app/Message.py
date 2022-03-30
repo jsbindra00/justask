@@ -15,15 +15,6 @@ class MessageFlairType(IntEnum):
     Request = 3
 
 
-class Message:
-
-    def __init__(self, flairs, upvotes, date, id):
-        self.flairs = flairs
-        self.upvotes = upvotes
-        self.date = date
-        self.messageID = id
-
-
 from app import db
 from enum import IntEnum
 
@@ -38,11 +29,13 @@ class MessageModel(db.Model):
     num_upvotes = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
     payload = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
     from_session_id = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+    from_user = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+
 
 
 
     def __repr__(self):
-        return 'MESSAGE {} {} {} {} {} {}'.format(self.message_id, self.message_flairs, self.date_sent, self.num_upvotes, self.payload) 
+        return 'MESSAGE {} {} {} {} {} {} {}'.format(self.message_id, self.message_flairs, self.date_sent, self.num_upvotes, self.payload, self.from_session_id, self.from_user) 
     def __init__(self, **kwargs):
         super(MessageModel, self).__init__(**kwargs)
 
@@ -52,6 +45,8 @@ class MessageModel(db.Model):
         # pull all clients.
         ModelBase.ProcessDatabase(MessageModel.query.all(), filePath)
         print("SAVED MESSAGES DB TO {}".format(filePath))
+
+
 
 
 

@@ -34,8 +34,7 @@ socket.on('connect', function () {
         let message = message_input.value.trim();
         if (message.length) {
             socket.emit('send_message', {
-                message: message,
-                m_session_id: "m_sessionid"
+                message: message
             })
         }
         message_input.value = '';

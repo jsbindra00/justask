@@ -8,10 +8,11 @@ from flask_classful import FlaskView, route
 from Client import ClientModel
 from Utility import Utility
 
-from Message import Message, MessageModel
+from Message import MessageModel
 from app import *
 
 import time
+import uuid
 
 class JustAsk(FlaskView):
     default_methods = ['GET', 'POST']
@@ -183,18 +184,14 @@ class JustAsk(FlaskView):
             return redirect(url_for('session'))
 
     def handle_send_message_event(self,data):
-        data["time"] = datetime.now().strftime("%H:%M")   
-        data["username"] = session["username"]                                                         
+        data["time"] = datetime.now().strftime("%D %H:%M")   
+        data["username"] = session["username"]                    
+        data["message_id"] = str(uuid.uuid4())                                     
         socketio.emit('receive_message',data, room=session['active_session'])
+        
 
-        # message_id = db.Column(db.String(120), unique=False, nullable=False, primary_key=True)
-        # message_flairs = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
-        # date_sent = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
-        # num_upvotes = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
-        # payload = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
-        # from_session_id = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
-            
-        db.session.add(MessageModel(message_id = str(int(time.time())), message_flairs="flairs", date_sent = data["time"], num_upvotes="0",payload=data["message"], from_session_id=data["m_session_id"]))
+
+        db.session.add(MessageModel(message_id = data["message_id"], message_flairs="flairs", date_sent = data["time"], num_upvotes=0,payload=data["message"], from_session_id=session["active_session"], from_user = session["username"]))
         db.session.commit()
    
 
