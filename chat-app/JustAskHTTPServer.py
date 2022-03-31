@@ -18,9 +18,19 @@ class JustAskHTTPServer(FlaskView):
         app.config["SESSION_TYPE"] = "filesystem"
         Session(app)
 
+
+
+    @route("/signout", endpoint="signout")
+    def Signout(self):
+        session.clear()
+        return redirect("landingpage")
+
+
     @route("/landingpage", endpoint="landingpage")
     @route("/", endpoint="landingpage")
     def landingpage(self):
+        if session:
+            return redirect("profile")
         return render_template("landingpage.html")
 
 
@@ -39,10 +49,16 @@ class JustAskHTTPServer(FlaskView):
     @route("/profile", endpoint="profile",methods=["GET", "POST"])
     def profile(self):
 
-        default_args = {"firstname" : session["firstname"], "lastname" : session["lastname"], "email": session["email"], "password": session["password"], "username": session["username"]}
         if request.method == "GET":
-            return render_template("profile.html", **default_args)
+            if session:
+                print("SESSION VALID")
+                return render_template("profile.html", **{"firstname" : session["firstname"], "lastname" : session["lastname"], "email": session["email"], "password": session["password"], "username": session["username"]})
+            return redirect("landingpage")
         # the user can submit two types of post, change profile or change password.
+
+        default_args = {"firstname" : session["firstname"], "lastname" : session["lastname"], "email": session["email"], "password": session["password"], "username": session["username"]}
+
+
         if "submit-profile" in request.form:
 
             form_email = request.form.get("email")
@@ -94,6 +110,8 @@ class JustAskHTTPServer(FlaskView):
     @route("/login/", endpoint="login", methods=['POST', 'GET'])
     def login(self):
         if request.method == "GET":
+            if session:
+                return render_template("profile.html")
             return render_template("landingpage.html")
         form_email = request.form.get("email")
         form_password = Utility.EncryptSHA256(request.form.get("password"))
@@ -119,6 +137,8 @@ class JustAskHTTPServer(FlaskView):
     @route("/registration/",endpoint="registration", methods = ["GET", "POST"])
     def registration(self):
         if request.method == "GET":
+            if session:
+                return render_template("profile.html")
             return render_template("registration.html")
         form_email = request.form.get("email")
         form_username = request.form.get("username")
@@ -147,12 +167,14 @@ class JustAskHTTPServer(FlaskView):
 
     @route("/logout", endpoint="logout")
     def logout():
-        session["email"] = None
-        return redirect("/login")
+        session.clear()
+        return redirect("login")
 
     @route("/session", endpoint="session", methods=["GET", "POST"])
     def session(self):
         if request.method == "GET":
+            if session["active_session"] != "":
+                return redirect(url_for("chat"))
             return render_template("session.html")
         roomID = request.form.get("room")
         matchingRoomClients = ClientModel.query.filter_by(active_session = roomID).all()
@@ -163,7 +185,6 @@ class JustAskHTTPServer(FlaskView):
             if matchingRoomClients == []:
                 # handle this.
                 return "room id does not exist"
-
         
         elif "createsession" in request.form:
             if matchingRoomClients != []:
