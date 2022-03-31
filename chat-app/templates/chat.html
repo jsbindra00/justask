@@ -96,13 +96,14 @@ Chat
     </div>
 
     <div id="chat-wrapper">
-        <strong>
-            <div id="session-id-wrapper">
-                <p id="session-id">Session ID: {{ room }}</p>
+      
+            <div id="session-information-wrapper">
+                <strong><p id="session-id">Session ID: {{ room }}</p></strong>
+                <div id="leave-session-wrapper">
+                    <a id="leave-session" href="/leave_session">Leave Session</a>
+                </div>
 
             </div>
-        </strong>
-
 
         <div id="messages">
         </div>

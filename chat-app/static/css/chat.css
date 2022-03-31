@@ -1,8 +1,17 @@
-#session-id-wrapper{
+#session-information-wrapper{
     background-color: rgb(250, 250, 250);
     box-shadow: 6px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 5px;
     padding:5px;
+    width:100%;
+
+    display:flex;
+    flex-direction: row;
+}
+
+#leave-session-wrapper{
+    padding:5px;
+    background-color: red;
 }
 
 
@@ -54,7 +63,6 @@
 }
 #session-id
 {
-    width:100%;
     height:30px;
     text-align: left;
     padding:0;
@@ -270,6 +278,3 @@
     cursor:pointer;
 }
 
-#fasdfsad .foo{
-    
-}

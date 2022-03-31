@@ -12,7 +12,6 @@ class JustAskHTTPServer(FlaskView):
 
     def __init__(self):
         super().__init__()
-        print("INITIALISED HTTP")
 
         db.create_all()
         app.config["SESSION_PERMANENT"] = False
@@ -23,6 +22,17 @@ class JustAskHTTPServer(FlaskView):
     @route("/", endpoint="landingpage")
     def landingpage(self):
         return render_template("landingpage.html")
+
+
+    @route("/leave_session", endpoint="leave_session",methods=["GET", "POST"])
+    def LeaveSession(self):
+        session["active_session"] = ""
+        ClientModel.query.filter_by(email=session['email']).first().active_session = ""
+        db.session.commit()
+        return redirect("/profile")
+
+
+
 
 
 

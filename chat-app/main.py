@@ -7,7 +7,6 @@ from flask_session import Session
 import os
 
 
-
 def DebugMode():
     while True:
         arg = input("Enter Server Command").upper()

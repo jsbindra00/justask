@@ -120,14 +120,11 @@ function ClientAcknowledgeSendMessage(data){
 
 
 
-
-
 function ClientRequestLeave(){
     socket.emit('REQ_LEAVE', {
         room: "{{ room }}"
     })
 }
-
 
 function ClientAcknowledgeLeave(data){
     const newNode = document.createElement('div');
@@ -136,20 +133,16 @@ function ClientAcknowledgeLeave(data){
 }
 
 
-
-
-
 function SortMessages(){
 
 
     // get a list of the messages.
     messages = $('.message-wrapper-master');
-    alert(messages.length)
 }
 
 $(document).ready(function(){
     $('#message_input_form').submit(function(e){e.preventDefault(); ClientRequestSendMessage();});
-
+    $('#leave-session').click(ClientRequestLeave);
 
     socket.on('ACK_VOTE_CHANGE', function(data){ClientAcknowledgeVoteChange(data);});
     socket.on('ACK_SEND_MESSAGE', ClientAcknowledgeSendMessage);
@@ -157,6 +150,7 @@ $(document).ready(function(){
     socket.on('ACK_JOIN', function(data){ClientAcknowledgeJoin(data)});
     socket.on('ACK_LEAVE', ClientAcknowledgeLeave);
 
+    
     window.onbeforeunload = ClientRequestLeave;
 })
 

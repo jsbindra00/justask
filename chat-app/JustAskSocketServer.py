@@ -13,7 +13,6 @@ class JustAskSocketServer:
 
     def __init__(self):
         super().__init__()
-        print("INITIALISED SOCKETS")
         socketio.on_event("REQ_SEND_MESSAGE", self.REQUEST_SEND_MESSAGE)
         socketio.on_event("REQ_JOIN", self.REQUEST_JOIN)
         socketio.on_event("REQ_LEAVE", self.REQUEST_LEAVE)
