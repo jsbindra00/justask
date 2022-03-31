@@ -241,3 +241,20 @@
     margin:2px;
     cursor:pointer;
 }
+.message-properties{
+    display:flex;
+    flex-direction: row;
+    background-color: rgb(255, 0, 0);
+    height:50px
+}
+
+.fa-solid.fa-arrow-pointer.fa-lg{
+    width:20px;
+    height:20px;
+}
+.message-flairs, .upvote-message, .downvote-message{
+    width:50px;
+    height:50px;
+    background-color: blueviolet;
+    border: 1px solid black;
+}

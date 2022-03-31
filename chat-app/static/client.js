@@ -23,8 +23,12 @@ const socket = io.connect("http://127.0.0.1:5000");
 
 
 
-function OnMessageVote(message_id){
-    socket.emit('on_message_vote', {message_id : message_id});
+function OnMessageVote(message_id, vote_amount){
+    if (vote_amount < 0){
+        alert("downvote")
+    }
+    else alert("upvote");
+    socket.emit('on_message_vote', {message_id : message_id, vote_amount: vote_amount});
 }
 socket.on('connect', function () {
     socket.emit('join_room', {
@@ -57,30 +61,60 @@ window.onbeforeunload = function () {
 socket.on('receive_message', function (data) {
     console.log(data);
 
-    const newNode = document.createElement('div');
+    const messageNode = $('<div/>',
+     {
+         "class" : "message-wrapper " + ((data.username == $('#username-metadata').attr("username"))? "native" : "foreign"),
+         "id" : data.message_id
+        });
 
-    let owned_message = ((data.username == $('#username-metadata').attr("username"))? "native" : "foreign")
-    newNode.className = 'message-wrapper ' + owned_message;
-    newNode.id = data.message_id;
-    newNode.onclick = function(){OnMessageVote(data.message_id);};
-    console.log(data.username);
+    const messageHeader = $('<div/>',
+    {
+        "class" : "message-header"
+    }).append(`<p>${data.username}</p><p>at</p><p>${data.time}</p>`);
 
-    let newMessage = `
-    <div class="message-header">
-        <p>${data.username}</p>
-        <p>at</p>
-        <p>${data.time}</p>
-    </div>
-    <div class="message-payload">
-        <p>${data.message}</p>
-    </div>
+    const messagePayload = $('<div/>',
+    {
+        "class" : "message-payload"
+    }).append(`<p>${data.message}</p>`);
 
-    `
+    
 
-    newNode.innerHTML = newMessage;
+
+
+    const upvoteMessage = $('<div/>', {
+        "class" : "upvote-message",
+        "click" : function(){OnMessageVote(data, 1)}
+    }).append(`<i class="fa-solid fa-up fa-lg"></i>`)
+    const downvoteMessage = $('<div/>', {
+        "class" : "downvote-message",
+        "click" : function(){OnMessageVote(data, -1)}
+    }).append(`<i class="fa-solid fa-down fa-lg"></i>`)
+
+
+    const messageProperties = $('<div/>',
+    {
+        "class" : "message-properties"
+    }).append(`<div class="message-flairs">`).append(upvoteMessage).append(downvoteMessage);
+
+
+    messageNode.append(messageHeader);
+    messageNode.append(messagePayload);
+    messageNode.append(messageProperties)
+    // messageNode.append(messageProperties);
+
+    // messageNode.click(function(){alert("hello world");});
+
+    // messageNode.get(0).children[0].onclick = function(){OnMessageVote(data.message_id, )}};
+    // messageNode.get(0).children[1].onclick = function(){alert("header");};
+
+    // messageNode.get(0)click(function(){alert("header");});
+    // messageNode.get(0).click(function(){alert("payload");});
+
+
+    $('#messages').append(messageNode);
 
  
-    document.getElementById('messages').appendChild(newNode);
+    // document.getElementById('messages').appendChild(newNode);
 
     // keep the scroll at the bottom.
     var messageBody = document.querySelector('#messages');
