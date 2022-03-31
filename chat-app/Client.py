@@ -1,4 +1,4 @@
-from app import db
+from SharedContext import db
 from enum import IntEnum
 from ModelBase import ModelBase
 

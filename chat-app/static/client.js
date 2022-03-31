@@ -48,6 +48,8 @@ function ClientRequestSendMessage(){
 
 function ClientAcknowledgeSendMessage(data){
 
+    alert("received")
+
     const messageNodeWrapper = $('<div/>', {
         "class" : "message-wrapper-master",
         "id" : data.message_id

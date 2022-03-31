@@ -1,10 +1,9 @@
-from app import socketio, app, db
+from SharedContext import socketio, app, db
 from JustAsk import *
 from threading import Thread
 from Client import ClientModel
 from Message import MessageModel
-
-
+from flask_session import Session
 
 
 
@@ -19,16 +18,18 @@ def DebugMode():
 
 
 if __name__ == '__main__':
+
+    JustAsk.register(app)
+
     Session()
     application = JustAsk()
     from Client import ClientModel
     db.create_all()
-    application.Start()
 
     # debugMode = Thread(target=DebugMode)
     # debugMode.start()
     
-    socketio.run(app, debug=False)
+    socketio.run(app, debug=True)
     # debugMode.join()
 
 
