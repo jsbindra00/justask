@@ -28,7 +28,7 @@ if __name__ == '__main__':
     # debugMode = Thread(target=DebugMode)
     # debugMode.start()
     
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=False)
     # debugMode.join()
 
 

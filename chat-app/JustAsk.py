@@ -2,9 +2,11 @@ from email.message import Message
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_session import Session
 from flask_socketio import SocketIO, join_room, leave_room
-import sqlite3
 from datetime import datetime
 from flask_classful import FlaskView, route
+
+
+
 
 from Client import ClientModel
 from Utility import Utility
@@ -12,7 +14,6 @@ from Utility import Utility
 from Message import MessageModel
 from app import *
 
-import time
 import uuid
 
 class JustAsk(FlaskView):
@@ -26,16 +27,26 @@ class JustAsk(FlaskView):
         app.config["SESSION_TYPE"] = "filesystem"
         Session(app)
 
-        socketio.on_event("send_message", self.handle_send_message_event)
-        socketio.on_event("join_room", self.handle_join_room_event)
-        socketio.on_event("leave_room", self.handle_leave_room_event)
-        socketio.on_event("clientmsg", self.handle_my_custom_event)
-        socketio.on_event("on_message_vote", self.handle_update_message_vote_event)
+        socketio.on_event("REQ_SEND_MESSAGE", self.REQUEST_SEND_MESSAGE)
+        socketio.on_event("REQ_JOIN", self.REQUEST_JOIN)
+        socketio.on_event("REQ_LEAVE", self.REQUEST_LEAVE)
+        socketio.on_event("REQ_MESSAGE_VOTE_CHANGE", self.REQ_MESSAGE_VOTE_CHANGE)
+
+
+
+
+
+
+
 
     @route("/landingpage", endpoint="landingpage")
     @route("/", endpoint="landingpage")
     def landingpage(self):
         return render_template("landingpage.html")
+
+
+
+        
 
     @route("/profile", endpoint="profile",methods=["GET", "POST"])
     def profile(self):
@@ -136,7 +147,7 @@ class JustAsk(FlaskView):
         if user_exists != None :
             #todo handle this. User is already registered.
             return "user exists already"
-        db.session.add(ClientModel(username = form_username, firstname = form_first_name, lastname = form_last_name, email = form_email, password = form_password, active_session = "0"))
+        db.session.add(ClientModel(username = form_username, firstname = form_first_name, lastname = form_last_name, email = form_email, password = form_password, active_session = "0", socket_id=""))
         db.session.commit()
 
         return redirect("/login")
@@ -185,42 +196,38 @@ class JustAsk(FlaskView):
         else:
             return redirect(url_for('session'))
 
-    def handle_send_message_event(self,data):
+    def REQUEST_SEND_MESSAGE(self,data):
         data["time"] = datetime.now().strftime("%D %H:%M")   
         data["username"] = session["username"]                    
-        data["message_id"] = str(uuid.uuid4())                                     
-        socketio.emit('receive_message',data, room=session['active_session'])
-    
-
+        data["message_id"] = str(uuid.uuid4())    
+        data["session_id"] = session["active_session"]       
+        socketio.emit('ACK_SEND_MESSAGE',data, to=session['active_session'])
         db.session.add(MessageModel(message_id = data["message_id"], message_flairs="flairs", date_sent = data["time"], num_upvotes=0,payload=data["message"], from_session_id=session["active_session"], from_user = session["username"]))
         db.session.commit()
     
 
-    def handle_update_message_vote_event(self, data):
-        message = MessageModel.query.filter_by(message_id = data["message_id"]).first()
-        message.num_upvotes = message.num_upvotes + 1
-        db.session.commit()
-        print(message.num_upvotes)
+    def REQ_MESSAGE_VOTE_CHANGE(self, data):
 
-    def handle_join_room_event(self,data):
+        # TODO MAKE THIS ENTIRE OPERATION ATOMIC
+        message = MessageModel.query.filter_by(message_id = data["message_id"]).first()
+        message.num_upvotes = int(data["vote_amount"])
+
+        db.session.commit()
+        socketio.emit("ACK_VOTE_CHANGE", {"message_id" : data["message_id"], "vote_amount" : data["vote_amount"]}, to=data["session_id"])
+
+
+
+
+    def REQUEST_JOIN(self,data):
         join_room(session['active_session'])
         data["time"] = datetime.now().strftime("[%H:%M:%S]")
-        data["username"] = session["username"]                                                            
-        socketio.emit('join_room_announcement',data, room=session['active_session'], username=session["username"])
+        data["username"] = session["username"]         
+        socketio.emit('ACK_JOIN',data, room=session['active_session'], username=session["username"])
 
-    def handle_leave_room_event(self,data):
+    def REQUEST_LEAVE(self,data):
         leave_room(session['active_session'])
-        socketio.emit('leave_room_announcement', data, room=session['active_session'])
+        socketio.emit('ACK_LEAVE', data, room=session['active_session'])
 
 
-    def messageReceived(self,methods=['GET', 'POST']):
-        print('message was received!!!')
-
-    def handle_my_custom_event(self,json, methods=['GET', 'POST']):
-        print('received my event: ' + str(json))
-        socketio.emit('servermsg', json, callback=self.messageReceived)
-
-
-    
 
 JustAsk.register(app)

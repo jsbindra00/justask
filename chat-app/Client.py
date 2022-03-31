@@ -22,6 +22,7 @@ class ClientModel(db.Model, ModelBase):
     password = db.Column(db.String(80), unique=False, nullable=False)
     active_session = db.Column(db.String(80), unique=False, nullable=False)
 
+
     def __repr__(self):
         return 'CLIENT {} {} {} {} {} {}'.format(self.email, self.username, self.firstname, self.lastname, self.password, self.active_session)
     def __init__(self, **kwargs):
