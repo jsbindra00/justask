@@ -4,6 +4,7 @@ from threading import Thread
 from Client import ClientModel
 from Message import MessageModel
 from flask_session import Session
+import os
 
 
 
@@ -29,7 +30,11 @@ if __name__ == '__main__':
     # debugMode = Thread(target=DebugMode)
     # debugMode.start()
     
-    socketio.run(app, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    # debugMode = Thread(target=DebugMode)
+    # debugMode.start()
+
+    socketio.run(app, debug=True, host='127.0.0.1', port=port)
     # debugMode.join()
 
 
