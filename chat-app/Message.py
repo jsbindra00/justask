@@ -26,7 +26,7 @@ class MessageModel(db.Model):
     message_id = db.Column(db.String(120), unique=False, nullable=False, primary_key=True)
     message_flairs = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
     date_sent = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
-    num_upvotes = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+    num_upvotes = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
     payload = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
     from_session_id = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
     from_user = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)

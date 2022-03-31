@@ -25,10 +25,10 @@ if __name__ == '__main__':
     db.create_all()
     application.Start()
 
-    debugMode = Thread(target=DebugMode)
-    debugMode.start()
+    # debugMode = Thread(target=DebugMode)
+    # debugMode.start()
     
     socketio.run(app, debug=True)
-    debugMode.join()
+    # debugMode.join()
 
 

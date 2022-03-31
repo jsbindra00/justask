@@ -1,3 +1,4 @@
+from email.message import Message
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_session import Session
 from flask_socketio import SocketIO, join_room, leave_room
@@ -29,6 +30,7 @@ class JustAsk(FlaskView):
         socketio.on_event("join_room", self.handle_join_room_event)
         socketio.on_event("leave_room", self.handle_leave_room_event)
         socketio.on_event("clientmsg", self.handle_my_custom_event)
+        socketio.on_event("on_message_vote", self.handle_update_message_vote_event)
 
     @route("/landingpage", endpoint="landingpage")
     @route("/", endpoint="landingpage")
@@ -188,13 +190,17 @@ class JustAsk(FlaskView):
         data["username"] = session["username"]                    
         data["message_id"] = str(uuid.uuid4())                                     
         socketio.emit('receive_message',data, room=session['active_session'])
-        
-
+    
 
         db.session.add(MessageModel(message_id = data["message_id"], message_flairs="flairs", date_sent = data["time"], num_upvotes=0,payload=data["message"], from_session_id=session["active_session"], from_user = session["username"]))
         db.session.commit()
-   
+    
 
+    def handle_update_message_vote_event(self, data):
+        message = MessageModel.query.filter_by(message_id = data["message_id"]).first()
+        message.num_upvotes = message.num_upvotes + 1
+        db.session.commit()
+        print(message.num_upvotes)
 
     def handle_join_room_event(self,data):
         join_room(session['active_session'])

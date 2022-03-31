@@ -21,6 +21,11 @@
 
 const socket = io.connect("http://127.0.0.1:5000");
 
+
+
+function OnMessageVote(message_id){
+    socket.emit('on_message_vote', {message_id : message_id});
+}
 socket.on('connect', function () {
     socket.emit('join_room', {
         username: "{{ username }}",
@@ -56,8 +61,8 @@ socket.on('receive_message', function (data) {
 
     let owned_message = ((data.username == $('#username-metadata').attr("username"))? "native" : "foreign")
     newNode.className = 'message-wrapper ' + owned_message;
-
-
+    newNode.id = data.message_id;
+    newNode.onclick = function(){OnMessageVote(data.message_id);};
     console.log(data.username);
 
     let newMessage = `
@@ -121,44 +126,10 @@ function RequestSessionMessages(){
 
 
 
-function GenerateMessageID(){
-    // returns a unique message id for a given message.
-
-    let current_date = Date();
-    console.log(current_date)
-}
-
-
 
 
 $(document).ready(function(){
 
 
 
-
-
-    // socket.on('connect', function () {
-    //     socket.emit('join_room', {
-    //         username: "{{ username }}",
-    //         room: "{{ room }}"
-    //     });
-    
-    //     let message_input = document.getElementById('chatbar');
-    
-    //     document.getElementById('message_input_form').onsubmit = function (e) {
-    //         e.preventDefault();
-    //         let message = message_input.value.trim();
-    //         if (message.length) {
-    //             socket.emit('send_message', {
-    //                 message: message
-    //             })
-    //         }
-    //         message_input.value = '';
-    //         message_input.focus();
-    
-    //     }
-    // });
-    // apply a sort to the chat.
-
-    // request the messages for this session from socket io server.
 })
