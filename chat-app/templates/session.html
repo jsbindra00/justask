@@ -12,12 +12,13 @@ Session
 <script>
 
 
-    let title, joinsession, createsession, submitbutton, sessionIDGenerator, joinsessionbutton, createsessionbutton;
+    let title, joinsession, createsession, submitbutton, sessionIDGenerator, joinsessionbutton, createsessionbutton, anonBox;
     $(document).ready(function(){
         joinsession = $('#joinsessiontitle');
         createsession = $('#createsessiontitle');
         submitbutton = $('#submitsession');
         sessionIDGenerator = $('#sessionidgenerator')
+        anonBox = $('#anonbox')
 
         joinsessionbutton = $('#joinsessionselection');
         createsessionbutton = $('#createsessionselection');
@@ -32,6 +33,7 @@ Session
         createsession.css({"opacity" : 0});
         joinsession.css({"opacity" : 1});  
 
+        anonBox.css("visibility", "visible");
         sessionIDGenerator.css("visibility", "hidden");
         submitbutton.attr("name", "joinsession");
         submitbutton.text("Join Session");
@@ -47,6 +49,7 @@ Session
         createsession.css({"opacity" : 1});
 
         sessionIDGenerator.css("visibility", "visible");
+        anonBox.css("visibility", "hidden");
 
         submitbutton.attr("name", "createsession");
         submitbutton.text("Create Session")
@@ -94,7 +97,10 @@ Session
                 }
             </script>
             <strong><a id="sessionidgenerator" onclick = "GenerateSessionID()" style="cursor:pointer; visibility: hidden;">Generate Random ID</a></strong>
-           
+            <label class="anonbox" id="anonbox" style="cursor:pointer; visibility: hidden;">Stay Anonymous
+                <input type="checkbox" checked="checked">
+                <span class="checkmark"></span>
+            </label>
             <button id="submitsession" type="submit">Submit</button>
 
         </form>

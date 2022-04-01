@@ -135,8 +135,18 @@ body {
     color: white;
     font-weight: 500;
     font-size: 12px;
-    padding-top: 40px;
+    padding-top: 50px;
 }
 #sessionidgenerator:hover{
     color: rgb(206, 206, 206, 0.7);
 }
+
+.anonbox input:checked ~ .checkmark {
+    background-color: rgb(95, 68, 168);
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .anonbox:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+  
