@@ -37,10 +37,7 @@ Chat
 
     <div id="chat-wrapper">
 
-        <div id="sort-chat">
-            <div>sort by <i class="fa-solid fa-sort"></i>
-            </div>
-        </div>
+
 
         <div id="messages">
         </div>
@@ -68,26 +65,37 @@ Chat
 
     <div id="session-overview-master-wrapper">
 
-        <div id="session-overview-wrapper">
-            
+        <ul id="session-overview-wrapper">
+
+            <li class="session-overview">
                 <div id="session-ID-wrapper">
                     <strong>
                         <p id="session-id">Session ID: {{ room }}</p>
                     </strong>
                 </div>
-
+            </li>
+            <li class="session-overview">
                 <div id="session-clients-wrapper">
                     <div id="session-clients-title-wrapper">
-                        <h3>Listeners Online</h3>
+                        <h3>Current Session</h3>
                     </div>
-                    <div id="session-clients">
-                    </div>
+                    <ul id="session-clients">
+                    </ul>
                 </div>
+            </li>
+            <li class="session-overview">
+                <div id="sort-chat">
+                    <p>sort chat</p>
+                </div>
+                
+            </li>
 
+            <li class="session-overview" id="leave-session-master-wrapper">
                 <div id="leave-session-wrapper">
                     <a id="leave-session" href="/leave_session">Leave Session</a>
                 </div>
-            </div>
+            </li>
+        </ul>
 
 
 
