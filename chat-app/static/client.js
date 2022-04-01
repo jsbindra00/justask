@@ -28,10 +28,11 @@ function ClientRequestJoin(){
 function ClientAcknowledgeJoin(data){
     if (data.username !== "{{username}}") {
         const newNode = document.createElement('div');
+        newNode.className = "acknowledge";
         newNode.innerHTML = `<b>${data.time} ${data.username} has joined the room</b>`;
         document.getElementById('messages').appendChild(newNode);
     }
-    $('#session-clients').append(`<p class="session-client">${data.username}</p>`)
+    $('#session-clients').append(`<div class="session-client">${data.username}</div>`)
 }
 
 function ClientRequestSendMessage(){
@@ -88,27 +89,29 @@ function ClientAcknowledgeSendMessage(data){
     const upvoteMessage = $('<div/>', {
         "class" : "message-vote upvote-message",
         "click" : function(){ClientRequestVoteChange(data.message_id, 1, data.session_id)}
-    }).append(`<i class="fa-solid fa-caret-up fa-lg"></i>`)
+    }).append(`<i class="fa-solid fa-caret-up fa-2xl"></i>`)
+    const voteCountWrapper = $('<div/>',{
+        "class":"message-vote-count-wrapper"
+    }).append(`<div class="message-vote-count">0</div>`);
     const downvoteMessage = $('<div/>', {
         "class" : "message-vote downvote-message",
         "click" : function(){ClientRequestVoteChange(data.message_id, -1, data.session_id)}
-    }).append(`<i class="fa-solid fa-caret-down fa-lg"></i>`)
+    }).append(`<i class="fa-solid fa-caret-down fa-2xl"></i>`)
 
     votingIcons.append(upvoteMessage).append(downvoteMessage);
     
 
-    const voteCountWrapper = $('<div/>',{
-        "class":"message-vote-count-wrapper"
-    }).append(`<p class="message-vote-count">0</p>`);
-
-    votingProperty.append(votingIcons);
+    
+    votingProperty.append(upvoteMessage);
     votingProperty.append(voteCountWrapper);
+    votingProperty.append(downvoteMessage);
 
 
     messageNode.append(messageHeader);
     messageNode.append(messagePayload);
+    messageNodeWrapper.append(votingProperty);
     messageNodeWrapper.append(messageNode);
-    messageNodeWrapper.append(votingProperty)
+
 
 
     $('#messages').append(messageNodeWrapper);
@@ -128,6 +131,7 @@ function ClientRequestLeave(){
 
 function ClientAcknowledgeLeave(data){
     const newNode = document.createElement('div');
+    newNode.className = "acknowledge";
     newNode.innerHTML = `<b>${data.username}</b> has left the room`;
     document.getElementById('messages').appendChild(newNode);
 }
