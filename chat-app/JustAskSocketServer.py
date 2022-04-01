@@ -22,12 +22,12 @@ class JustAskSocketServer:
     def REQUEST_SEND_MESSAGE(self,data):
         print("RECEIVED")
         data["time"] = datetime.now().strftime("%D %H:%M")   
-        data["username"] = session["username"]                    
+        data["username"] = session["USERNAME"]                    
         data["message_id"] = str(uuid.uuid4())    
-        data["session_id"] = session["active_session"]       
+        data["session_id"] = session["ACTIVE_SESSION"]       
 
-        socketio.emit('ACK_SEND_MESSAGE',data, to=session['active_session'])
-        db.session.add(MessageModel(message_id = data["message_id"], message_flairs="flairs", date_sent = data["time"], num_upvotes=0,payload=data["message"], from_session_id=session["active_session"], from_user = session["username"]))
+        socketio.emit('ACK_SEND_MESSAGE',data, to=session['ACTIVE_SESSION'])
+        db.session.add(MessageModel(message_id = data["message_id"], message_flairs="flairs", date_sent = data["time"], num_upvotes=0,payload=data["message"], from_session_id=session["ACTIVE_SESSION"], from_user = session["USERNAME"]))
         db.session.commit()
     
 
@@ -42,12 +42,12 @@ class JustAskSocketServer:
 
 
     def REQUEST_JOIN(self,data):
-        join_room(session['active_session'])
+        join_room(session['ACTIVE_SESSION'])
         data["time"] = datetime.now().strftime("[%H:%M:%S]")
-        data["username"] = session["username"]         
-        socketio.emit('ACK_JOIN',data, room=session['active_session'], username=session["username"])
+        data["username"] = session["USERNAME"]         
+        socketio.emit('ACK_JOIN',data, room=session['ACTIVE_SESSION'], username=session["USERNAME"])
 
     def REQUEST_LEAVE(self,data):
-        leave_room(session['active_session'])
-        socketio.emit('ACK_LEAVE', data, room=session['active_session'])
+        leave_room(session['ACTIVE_SESSION'])
+        socketio.emit('ACK_LEAVE', data, room=session['ACTIVE_SESSION'])
 
