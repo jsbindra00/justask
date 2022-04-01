@@ -31,6 +31,7 @@ function ClientAcknowledgeJoin(data){
         newNode.innerHTML = `<b>${data.time} ${data.username} has joined the room</b>`;
         document.getElementById('messages').appendChild(newNode);
     }
+    $('#session-clients').append(`<p class="session-client">${data.username}</p>`)
 }
 
 function ClientRequestSendMessage(){
@@ -48,7 +49,6 @@ function ClientRequestSendMessage(){
 
 function ClientAcknowledgeSendMessage(data){
 
-    SortMessages()
 
     const messageNodeWrapper = $('<div/>', {
         "class" : "message-wrapper-master",
@@ -120,14 +120,11 @@ function ClientAcknowledgeSendMessage(data){
 
 
 
-
-
 function ClientRequestLeave(){
     socket.emit('REQ_LEAVE', {
         room: "{{ room }}"
     })
 }
-
 
 function ClientAcknowledgeLeave(data){
     const newNode = document.createElement('div');
@@ -135,21 +132,45 @@ function ClientAcknowledgeLeave(data){
     document.getElementById('messages').appendChild(newNode);
 }
 
-
-
-
-
 function SortMessages(){
 
+    function SortByFlair(flairname){
+        
+    }
+    function SortByDate(message_a, message_b){
 
-    // get a list of the messages.
-    messages = $('.message-wrapper-master');
-    alert(messages.length)
+    }
+    function SortByUpvotes(message_a, message_b){
+        let message_a_upvotes = parseInt(message_a.querySelector(".message-vote-count").innerText)
+        let message_b_upvotes = parseInt(message_b.querySelector(".message-vote-count").innerText)
+
+        return (message_a_upvotes > message_b_upvotes) ? 1 : -1;
+    }
+    function SortByAscendingUpvotes(message_a, message_b){
+        return SortByUpvotes(message_a, message_b)
+    }
+    function SortByDescendingUpvotes(message_a, message_b){
+        return SortByUpvotes(message_a, message_b) * -1;
+    }
+
+
+    var toSort = document.getElementsByClassName('message-wrapper-master')
+    toSort = Array.prototype.slice.call(toSort, 0);
+
+    toSort.sort(SortByAscendingUpvotes)
+
+    var parent = document.getElementById('messages')
+    parent.innerHTML = "";
+
+    for(var i = 0, l = toSort.length; i < l; i++) {
+        parent.appendChild(toSort[i]);
+    }
 }
 
 $(document).ready(function(){
     $('#message_input_form').submit(function(e){e.preventDefault(); ClientRequestSendMessage();});
-
+    $('#leave-session').click(ClientRequestLeave);
+    $('#sort-chat').click(SortMessages);
 
     socket.on('ACK_VOTE_CHANGE', function(data){ClientAcknowledgeVoteChange(data);});
     socket.on('ACK_SEND_MESSAGE', ClientAcknowledgeSendMessage);
@@ -157,6 +178,7 @@ $(document).ready(function(){
     socket.on('ACK_JOIN', function(data){ClientAcknowledgeJoin(data)});
     socket.on('ACK_LEAVE', ClientAcknowledgeLeave);
 
+    
     window.onbeforeunload = ClientRequestLeave;
 })
 
