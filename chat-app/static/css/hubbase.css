@@ -128,6 +128,7 @@ a, a:hover, a:focus {
     padding: 10px;
     font-size: 1.1em;
     display: block;
+    color: rgb(255, 255, 255);
 }
 #sidebar ul li a:hover {
     color: #7386D5;
