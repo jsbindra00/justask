@@ -7,6 +7,16 @@ from enum import IntEnum
 
 
 
+class MessagePacket(IntEnum):
+    MESSAGE_ID = 0
+    MESSAGE_FLAIRS = 1
+    DATE_SENT = 2
+    NUM_UPVOTES = 3
+    PAYLOAD = 4
+    FROM_SESSION_ID = 5
+    FROM_USER = 6
+
+
 class MessageModel(db.Model):
     __bind_key__ = "messages"
 

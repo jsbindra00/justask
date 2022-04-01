@@ -1,26 +1,28 @@
 from SharedContext import db
-from enum import IntEnum
 from ModelBase import ModelBase
+from enum import IntEnum
 
 class ClientAttribute(IntEnum):
-    Email=0
-    Username=1
-    Firstname=2
-    Lastname=3
-    Password=4
-    ActiveSession=5
-    Admin=6
+    EMAIL=0
+    USERNAME=1
+    FIRSTNAME=2
+    LASTNAME=3
+    PASSWORD=4
+    ACTIVE_SESSION=5
+    ADMIN=6
 
 class ClientModel(db.Model, ModelBase):
 
     __bind_key__ = "clients"
 
-    email = db.Column(db.String(120), unique=True, nullable=False, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    firstname = db.Column(db.String(80), unique=False, nullable=False)
-    lastname = db.Column(db.String(80), unique=False, nullable=False)
-    password = db.Column(db.String(80), unique=False, nullable=False)
-    active_session = db.Column(db.String(80), unique=False, nullable=False)
+    EMAIL = db.Column(db.String(120), unique=True, nullable=False, primary_key=True)
+    USERNAME = db.Column(db.String(80), unique=True, nullable=False)
+    FIRSTNAME = db.Column(db.String(80), unique=False, nullable=False)
+    LASTNAME = db.Column(db.String(80), unique=False, nullable=False)
+    PASSWORD = db.Column(db.String(80), unique=False, nullable=False)
+    ACTIVE_SESSION = db.Column(db.String(80), unique=False, nullable=False)
+    ADMIN = db.Column(db.Integer, unique=False, nullable=False)
+
 
 
     def __repr__(self):
