@@ -31,6 +31,7 @@ function ClientAcknowledgeJoin(data){
         newNode.innerHTML = `<b>${data.time} ${data.username} has joined the room</b>`;
         document.getElementById('messages').appendChild(newNode);
     }
+    $('#session-clients').append(`<p class="session-client">${data.username}</p>`)
 }
 
 function ClientRequestSendMessage(){
