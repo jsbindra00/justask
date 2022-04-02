@@ -1,0 +1,147 @@
+{% extends "hubbase.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/css/profile.css">
+{% endblock %}
+{% block content_name %}
+Profile
+{% endblock %}
+
+{% block content %}
+
+
+<div id="profile-wrapper" style="width:100%; height:100%">
+    <div id="profile-picture-master-wrapper">
+        <div id="profile-picture-child-wrapper">
+            <div id="profile-picture-wrapper">
+            </div>
+            <div id="profile-socials-wrapper">
+                <ul id="profile-socials">
+                    <li class="profile-social" id="instagram">
+                        <p>foo</p>
+                    </li>
+                    <li class="profile-social" id="facebook">
+                        <p>foo</p>
+
+                    </li>
+                    <li class="profile-social" id="twitter">
+                        <p>foo</p>
+
+                    </li>
+                    <li class="profile-social" id="linkedin">
+                        <p>foo</p>
+
+                    </li>
+                </ul>
+            </div>
+            <div id="profile-picture-about-me-wrapper">
+
+            </div>
+
+
+        </div>
+    </div>
+    <div id="profile-settings-master-wrapper">
+        <div id="profile-settings-wrapper">
+            <button class="collapse-button">
+                <h1 style="display:inline;">Personal Information</h1>
+                <i class="fa-solid fa-plus fa-lg" style="float:right;top:50%;"></i>
+            </button>
+            <form class="settings">
+                <ul id="personal-information-settings" class="form-impl">
+                    <li>
+                        <p>First Name</p>
+                    </li>
+                    <li>
+                        <p>Middle Name</p>
+                    </li>
+                    <li>
+                        <p>Last Name</p>
+                    </li>
+                </ul>
+                <button>Submit</button>
+            </form>
+
+
+            <button class="collapse-button">
+                <h1>Login Information</h1>
+            </button>
+            <form class="settings">
+                <ul id="login-information-settings" class="form-impl">
+                    <li>
+                        <p>Email Address</p>
+                    </li>
+                    <li>
+                        <p>Username</p>
+                    </li>
+                </ul>
+                <button>Submit</button>
+            </form>
+
+
+            <button class="collapse-button">
+                <h1>Password Information</h1>
+            </button>
+            <form class="settings">
+                <ul id="password-information-settings"  class="form-impl">
+                    <li>
+                        <p>Old Password</p>
+                    </li>
+                    <li>
+                        <p>New Password</p>
+                    </li>
+                    <li>
+                        <p>New Password Confirm</p>
+                    </li>
+                </ul>
+                <button>Submit</button>
+            </form>
+
+
+            <button class="collapse-button">
+                <h1>Social Media Information</h1>
+            </button>
+            <form class="settings">
+                <ul id="social-media-information-settings" class="form-impl">
+
+                    <li>
+                        <p>Instagram</p>
+                    </li>
+                    <li>
+                        <p>Facebook</p>
+                    </li>
+                    <li>
+                        <p>Twitter</p>
+                    </li>
+                    <li>
+                        <p>Linkedin</p>
+                    </li>
+                </ul>
+            </form>
+
+
+
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var coll = document.getElementsByClassName("collapse-button");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    }
+</script>
+
+{% endblock %}
