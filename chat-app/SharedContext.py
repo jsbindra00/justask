@@ -5,9 +5,10 @@ import os
 
 
 
-dbFilepath = os.path.abspath(os.getcwd())
-clientsDBLeaf = "\clients.db"
-messagesDBLeaf = "\messages.db"
+dbFilepath = "./"
+clientsDBLeaf = "clients.db"
+print("************" + dbFilepath)
+messagesDBLeaf = "messages.db"
 
 clientsDB = dbFilepath + clientsDBLeaf
 messagesDB = dbFilepath + messagesDBLeaf
