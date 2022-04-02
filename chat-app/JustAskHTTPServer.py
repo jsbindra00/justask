@@ -161,7 +161,7 @@ class JustAskHTTPServer(FlaskView):
             ClientAttribute.FIRSTNAME.name : request.form.get("firstname"), 
             ClientAttribute.LASTNAME.name : request.form.get("lastname"), 
             ClientAttribute.PASSWORD.name : Utility.EncryptSHA256(request.form.get("password")),
-            ClientAttribute.ACTIVE_SESSION.name : None,
+            ClientAttribute.ACTIVE_SESSION.name : "",
             ClientAttribute.ADMIN.name : 0 
             }
         for key,value in new_user_details.items():

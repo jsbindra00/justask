@@ -66,6 +66,22 @@ $('document').ready(function(){
         loginBox.css('visibility', 'hidden');
         
     }
+
+    function TogglePasswordVisibility(passwordFieldSelector){
+        passwordField = $(passwordFieldSelector)
+        if (passwordField.attr("type") === "password")  passwordField.attr("type", "text")
+        else passwordField.attr("type", "password")
+    }
+
+
+    $('#view_login_password').click(function(){
+        TogglePasswordVisibility("#password")
+    })
+    $('#view_registration_password').click(function(){
+        TogglePasswordVisibility("#reg_password")
+    })
+
+
     $(window).resize(resizeCanvas)
 
     $('#continue').click(ShowLoginBox)
