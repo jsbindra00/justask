@@ -5,8 +5,8 @@ import os
 
 
 
-#dbFilepath = "./"
-dbFilepath = os.path.abspath(os.getcwd())
+dbFilepath = "./"
+#dbFilepath = os.path.abspath(os.getcwd())
 
 testing = False
 if testing:
@@ -14,9 +14,9 @@ if testing:
     messagesDBLeaf = "\messages_test.db"
     mcqDBLeaf = "\mcq_test.db"
 else:
-    clientsDBLeaf = "\clients.db"
-    messagesDBLeaf = "\messages.db"
-    mcqDBLeaf = "\mcq.db"
+    clientsDBLeaf = "clients.db"
+    messagesDBLeaf = "messages.db"
+    mcqDBLeaf = "mcq.db"
 
 clientsDB = dbFilepath + clientsDBLeaf
 messagesDB = dbFilepath + messagesDBLeaf
