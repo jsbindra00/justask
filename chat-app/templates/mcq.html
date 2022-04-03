@@ -1,0 +1,139 @@
+{% extends "hubbase.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/css/mcq.css">
+{% endblock %}
+
+{% block content_name %}
+MCQ
+{% endblock %}
+
+{% block content %}
+
+<div class="background">
+    <div class="poll">
+        <div class="question"></div>
+        <div class="answers"></div>
+    </div>
+
+     <!-- Trigger/Open The Modal -->
+     <button class="Mbutton" id="myBtn">Create a Question</button>
+     <!-- The Modal -->
+     <div id="myModal" class="modal">
+     <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="message_input_form" class="form-container">
+                <input type="text" id="question_input" placeholder="Enter your question" name="question" required>
+                <input type="text" id="answer0" placeholder="Option A" name="question" required>
+                <input type="text" id="answer1" placeholder="Option B" name="question" required>
+                <input type="text" id="answer2" placeholder="Option C" name="question" required>
+                <input type="text" id="answer3" placeholder="Option D" name="question" required>
+                <button type="submit" id="post" class="btn">Post</button>
+                
+            </form>
+        </div>
+     </div>
+</div>
+<script>
+let poll = { 
+    question:"",
+    answers:[
+      //"C", "Java", "PHP", "JavaScript"
+    ],
+    pollCount:0,
+    answersWeight: [0, 0, 0, 0],
+    selectedAnswer:-1
+};
+
+let pollDOM = {
+    question:document.querySelector(".poll .question"),
+    answers:document.querySelector(".poll .answers")
+};
+document.getElementById("message_input_form").onsubmit = function(e){
+    e.preventDefault();
+    let x = document.getElementById("question_input");
+    pollDOM.question.innerHTML = x.value.trim();
+    poll.answers = [];
+    for(let j = 0; j < 4; j++){
+        var id = "answer" + j;
+        option = document.getElementById(id).value.trim();
+        poll.answers.push(option);
+    }
+    pollDOM.answers.innerHTML = poll.answers.map(function(answer, i){
+    return (    
+        `
+            <div class="answer" id="option${i}" onclick="markAnswer ('${i}')">
+                ${answer}
+                <span class="percentage-bar"></span>
+                <span class="percentage-value"></span>
+            </div>
+        `
+    );   
+}).join("");
+
+}
+
+function markAnswer(i){
+    poll.selectedAnswer = +i;
+    const length = document.querySelectorAll(".poll .answers .answer").length
+    try {
+        document.querySelector(".poll .answers. answer.selected").classList.remove("selected"); 
+    } catch(msg){}
+    document.querySelectorAll(".poll .answers .answer")[+i].classList.add("selected");
+    showResults();
+    for(let k = 0; k<length; k++){
+        if (k == i){
+            continue;
+        }
+        document.querySelectorAll(".poll .answers .answer")[+k].classList.add("disabledbutton");
+    }
+    
+
+}
+
+function showResults(){
+    let answers = document.querySelectorAll(".poll .answers .answer");
+    for (let i=0; i<answers.length; i++){
+        let percentage = 0;
+        var id = "option" + i;
+        if(i == poll.selectedAnswer){
+            percentage = Math.round((poll.answersWeight[i]+1) * 100 / (poll.pollCount+1));
+        } else {
+            percentage = Math.round((poll.answersWeight[i]) * 100/ (poll.pollCount+1));
+        }
+        answers[i].querySelector (".percentage-bar").style.width = percentage + "%";
+        answers[i].querySelector (".percentage-value").innerText = percentage + "%";
+    }
+}
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+modal.style.display = "none";
+}
+// When the user posts question, close the modal
+post.onclick  = function() {
+modal.style.display = "none";
+}
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+if (event.target == modal) {
+    modal.style.display = "none";
+}
+}                                                                        
+</script>
+
+{% endblock %}
