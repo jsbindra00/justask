@@ -1,17 +1,12 @@
-{% extends "hubbase.html" %}
+{% extends 'hubbase.html' %}
 
 {% block head %}
 <link rel="stylesheet" href="../static/css/mcq.css">
 {% endblock %}
 
-{% block content_name %}
-MCQ
-{% endblock %}
-
 {% block content %}
-
 <div class="background">
-    <div class="poll">
+    <div class="poll" id="poll">
         <div class="question"></div>
         <div class="answers"></div>
     </div>
@@ -23,18 +18,25 @@ MCQ
      <!-- Modal content -->
         <div class="modal-content">
             <span class="close">&times;</span>
-            <form id="message_input_form" class="form-container">
+            <form name="modal-form" id="message_input_form" class="form-container">
                 <input type="text" id="question_input" placeholder="Enter your question" name="question" required>
-                <input type="text" id="answer0" placeholder="Option A" name="question" required>
-                <input type="text" id="answer1" placeholder="Option B" name="question" required>
-                <input type="text" id="answer2" placeholder="Option C" name="question" required>
-                <input type="text" id="answer3" placeholder="Option D" name="question" required>
+                <div class="answers" id="answerDiv">  
+                    <input type="text" id="answer0" placeholder="Option 1" name="question" required>
+                    <input type="text" id="answer1" placeholder="Option 2" name="question" required>
+                    <input type="text" id="answer2" placeholder="Option 3" name="question" required>
+                    <input type="text" id="answer3" placeholder="Option 4" name="question" required>
+                </div>
                 <button type="submit" id="post" class="btn">Post</button>
+                <button type="submit" id="add-option" class="btn" onclick="add()">+</button>
+                <button type="submit" id="delete-option" class="btn" onclick="del()">-</button>
+                <!-- <a href=""><i class="fa-solid fa-pen"></i>whiteboard</a> -->
                 
             </form>
         </div>
      </div>
 </div>
+
+
 <script>
 let poll = { 
     question:"",
@@ -50,16 +52,20 @@ let pollDOM = {
     question:document.querySelector(".poll .question"),
     answers:document.querySelector(".poll .answers")
 };
+
 document.getElementById("message_input_form").onsubmit = function(e){
     e.preventDefault();
-    let x = document.getElementById("question_input");
-    pollDOM.question.innerHTML = x.value.trim();
+    const quest = document.getElementById("question_input");
+    var inputForm = document.getElementById("answerDiv").getElementsByTagName("input");
+    var len = inputForm.length
+    pollDOM.question.innerHTML = quest.value.trim();
     poll.answers = [];
-    for(let j = 0; j < 4; j++){
+    for(let j = 0; j < len; j++){
         var id = "answer" + j;
         option = document.getElementById(id).value.trim();
         poll.answers.push(option);
     }
+    document.getElementById("poll").style.display = "inline";
     pollDOM.answers.innerHTML = poll.answers.map(function(answer, i){
     return (    
         `
@@ -69,9 +75,37 @@ document.getElementById("message_input_form").onsubmit = function(e){
                 <span class="percentage-value"></span>
             </div>
         `
-    );   
+    );
 }).join("");
+}
 
+function add(){
+    var answerDiv = document.getElementById("answerDiv");
+    var len = answerDiv.getElementsByTagName("input").length;
+    var newEntry = document.createElement("input");
+    id = "answer" + len;
+    placeholder = "Option " + (len +1);
+    newEntry.setAttribute("id", id);
+    newEntry.setAttribute("placeholder", placeholder);
+    newEntry.classList.add("answerDiv");
+    if (len < 6){
+        poll.answersWeight.push(0)
+        return(answerDiv.append(newEntry));
+    }
+    else{
+        return alert("no more than 6 possible answers");
+    }
+}
+function del(){
+    var answers = document.getElementById("answerDiv").getElementsByTagName("input");
+    var len = answers.length
+    if (len > 1){
+        answers[len-1].remove();
+        return poll.answersWeight.pop()
+    }
+    else{
+        return alert("One option required");
+    }
 }
 
 function markAnswer(i){
@@ -82,7 +116,7 @@ function markAnswer(i){
     } catch(msg){}
     document.querySelectorAll(".poll .answers .answer")[+i].classList.add("selected");
     showResults();
-    for(let k = 0; k<length; k++){
+    for(let k = 0; k< length; k++){
         if (k == i){
             continue;
         }
@@ -135,5 +169,8 @@ if (event.target == modal) {
 }
 }                                                                        
 </script>
+{% endblock %}
 
+{% block body1 %}
+<h1>hello world</h1>
 {% endblock %}

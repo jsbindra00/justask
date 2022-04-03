@@ -125,6 +125,20 @@
     border-radius: 5px;
     resize: none;
 }
+.answerDiv{
+    width: 90%;
+    padding: 15px;
+    margin: 16px 0 16px 20px;
+    border: none;
+    background: rgb(187,170,234);
+    border-radius: 5px;
+    resize: none;
+}
+.answerDiv:focus{
+    background-color: rgb(255, 255, 255, 0.5);
+    outline: none;
+}
+
 
     /* When the inputs get focus, do something */
 .form-container input[type=text]:focus, .form-container textarea:focus {
