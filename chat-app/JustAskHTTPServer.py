@@ -234,7 +234,7 @@ class JustAskHTTPServer(FlaskView):
     #         }
         
     #     user_exists = self.UserExists(username=new_user_details[ClientAttribute.USERNAME.name], email=new_user_details[ClientAttribute.EMAIL.name])
-    #     if self.REGISTERATION_VALIDATION(list(new_user_details.values()), user_exists, new_user_details[ClientAttribute.EMAIL.name], new_user_details[ClientAttribute.PASSWORD.name]):
+    #     if not self.REGISTERATION_VALIDATION(list(new_user_details.values()), user_exists, new_user_details[ClientAttribute.EMAIL.name], new_user_details[ClientAttribute.PASSWORD.name]):
     #         return redirect("/landingpage") 
         
     #     new_user_details[ClientAttribute.PASSWORD.name] = Utility.EncryptSHA256(new_user_details[ClientAttribute.PASSWORD.name])
