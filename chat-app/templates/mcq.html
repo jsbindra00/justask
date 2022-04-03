@@ -87,6 +87,7 @@ function add(){
     placeholder = "Option " + (len +1);
     newEntry.setAttribute("id", id);
     newEntry.setAttribute("placeholder", placeholder);
+    newEntry.required = true;
     newEntry.classList.add("answerDiv");
     if (len < 6){
         poll.answersWeight.push(0)
