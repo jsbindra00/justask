@@ -149,7 +149,7 @@ class JustAskHTTPServer(FlaskView):
     #     if not Utility.IsStrongPassword(new_password):
     #         return "Weak Password"
 
-    #     self.UpdateSessionInformation(ClientAttribute.PASSWORD, new_password, updateDB=True, auto_commit=True)
+    #     self.UpdateSessionInformation(ClientAttribute.PASSWORD, Utility.EncryptSHA256(new_password), updateDB=True, auto_commit=True)
     #     default_args[ClientAttribute.PASSWORD.name] = new_password
     #     return default_args
     def CHANGE_PASSWORD_INFORMATION(self, default_args):
@@ -158,11 +158,11 @@ class JustAskHTTPServer(FlaskView):
         new_password_confirm = request.form.get("new-password-confirm")
         # check if old password entry matches password in db.
         if new_password != new_password_confirm:
-            return "pw mismatch"
-        if old_password != new_password_confirm:
             return "pw not confirmed"
 
-
+        if old_password != self.GetSessionInformation(ClientAttribute.PASSWORD):
+            return "pw mismatch"
+        
         if not Utility.IsStrongPassword(new_password):
             return "Weak Password"
 
@@ -227,8 +227,6 @@ class JustAskHTTPServer(FlaskView):
 
         if not self.LOGIN_VALIDATION([form_email, form_password], user == None):
             return render_template("landingpage.html")
-        return self.LOGIN_CONFIRMATION(user)
-
         return self.LOGIN_CONFIRMATION(user)
 
 
