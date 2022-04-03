@@ -161,7 +161,7 @@ function SortMessages(){
     var toSort = document.getElementsByClassName('message-wrapper-master')
     toSort = Array.prototype.slice.call(toSort, 0);
 
-    toSort.sort(SortByAscendingUpvotes)
+    toSort.sort(SortByDescendingUpvotes)
 
     var parent = document.getElementById('messages')
     parent.innerHTML = "";
@@ -172,10 +172,11 @@ function SortMessages(){
 }
 
 
+
 $(document).ready(function(){
     $('#message_input_form').submit(function(e){e.preventDefault(); ClientRequestSendMessage();});
     $('#leave-session').click(ClientRequestLeave);
-    $('#sort-chat').click(SortMessages);
+    $('#popularity').click(SortMessages);
     
 
     socket.on('ACK_VOTE_CHANGE', function(data){ClientAcknowledgeVoteChange(data);});
