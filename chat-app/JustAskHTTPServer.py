@@ -78,10 +78,6 @@ class JustAskHTTPServer(FlaskView):
     def ROUTE_TESTING(self):
         return render_template("testing.html")
 
-    @route("/mcq", endpoint="mcq")
-    def ROUTE_MCQ(self):
-        return render_template("mcq.html")
-    
     # def PROFILE_CHANGE_ASSIGNMENT(self, change_exists, client_attribute, form_input, default):
     #     if change_exists:
     #         self.UpdateSessionInformation(client_attribute, form_input, updateDB=True) 
@@ -316,6 +312,10 @@ class JustAskHTTPServer(FlaskView):
     @route("/sketchpad", endpoint="sketchpad", methods=["GET", "POST"])
     def ROUTE_SKETCHPAD(self):
         return render_template("sketchpad.html")
+    
+    @route("/mcq", endpoint="mcq", methods=['POST', 'GET'])
+    def ROUTE_MCQ(self):
+        if request.method == "GET": return render_template("mcq.html")
 
 
     def LOGIN_VALIDATION(self, fields, invalid_existence_status):
