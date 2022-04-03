@@ -316,6 +316,14 @@ class JustAskHTTPServer(FlaskView):
     @route("/mcq", endpoint="mcq", methods=['POST', 'GET'])
     def ROUTE_MCQ(self):
         if request.method == "GET": return render_template("mcq.html")
+        
+        if "submit_question": # only for admins
+            # add a question
+            pass
+        if "answer_mcq": # anyone
+            # update the mcq
+            pass
+        # idk
 
 
     def LOGIN_VALIDATION(self, fields, invalid_existence_status):
