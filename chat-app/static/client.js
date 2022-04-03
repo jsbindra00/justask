@@ -121,8 +121,6 @@ function ClientAcknowledgeSendMessage(data){
     messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
 }
 
-
-
 function ClientRequestLeave(){
     socket.emit('REQ_LEAVE', {
         room: "{{ room }}"
@@ -135,6 +133,7 @@ function ClientAcknowledgeLeave(data){
     newNode.innerHTML = `<b>${data.username}</b> has left the room`;
     document.getElementById('messages').appendChild(newNode);
 }
+var Ascend = true;
 
 function SortMessages(){
 
@@ -161,7 +160,8 @@ function SortMessages(){
     var toSort = document.getElementsByClassName('message-wrapper-master')
     toSort = Array.prototype.slice.call(toSort, 0);
 
-    toSort.sort(SortByAscendingUpvotes)
+    (Ascend) ?  toSort.sort(SortByDescendingUpvotes): toSort.sort(SortByAscendingUpvotes);
+    Ascend = !Ascend;
 
     var parent = document.getElementById('messages')
     parent.innerHTML = "";
