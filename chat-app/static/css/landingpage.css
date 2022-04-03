@@ -107,7 +107,7 @@ top: 53%;
 left: 50%;
 border-radius: 10px;
 padding: 50px 35px;
-background:  rgb(129,96,217);;
+background:  rgb(129,96,217);
 visibility:hidden;
 opacity: 0;
 -webkit-transition: all 0.5s ease-in-out;
@@ -115,12 +115,31 @@ opacity: 0;
 -ms-transition: all 0.5s ease-in-out;
 -o-transition: all 0.5s ease-in-out;
 transition: all 0.5s ease-in-out;
-
 }
+
+#loginBox #username{
+  margin-bottom: 10px;
+}
+
+#passwordBox input, #passwordBox2 input{
+  float: left;
+}
+
+#passwordBox i{
+  margin-top: -25px;
+  transform: translate(600%, 0);
+  color: rgb(129,96,217);
+}
+
+#passwordBox2 i{ /* for registration */
+  color: rgb(129,96,217);
+  margin-top: -10px;
+  transform: translate(800%, 0);
+}
+
 #loginbutton
 {
     margin-bottom: 30px;
-
 }
 
 #signupLink
@@ -236,6 +255,14 @@ transition: all 0.5s ease-in-out;
 min-height: 100px;
 overflow: visible;
 margin: 20px;
+}
+
+#registrationBox label{
+  margin-bottom: -6px;
+}
+
+#registrationBox input{
+  margin-bottom: -16px;
 }
 
 #redirectToLogin
