@@ -49,29 +49,24 @@
 
 
     <div class="wrapper">
-        <nav id="sidebar" class="element-flash background">
-            <ul id="sidebar-contents element-flash" style="padding: 20px 0;">
-                <li class="sidebar-element">
-                    <a id="profile-button" class="active" href="/profile" ><i
-                            class="fa-regular fa-user fa-lg"></i></a>
-                    <label class="sidebar-label">Profile</label>
+        <nav id="sidebar">
+ 
+            <ul class="list-unstyled components">
+                <li>
+                    <a id="profile-button" class="active" href="/profile"><i class="fa-regular fa-user fa-lg"></i></a>
                 </li>
-                <li class="sidebar-element">
-                    <a id="manage-sessions" href="/session"><i class="fa-solid fa-comments fa-lg"></i></a>
-                    <label class="sidebar-label">Sessions</label>
-
+                <li>
+                    <a id = "manage-sessions" href="/session"><i class="fa-solid fa-comments fa-lg"></i></a>
                 </li>
-                <li class="sidebar-element">
+                <li>
+                    <a id = "mcq" href="/session"><i class="fa-solid fa-circle-question fa-lg"></i></a>
+                </li>
+                <li>
                     <a id="sketchpad" href="/sketchpad"><i class="fa-solid fa-paintbrush fa-lg"></i></a>
-                    <label class="sidebar-label ">Sketchpad</label>
                 </li>
-                <li class="sidebar-element">
-                    <a id="mcq" href="/mcq"><i class="fa-solid fa-circle-question"></i></i></a>
-                    <label class="sidebar-label">MCQ</label>
-                </li> 
-                <li class="sidebar-element">
+                <li>
                     <a id="sign_out" href="/signout"><i class="fa-solid fa-power-off fa-lg"></i></a>
-                    <label class="sidebar-label">Signout</label>
+
                 </li>
                 
             </ul>
@@ -88,7 +83,7 @@
 
                 </div>
             </nav>
-            <div id="content-name-strip" class="element-flash background">
+            <div id="content-name">
                 <p>Home/{% block content_name %}{% endblock %}</p>
             </div>
             <div id="content">
