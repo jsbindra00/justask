@@ -12,6 +12,7 @@
     background:#fff; 
     border-radius:10px;
     box-shadow: Opx Opx 20px 5px rgba(35, 3);
+    display: none;
 }
 .poll .question {
     padding:20px;
