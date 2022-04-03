@@ -15,6 +15,7 @@ class MessagePacket(IntEnum):
     OPTION_2_VOTE = 7
     OPTION_3_VOTE = 8
     OPTION_4_VOTE = 9
+    ROOM = 10
 
 
 class MCQModel(db.Model):
@@ -30,9 +31,10 @@ class MCQModel(db.Model):
     option_2_vote = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
     option_3_vote = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
     option_4_vote = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
+    room = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
 
     def __repr__(self):
-        return 'MCQ {} {} {} {} {} {} {} {} {} {}'.format(self.mcq_id, self.question, self.option_1, self.option_2, self.option_3, self.option_4, self.option_1_vote, self.option_2_vote, self.option_3_vote, self.option_4_vote) 
+        return 'MCQ {} {} {} {} {} {} {} {} {} {} {}'.format(self.mcq_id, self.question, self.option_1, self.option_2, self.option_3, self.option_4, self.option_1_vote, self.option_2_vote, self.option_3_vote, self.option_4_vote, self.room) 
     def __init__(self, **kwargs):
         super(MCQModel, self).__init__(**kwargs)
 
