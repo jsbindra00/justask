@@ -15,6 +15,8 @@ def DebugMode():
             ClientModel.SaveDatabase("./database.txt")
         elif arg == "SAVE_MESSAGES_DB":
             MessageModel.SaveDatabase("./messages.txt")
+        elif arg == "SAVE_MCQ_DB":
+            MessageModel.SaveDatabase("./mcq.txt")
 
 if __name__ == '__main__':
 

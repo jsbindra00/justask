@@ -5,18 +5,22 @@ import os
 
 
 
-dbFilepath = "./"
+#dbFilepath = "./"
+dbFilepath = os.path.abspath(os.getcwd())
 
 testing = False
 if testing:
     clientsDBLeaf = "\clients_test.db"
     messagesDBLeaf = "\messages_test.db"
+    mcqDBLeaf = "\mcq_test.db"
 else:
     clientsDBLeaf = "\clients.db"
     messagesDBLeaf = "\messages.db"
+    mcqDBLeaf = "\mcq.db"
 
 clientsDB = dbFilepath + clientsDBLeaf
 messagesDB = dbFilepath + messagesDBLeaf
+mcqDB = dbFilepath + mcqDBLeaf
 
 
 
@@ -28,7 +32,8 @@ app = Flask(__name__)
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + clientsDB
 SQLALCHEMY_BINDS = {
     'clients' : 'sqlite:///' + clientsDB,
-    'messages' : 'sqlite:///' + messagesDB
+    'messages' : 'sqlite:///' + messagesDB,
+    'mcq' : 'sqlite:///' + mcqDB
 }
 
 
