@@ -206,9 +206,13 @@
 #session-ID-wrapper{
     border-bottom: 2px solid rgb(256,256,256,0.5);
 }
-
-#sort-chat{
+#sorting{
+    display: inline-block;
+    position: relative;
     margin-bottom: 10px;
+}
+#sort-chat{
+    display: inline-block;
     cursor: pointer;
     background-color: rgb(129,96,217,0.6);
     color: white;
@@ -216,11 +220,37 @@
     font-size: 14px;
     padding: 5px 10px;
     text-align: center;
-    text-decoration: none;
     width: 100px;
 }
+.sorters{
+    display: none;
+    cursor: pointer;
+    color: white;
+}
+.sorters a{
+    background-color: rgb(129,96,217);
+    font-size: 14px;
+    padding: 9.2px 30px;
+    text-align: center;
+    margin: 0px -5px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin-left: -20px;
+}
+#newest{
+    border-top-left-radius: -20px;
+    border-bottom-left-radius: -20px;
+}
+#sorting:hover #sort-chat{
+    background-color: rgb(129,96,217);
+}
 
-
+#sorting:hover .sorters{
+    display: inline-block;
+}
+.sorters a:hover{
+    background-color: rgb(129,96,217,0.6);
+}
 #leave-session-wrapper{
     bottom: 0px;
     width:100%;

@@ -171,10 +171,12 @@ function SortMessages(){
     }
 }
 
+
 $(document).ready(function(){
     $('#message_input_form').submit(function(e){e.preventDefault(); ClientRequestSendMessage();});
     $('#leave-session').click(ClientRequestLeave);
     $('#sort-chat').click(SortMessages);
+    
 
     socket.on('ACK_VOTE_CHANGE', function(data){ClientAcknowledgeVoteChange(data);});
     socket.on('ACK_SEND_MESSAGE', ClientAcknowledgeSendMessage);
