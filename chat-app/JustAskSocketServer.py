@@ -10,6 +10,7 @@ from Message import MessageModel, PacketAttributes
 from SharedContext import *
 
 import uuid
+import time
 
 class JustAskSocketServer:
 
@@ -25,18 +26,21 @@ class JustAskSocketServer:
 
     def REQUEST_MESSAGE_CACHE_UPDATE(self, data):
         message_history = {PacketAttributes.MESSAGE_HISTORY.name : [message.MessageToJSON() for message in MessageModel.query.filter_by(**{PacketAttributes.from_session_id.name:data[PacketAttributes.from_session_id.name]}).all()]}
-        print(len(message_history[PacketAttributes.MESSAGE_HISTORY.name]))
         socketio.emit("ACK_MESSAGE_CACHE_UPDATE", message_history)
         # convert messages to JSON.
+
     def REQUEST_SEND_MESSAGE(self,data):
         data["time"] = datetime.now().strftime("%D %H:%M")   
         data["username"] = session["USERNAME"]                    
         data["message_id"] = str(uuid.uuid4())    
-        data["session_id"] = session["ACTIVE_SESSION"]       
-
-        socketio.emit('ACK_SEND_MESSAGE',data, to=session['ACTIVE_SESSION'])
-        db.session.add(MessageModel(message_id = data["message_id"], message_flairs="flairs", date_sent = data["time"], num_upvotes=0,payload=data["message"], from_session_id=session["ACTIVE_SESSION"], from_user = session["USERNAME"]))
+        data["session_id"] = session["ACTIVE_SESSION"]
+        data["vote_count"] = 0
+        data["time_since_epoch"] = time.time()
+        
+        db.session.add(MessageModel(message_id = data["message_id"], message_flairs="flairs", date_sent = data["time"], num_upvotes=0,payload=data["message"], from_session_id=session["ACTIVE_SESSION"], from_user = session["USERNAME"],time_since_epoch = data["time_since_epoch"],FROM_PARENT_ID = data["FROM_PARENT_ID"]))
         db.session.commit()
+        socketio.emit('ACK_SEND_MESSAGE',data, to=session['ACTIVE_SESSION'])
+
     
 
     def REQ_MESSAGE_VOTE_CHANGE(self, data):

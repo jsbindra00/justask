@@ -18,6 +18,8 @@ class PacketAttributes(IntEnum):
     from_session_id = 5
     FROM_USER = 6
     MESSAGE_HISTORY = 7
+    TIME_SINCE_EPOCH = 8
+    FROM_PARENT_ID = 9
 
 
 class MessageModel(db.Model):
@@ -30,6 +32,10 @@ class MessageModel(db.Model):
     payload = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
     from_session_id = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
     from_user = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+    time_since_epoch = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
+    FROM_PARENT_ID = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+
+
 
     def __repr__(self):
         return 'MESSAGE {} {} {} {} {} {} {}'.format(self.message_id, self.message_flairs, self.date_sent, self.num_upvotes, self.payload, self.from_session_id, self.from_user) 
@@ -49,15 +55,7 @@ class MessageModel(db.Model):
             PacketAttributes.NUM_UPVOTES.name: self.num_upvotes,
             PacketAttributes.PAYLOAD.name : self.payload,
             PacketAttributes.from_session_id.name : self.from_session_id,
-            PacketAttributes.FROM_USER.name : self.from_user
+            PacketAttributes.FROM_USER.name : self.from_user,
+            PacketAttributes.TIME_SINCE_EPOCH.name : self.time_since_epoch,
+            PacketAttributes.FROM_PARENT_ID.name : self.FROM_PARENT_ID
         }
-
-
-
-
-
-
-
-
-
-

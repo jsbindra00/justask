@@ -45,7 +45,7 @@ Profile
                         <textarea class="about-me" id="about-me-text-edit">
                         </textarea>
                     </div>
-                    <button>Submit</button>
+                    <button class="submit-form" id="about-me-submit">Submit</button>
 
                 </div>
 
@@ -62,24 +62,20 @@ Profile
                 <h1 >Personal Information</h1>
                 <i class="fa-solid fa-plus fa-lg" style="float:right;top:50%;"></i>
             </button>
-            <form class="settings">
+            <form class="settings" action="/profile" method="POST">
                 <ul id="personal-information-settings" class="form-impl">
                     <li class = "setting">
                         <p>First Name</p>
-                        <input type="text">
+                        <input type="text" name="firstname" placeholder = "{{FIRSTNAME}}">
                     </li>
-                    <li class = "setting">
-                        <p>Middle Name</p>
-                        <input type="text">
-
-                    </li>
+         
                     <li class = "setting">
                         <p>Last Name</p>
-                        <input type="text">
+                        <input type="text" name="lastname" placeholder = "{{LASTNAME}}">
 
                     </li>
                 </ul>
-                <button>Submit</button>
+                <button class="submit-form" name="personal-information-submit">Submit</button>
             </form>
 
 
@@ -87,20 +83,20 @@ Profile
                 <h1>Login Information</h1>
                 <i class="fa-solid fa-plus fa-lg" style="float:right;top:50%;"></i>
             </button>
-            <form class="settings">
+            <form class="settings"  action="/profile" method="POST">
                 <ul id="login-information-settings" class="form-impl">
                     <li class = "setting">
                         <p>Email Address</p>
-                        <input type="text">
+                        <input type="text" name="email" placeholder="{{EMAIL}}">
 
                     </li>
                     <li class = "setting">
                         <p>Username</p>
-                        <input type="text">
+                        <input type="text" name="username" placeholder = "{{USERNAME}}">
 
                     </li>
                 </ul>
-                <button>Submit</button>
+                <button class="submit-form" name="login-information-submit">Submit</button>
             </form>
 
 
@@ -108,25 +104,25 @@ Profile
                 <h1>Password Information</h1>
                 <i class="fa-solid fa-plus fa-lg" style="float:right;top:50%;"></i>
             </button>
-            <form class="settings">
+            <form class="settings" action="/profile" method="POST">
                 <ul id="password-information-settings" class="form-impl">
                     <li class = "setting">
                         <p>Old Password</p>
-                        <input type="text">
+                        <input type="password" name="old_password" placeholder="*******">
 
                     </li>
                     <li class = "setting">
                         <p>New Password</p>
-                        <input type="text">
+                        <input type="password" name="new_password">
 
                     </li>
                     <li class = "setting">
                         <p>New Password Confirm</p>
-                        <input type="text">
+                        <input type="password" name="new_password_confirm">
 
                     </li>
                 </ul>
-                <button>Submit</button>
+                <button class="submit-form" name="password-information-submit">Submit</button>
             </form>
 
 
@@ -134,34 +130,33 @@ Profile
                 <h1>Social Media Information</h1>
                 <i class="fa-solid fa-plus fa-lg" style="float:right;top:50%;"></i>
             </button>
-            <form class="settings">
+            <form class="settings" method="POST" action="/profile">
                 <ul id="social-media-information-settings" class="form-impl">
 
                     <li class = "setting">
                         <p>Instagram</p>
-                        <input type="text">
+                        <input type="text" name="instagram" placeholder="{{INSTAGRAM}}">
 
                     </li>
                     <li class = "setting">
                         <p>Facebook</p>
-                        <input type="text">
+                        <input type="text" name="facebook" placeholder = "{{FACEBOOK}}">
 
                     </li>
                     <li class = "setting">
                         <p>Twitter</p>
-                        <input type="text">
+                        <input type="text" name="twitter" placeholder = "{{TWITTER}}">
 
                     </li>
                     <li class="setting">
                         <p>Linkedin</p>
-                        <input type="text">
+                        <input type="text" name="linkedin" placeholder = "{{LINKEDIN}}">
 
                     </li>
                 </ul>
+                <button class="submit-form" name="social-media-information-submit">Submit</button>
+
             </form>
-
-
-
 
         </div>
     </div>

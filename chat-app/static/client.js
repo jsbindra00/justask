@@ -3,25 +3,82 @@
 const socket = io.connect("192.168.0.29:5000");
 var roomID = ""
 
+var ACTIVE_SORT;
+
+var CURRENTLY_RESPONDING_TO_MESSAGE_ID = "";
+var voted_messages = []
 
 
-
-function ConvertJSONToMessage(){
-
+function SignOfNumber(num){
+    if(num < 0) return -1
+    if (num == 0) return 0;
+    if (num > 0) return 1
 }
 
-function ClientRequestVoteChange(message_id, vote_amount, sesh_id){
 
-    new_upvote_amount = parseInt($("#" + message_id).find("*").find(".message-vote-count").text()) + vote_amount
-    socket.emit('REQ_MESSAGE_VOTE_CHANGE', {message_id : message_id, vote_amount: new_upvote_amount, session_id : sesh_id});
+function MessageExists(message_id){
+    
+    for (var j=0; j<voted_messages.length; ++j) {
+
+        if(voted_messages[j].message_id == message_id) return true;
+    }
+    return false;
+}
+function HasMessageBeenVotedByUser (message_id, vote_amount) {
+
+
+
+
+    for (var j=0; j<voted_messages.length; ++j) {
+
+        let current_message = voted_messages[j]
+
+        if(current_message.message_id == message_id){
+            
+            return (SignOfNumber(current_message.vote_amount) == SignOfNumber(vote_amount))
+        } 
+    }
+    return false;
+}
+
+
+function RespondToMessage(message_id){
+    CURRENTLY_RESPONDING_TO_MESSAGE_ID = message_id;
+    // alert("responding " + CURRENTLY_RESPONDING_TO_MESSAGE_ID);
+}
+function ViewMessageFlairs(message_id){
+    // alert("view flairs " +  message_id)
+}
+
+
+function LocalUpdateMessageVoteChange(message_id,current_vote_amount, vote_amount){
+    
+    for (var j=0; j<voted_messages.length; ++j) {
+        let current_message = voted_messages[j]
+        if(current_message.message_id == message_id){
+            if (SignOfNumber(current_message.vote_amount) == SignOfNumber(vote_amount)) return false;
+            current_message.vote_amount = current_message.vote_amount + vote_amount;
+            return true
+        } 
+    }
+    voted_messages.push({message_id : message_id, vote_amount : current_vote_amount});
+    return false;
+}
+function ClientRequestVoteChange(message_id, vote_amount){
+
+    target = $("#" + message_id).find("*").find(".message-vote-count").get(0)
+    if (!LocalUpdateMessageVoteChange(message_id, parseInt(target.textContent), vote_amount)) return;
+
+    
+    new_upvote_amount = parseInt(target.textContent) + vote_amount;
+    socket.emit('REQ_MESSAGE_VOTE_CHANGE', {message_id : message_id, vote_amount: new_upvote_amount, session_id : roomID});
 }
 
 function ClientAcknowledgeVoteChange(data){
     message_id = data.message_id;
     vote_amount = data.vote_amount;
-
-    upvote_amount_p = $("#" + message_id).find("*").find(".message-vote-count");
-    upvote_amount_p.text(vote_amount) 
+    target = $("#" + message_id).find("*").find(".message-vote-count").get(0)
+    target.textContent = vote_amount;
 }
 
 function ClientRequestJoin(){
@@ -30,7 +87,6 @@ function ClientRequestJoin(){
         room: "{{ room }}"
     });
 }
-
 
 function ClientAcknowledgeJoin(data){
 
@@ -52,23 +108,27 @@ function ClientRequestSendMessage(){
     let message = message_input.value.trim();
     if (message.length) {
         socket.emit('REQ_SEND_MESSAGE', {
-            message: message
+            message: message,
+            FROM_PARENT_ID : CURRENTLY_RESPONDING_TO_MESSAGE_ID
         })
     }
+
     message_input.value = '';
     message_input.focus();
 }
 
+function ConstructMessage(username,time,message_id,message,vote_count, time_since_epoch){
 
-
-function ConstructMessage(username,time,message_id,message,vote_count){
-
+    master_wrapper_class = (CURRENTLY_RESPONDING_TO_MESSAGE_ID == ""? "message-wrapper-master" : "message-wrapper-master-child") 
+    
     const messageNodeWrapper = $('<div/>', {
-        "class" : "message-wrapper-master",
-        "id" : message_id
+        "class" : master_wrapper_class,
+        // "class" : "message-wrapper-master",
+        "id" : message_id,
+        "time_since_epoch" : time_since_epoch,
+        "FROM_PARENT_ID" : CURRENTLY_RESPONDING_TO_MESSAGE_ID
     })
 
-    // MESSAGE NODE
     const messageNode = $('<div/>',
      {
          "class" : "message-wrapper " + ((username == $('#username-metadata').attr("username"))? "native" : "foreign"),
@@ -86,7 +146,44 @@ function ConstructMessage(username,time,message_id,message,vote_count){
     }).append(`<p>${message}</p>`);
 
 
-    // VOTING
+    const messagePropertiesWrapper = $('<div/>',
+    {
+        "class" : "message-properties-wrapper"
+    });
+
+
+    const commentProperty = $('<li/>',
+    {
+        "class" : "message-property",
+        "click" : function(){RespondToMessage(message_id);}
+
+    }).append(
+        `
+        <i style="display:inline;" class="fa-regular fa-comment-dots fa-lg"></i> 
+        <a class="comment-button">Comment</a>
+        `
+    );
+    const flairsProperty = $('<li/>', {
+        "class" : "message-property",
+        "click" : function(){ViewMessageFlairs(message_id);}
+    }).append(
+        `
+        <i style="display:inline;" class="fa-solid fa-tags fa-lg"></i> 
+        <a class="flairs-button">Flairs</a>
+        `
+    );
+    const messageProperties = $('<ul/>', 
+    {
+        "class" : "message-properties"
+    }).append(commentProperty, flairsProperty);
+
+    messagePropertiesWrapper.append(messageProperties)
+    const messageResponse = $('<div/>',
+    {
+        "class" : "message-response"
+    });
+
+
 
     const votingProperty = $('<div/>', {
         "class" : "message-property message-voting"
@@ -94,19 +191,18 @@ function ConstructMessage(username,time,message_id,message,vote_count){
     const votingIcons = $('<ul/>', {
         "class" : "voting-icons"
     });
-
     
 
     const upvoteMessage = $('<div/>', {
         "class" : "message-vote upvote-message",
-        "click" : function(){ClientRequestVoteChange(message_id, 1, session_id)}
+        "click" : function(){ClientRequestVoteChange(message_id, 1)}
     }).append(`<i class="fa-solid fa-caret-up fa-2xl"></i>`)
     const voteCountWrapper = $('<div/>',{
         "class":"message-vote-count-wrapper"
     }).append(`<div class="message-vote-count">${vote_count}</div>`);
     const downvoteMessage = $('<div/>', {
         "class" : "message-vote downvote-message",
-        "click" : function(){ClientRequestVoteChange(message_id, -1, session_id)}
+        "click" : function(){ClientRequestVoteChange(message_id, -1)}
     }).append(`<i class="fa-solid fa-caret-down fa-2xl"></i>`)
 
     votingIcons.append(upvoteMessage).append(downvoteMessage);
@@ -120,6 +216,9 @@ function ConstructMessage(username,time,message_id,message,vote_count){
 
     messageNode.append(messageHeader);
     messageNode.append(messagePayload);
+    messageNode.append(messagePropertiesWrapper);
+    messageNode.append(messageResponse);
+
     messageNodeWrapper.append(votingProperty);
     messageNodeWrapper.append(messageNode);
 
@@ -127,23 +226,27 @@ function ConstructMessage(username,time,message_id,message,vote_count){
 }
 function AppendMessage(message)
 {
-    $('#messages').append(message);
+    if (CURRENTLY_RESPONDING_TO_MESSAGE_ID != ""){
+        $('#' + CURRENTLY_RESPONDING_TO_MESSAGE_ID).find(".message-response").append(message)
+    } 
 
+    else{
+        // alert("appending to body")
+        $('#messages').append(message);
+    } 
     var messageBody = document.querySelector('#messages');
     messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
-
+    // SortMessages(ACTIVE_SORT)
 }
 function ClientAcknowledgeSendMessage(data){
-    messageNodeWrapper = ConstructMessage(data.username, data.message_id, data.time, data.payload, data.vote_count)
-    AppendMessage(messageNde)
+    messageNodeWrapper = ConstructMessage(data.username, data.time, data.message_id, data.message, data.vote_count, data.time_since_epoch)
+    AppendMessage(messageNodeWrapper)
 }
-
 function ClientRequestLeave(){
     socket.emit('REQ_LEAVE', {
         room: "{{ room }}"
     })
 }
-
 function ClientAcknowledgeLeave(data){
     const newNode = document.createElement('div');
     newNode.className = "acknowledge";
@@ -151,13 +254,14 @@ function ClientAcknowledgeLeave(data){
     document.getElementById('messages').appendChild(newNode);
 }
 
-
-
 function SortByFlairPredicate(flairname){
-        
+
 }
 function SortByDatePredicate(message_a, message_b){
+    let message_a_time_since_epoch = parseInt(message_a.getAttribute("time_since_epoch"))
+    let message_b_time_since_epoch = parseInt(message_b.getAttribute("time_since_epoch"))
 
+    return (message_a_time_since_epoch > message_b_time_since_epoch) ? 1 : -1;
 }
 function SortByUpvotesPredicate(message_a, message_b){
     let message_a_upvotes = parseInt(message_a.querySelector(".message-vote-count").innerText)
@@ -171,8 +275,17 @@ function SortByAscendingUpvotesPredicate(message_a, message_b){
 function SortByDescendingUpvotesPredicate(message_a, message_b){
     return SortByUpvotesPredicate(message_a, message_b) * -1;
 }
+function SortByAscendingDatePredicate(message_a,message_b){
+    return SortByDatePredicate(message_a, message_b)
+}
+function SortByDescendingDatePredicate(message_a,message_b){
+    return SortByDatePredicate(message_a,message_b) * -1;
+}
+
 function SortMessages(predicate){
 
+
+    // only get the first parents as we want 
     var to_sort = document.getElementsByClassName('message-wrapper-master')
     to_sort = Array.prototype.slice.call(to_sort, 0);
 
@@ -186,23 +299,26 @@ function SortMessages(predicate){
     }
 
     
+
+    ACTIVE_SORT = predicate;
 }
-
-
-
 
 
 function ClientRequestMessageCacheUpdate(){
     socket.emit("REQ_MESSAGE_CACHE_UPDATE", {from_session_id : roomID})
+
 }
 function ClientAcknowledgeMessageHistoryCache(packet){
     message_history = packet.MESSAGE_HISTORY
     for(var i = 0; i < message_history.length; ++i){
         current_msg_json = message_history[i]
-        msg = ConstructMessage(current_msg_json.FROM_USER, current_msg_json.DATE_SENT, current_msg_json.MESSAGE_ID, current_msg_json.PAYLOAD, current_msg_json.NUM_UPVOTES);
+        msg = ConstructMessage(current_msg_json.FROM_USER, current_msg_json.DATE_SENT, current_msg_json.MESSAGE_ID, current_msg_json.PAYLOAD, current_msg_json.NUM_UPVOTES, current_msg_json.TIME_SINCE_EPOCH);
         AppendMessage(msg)
     }
 }
+
+
+
 
 
 $(document).ready(function(){
@@ -210,8 +326,9 @@ $(document).ready(function(){
     $('#leave-session').click(ClientRequestLeave);
     $('#most-popular').click(function(){SortMessages(SortByAscendingUpvotesPredicate)})
     $('#least-popular').click(function(){SortMessages(SortByDescendingUpvotesPredicate)})
-    $('#newest').click(function(){alert("IMPL_SORT_BY_NEWEST");})
-    $('#oldest').click(function(){alert("IMPL_SORT_BY_OLDEST");})
+    $('#newest').click(function(){SortMessages(SortByAscendingDatePredicate)})
+    $('#oldest').click(function(){SortMessages(SortByDescendingDatePredicate)})
+
 
     
 

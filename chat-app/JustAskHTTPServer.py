@@ -170,10 +170,22 @@ class JustAskHTTPServer(FlaskView):
 
     @route("/profile", endpoint="profile",methods=["GET", "POST"])
     def ROUTE_PROFILE(self):
-        if not self.IsUserLoggedIn(): return render_template("landingpage.html")
         default_args = {key.name : session[key.name] for key in ClientAttribute}
-        # default_args = {"FIRSTNAME" : session["FIRSTNAME"], "LASTNAME" : session["LASTNAME"], "EMAIL": session["EMAIL"], "PASSWORD": session["PASSWORD"], "USERNAME": session["USERNAME"]}
-        if request.method == "GET": return render_template("profile.html", **default_args)
+        if request.method == "GET":
+            if not self.IsUserLoggedIn(): return render_template("landingpage.html")
+            return render_template("profile.html", **default_args)
+        
+
+        if "personal-information-submit" in request.form:
+            return "PERSONAL"
+        elif "login-information-submit" in request.form:
+            return "LOGIN"
+        elif "password-information-submit" in request.form:
+            return "PASSWORD"
+        elif "social-media-information-submit" in request.form:
+            return "SOCIALS"
+
+
         if "submit-profile" in request.form: default_args = self.CHANGE_PROFILE_INFORMATION(default_args)
         elif "submit-password" in request.form: default_args = self.CHANGE_PASSWORD_INFORMATION(default_args)
         try: db.session.commit()

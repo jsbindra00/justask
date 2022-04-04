@@ -55,7 +55,7 @@
 {
     padding-right: 5px;
 }
-.message-wrapper-master{
+.message-wrapper-master, .message-wrapper-master-child{
     display:flex;
     flex-direction: row;
     width: 100%;
@@ -114,14 +114,31 @@
 }
 
 
-.message-properties{
+.message-properties-wrapper{
     display:flex;
     flex-direction: row;
+    width:100%;
+    background:red;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    
+}
+.message-properties{
+    list-style-type: none;
+    padding:0;
+    display:flex;
+    flex-direction: row;
+    margin:0;
+
+
 }
 .message-property{
     margin-left: 2px;
     margin-right:2px;
     cursor:pointer;
+    padding-right:10px;
+    font-size:12px;
+
 }
 
 .message-property.message-voting{
@@ -133,6 +150,11 @@
     color:rgb(95, 68, 168);
 }
 
+
+.comment-button{
+    padding:0;
+    margin:0;
+}
 
 .voting-icons{
     list-style-type: none;
