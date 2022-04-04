@@ -1,0 +1,142 @@
+
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: rgb(206,206,206);
+}
+
+#sessionbox
+{
+    display:flex;
+    flex-direction: column;
+    list-style-type:none;
+    text-align: center;
+    background-color:rgb(95, 68, 168);
+    color:white;
+    width:400px;
+    height:450px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    overflow:hidden;
+    margin-top: 60px;
+
+}
+#sessionselector *
+{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    padding:0;
+    
+}
+
+.sessionselectorlist li a{
+    width:100%;
+    cursor:pointer;
+    padding:5px;
+    line-height: 30px;
+    margin-right: 40px;
+    margin-left: 40px;
+    margin-top: 5px;
+}
+.sessionselectorlist li:hover{
+    cursor:pointer;
+    transition: color 0.1s linear;
+    -webkit-transition: color 0.1s linear;
+    -moz-transition: color 0.1s linear;
+    color:rgb(206, 206, 206);   
+
+}
+.sessionconfigwrapper
+{
+    height:100%;
+    text-align: center;
+
+}
+.sessionconfig
+{
+    margin-top: 50px;
+    position: absolute;
+    display:flex;
+    flex-direction: column;
+    list-style-type:none;
+    text-align: center;
+    transform: translate(-50%,-50%);
+    top:50%;
+    left:50%;
+    width: 70%;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+}
+
+
+#sessiontitles
+{
+    width:100%;
+    overflow:hidden;
+}
+.sessionconfigtitle
+{
+    position:absolute;
+    transform: translate(-50%,-50%);
+    left:50%;
+    margin-top: 60px;
+    margin-bottom: 25px;
+    width:70%;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+}
+
+
+#sessionid
+{
+    border-radius: 8px;
+    height: 50px;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    background-color: rgba(255,255,255,0.07);
+    color: white;
+    border-radius: 3px;
+    padding: 0 10px;
+    border: none;
+}
+::placeholder{
+    color: rgb(206, 206, 206, 0.7);
+}
+#submitsession
+{
+    margin-top: 20px;
+    width: 100%;
+    background-color: #ffffff;
+    color: #080710;
+    padding: 15px 0;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+}
+
+#sessionidgenerator{
+    color: white;
+    font-weight: 500;
+    font-size: 12px;
+    padding-top: 5px;
+}
+#sessionidgenerator:hover{
+    color: rgb(206, 206, 206, 0.7);
+}
