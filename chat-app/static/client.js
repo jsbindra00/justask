@@ -1,7 +1,14 @@
 
 
-const socket = io.connect("http://127.0.0.1:5000");
+const socket = io.connect("192.168.0.29:5000");
+var roomID = ""
 
+
+
+
+function ConvertJSONToMessage(){
+
+}
 
 function ClientRequestVoteChange(message_id, vote_amount, sesh_id){
 
@@ -26,6 +33,7 @@ function ClientRequestJoin(){
 
 
 function ClientAcknowledgeJoin(data){
+
     if (data.username !== "{{username}}") {
         const newNode = document.createElement('div');
         newNode.className = "acknowledge";
@@ -33,6 +41,9 @@ function ClientAcknowledgeJoin(data){
         document.getElementById('messages').appendChild(newNode);
     }
     $('#session-clients').append(`<div class="session-client">${data.username}</div>`)
+    roomID = data.ACTIVE_SESSION;
+    ClientRequestMessageCacheUpdate()
+
 }
 
 function ClientRequestSendMessage(){
@@ -48,31 +59,31 @@ function ClientRequestSendMessage(){
     message_input.focus();
 }
 
-function ClientAcknowledgeSendMessage(data){
 
+
+function ConstructMessage(username,time,message_id,message,vote_count){
 
     const messageNodeWrapper = $('<div/>', {
         "class" : "message-wrapper-master",
-        "id" : data.message_id
+        "id" : message_id
     })
-
 
     // MESSAGE NODE
     const messageNode = $('<div/>',
      {
-         "class" : "message-wrapper " + ((data.username == $('#username-metadata').attr("username"))? "native" : "foreign"),
+         "class" : "message-wrapper " + ((username == $('#username-metadata').attr("username"))? "native" : "foreign"),
         });
     
 
     const messageHeader = $('<div/>',
     {
         "class" : "message-header"
-    }).append(`<p>${data.username}</p><p>at</p><p>${data.time}</p>`);
+    }).append(`<p>${username}</p><p>at</p><p>${time}</p>`);
 
     const messagePayload = $('<div/>',
     {
         "class" : "message-payload"
-    }).append(`<p>${data.message}</p>`);
+    }).append(`<p>${message}</p>`);
 
 
     // VOTING
@@ -88,14 +99,14 @@ function ClientAcknowledgeSendMessage(data){
 
     const upvoteMessage = $('<div/>', {
         "class" : "message-vote upvote-message",
-        "click" : function(){ClientRequestVoteChange(data.message_id, 1, data.session_id)}
+        "click" : function(){ClientRequestVoteChange(message_id, 1, session_id)}
     }).append(`<i class="fa-solid fa-caret-up fa-2xl"></i>`)
     const voteCountWrapper = $('<div/>',{
         "class":"message-vote-count-wrapper"
-    }).append(`<div class="message-vote-count">0</div>`);
+    }).append(`<div class="message-vote-count">${vote_count}</div>`);
     const downvoteMessage = $('<div/>', {
         "class" : "message-vote downvote-message",
-        "click" : function(){ClientRequestVoteChange(data.message_id, -1, data.session_id)}
+        "click" : function(){ClientRequestVoteChange(message_id, -1, session_id)}
     }).append(`<i class="fa-solid fa-caret-down fa-2xl"></i>`)
 
     votingIcons.append(upvoteMessage).append(downvoteMessage);
@@ -112,13 +123,19 @@ function ClientAcknowledgeSendMessage(data){
     messageNodeWrapper.append(votingProperty);
     messageNodeWrapper.append(messageNode);
 
-
-
-    $('#messages').append(messageNodeWrapper);
-
+    return messageNodeWrapper;
+}
+function AppendMessage(message)
+{
+    $('#messages').append(message);
 
     var messageBody = document.querySelector('#messages');
     messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+
+}
+function ClientAcknowledgeSendMessage(data){
+    messageNodeWrapper = ConstructMessage(data.username, data.message_id, data.time, data.payload, data.vote_count)
+    AppendMessage(messageNde)
 }
 
 function ClientRequestLeave(){
@@ -172,6 +189,23 @@ function SortMessages(predicate){
 }
 
 
+
+
+
+function ClientRequestMessageCacheUpdate(){
+    socket.emit("REQ_MESSAGE_CACHE_UPDATE", {from_session_id : roomID})
+}
+function ClientAcknowledgeMessageHistoryCache(packet){
+    message_history = packet.MESSAGE_HISTORY
+    for(var i = 0; i < message_history.length; ++i){
+        current_msg_json = message_history[i]
+        msg = ConstructMessage(current_msg_json.FROM_USER, current_msg_json.DATE_SENT, current_msg_json.MESSAGE_ID, current_msg_json.PAYLOAD, current_msg_json.NUM_UPVOTES);
+        AppendMessage(msg)
+    }
+    alert(message_history.length)
+}
+
+
 $(document).ready(function(){
     $('#message_input_form').submit(function(e){e.preventDefault(); ClientRequestSendMessage();});
     $('#leave-session').click(ClientRequestLeave);
@@ -187,6 +221,8 @@ $(document).ready(function(){
     socket.on('connect', ClientRequestJoin)
     socket.on('ACK_JOIN', function(data){ClientAcknowledgeJoin(data)});
     socket.on('ACK_LEAVE', ClientAcknowledgeLeave);
+    socket.on('ACK_MESSAGE_CACHE_UPDATE', function(data){ClientAcknowledgeMessageHistoryCache(data);});
+
 
     
     window.onbeforeunload = ClientRequestLeave;

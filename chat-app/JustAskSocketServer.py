@@ -1,10 +1,12 @@
+from email.message import Message
+from tkinter import Pack
 from flask import session
 from flask_socketio import join_room, leave_room
 from datetime import datetime
 
 
 
-from Message import MessageModel
+from Message import MessageModel, PacketAttributes
 from SharedContext import *
 
 import uuid
@@ -17,10 +19,16 @@ class JustAskSocketServer:
         socketio.on_event("REQ_JOIN", self.REQUEST_JOIN)
         socketio.on_event("REQ_LEAVE", self.REQUEST_LEAVE)
         socketio.on_event("REQ_MESSAGE_VOTE_CHANGE", self.REQ_MESSAGE_VOTE_CHANGE)
+        socketio.on_event("REQ_MESSAGE_CACHE_UPDATE", self.REQUEST_MESSAGE_CACHE_UPDATE)
 
 
+
+    def REQUEST_MESSAGE_CACHE_UPDATE(self, data):
+        message_history = {PacketAttributes.MESSAGE_HISTORY.name : [message.MessageToJSON() for message in MessageModel.query.filter_by(**{PacketAttributes.from_session_id.name:data[PacketAttributes.from_session_id.name]}).all()]}
+        print(len(message_history[PacketAttributes.MESSAGE_HISTORY.name]))
+        socketio.emit("ACK_MESSAGE_CACHE_UPDATE", message_history)
+        # convert messages to JSON.
     def REQUEST_SEND_MESSAGE(self,data):
-        print("RECEIVED")
         data["time"] = datetime.now().strftime("%D %H:%M")   
         data["username"] = session["USERNAME"]                    
         data["message_id"] = str(uuid.uuid4())    
@@ -45,6 +53,7 @@ class JustAskSocketServer:
         join_room(session['ACTIVE_SESSION'])
         data["time"] = datetime.now().strftime("[%H:%M:%S]")
         data["username"] = session["USERNAME"]         
+        data["ACTIVE_SESSION"] = session["ACTIVE_SESSION"]
         socketio.emit('ACK_JOIN',data, room=session['ACTIVE_SESSION'], username=session["USERNAME"])
 
     def REQUEST_LEAVE(self,data):

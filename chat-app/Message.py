@@ -7,14 +7,17 @@ from enum import IntEnum
 
 
 
-class MessagePacket(IntEnum):
+
+
+class PacketAttributes(IntEnum):
     MESSAGE_ID = 0
     MESSAGE_FLAIRS = 1
     DATE_SENT = 2
     NUM_UPVOTES = 3
     PAYLOAD = 4
-    FROM_SESSION_ID = 5
+    from_session_id = 5
     FROM_USER = 6
+    MESSAGE_HISTORY = 7
 
 
 class MessageModel(db.Model):
@@ -37,6 +40,17 @@ class MessageModel(db.Model):
         # pull all clients.
         ModelBase.ProcessDatabase(MessageModel.query.all(), filePath)
         print("SAVED MESSAGES DB TO {}".format(filePath))
+
+    def MessageToJSON(self):
+        return {
+            PacketAttributes.MESSAGE_ID.name : self.message_id,
+            PacketAttributes.MESSAGE_FLAIRS.name : self.message_flairs,
+            PacketAttributes.DATE_SENT.name : self.date_sent,
+            PacketAttributes.NUM_UPVOTES.name: self.num_upvotes,
+            PacketAttributes.PAYLOAD.name : self.payload,
+            PacketAttributes.from_session_id.name : self.from_session_id,
+            PacketAttributes.FROM_USER.name : self.from_user
+        }
 
 
 
