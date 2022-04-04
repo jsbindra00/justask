@@ -29,9 +29,11 @@
           <input name = "email" type="text" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder ='Email'" id="username" required>
 
           <label for="password" style="display:inline;">Password</label>
-
-          <i id="view_login_password" class="fa-solid fa-eye-low-vision fa-2xs" style="cursor:pointer;"></i>
-          <input name = "password" type="password" placeholder="********" id="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='********'" required>
+          
+          <div id="passwordBox">
+            <input name = "password" type="password" placeholder="********" id="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='********'" required>
+            <i id="view_login_password" class="fa-solid fa-eye-low-vision fa-2xs" style="cursor:pointer;"></i>    
+          </div>
           
           
           <button id="loginbutton">Log In</button>
@@ -55,10 +57,12 @@
         <label for="email">Email</label>
         <input name = "email" type="text" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder ='Email'" id="email" required>
         
-        <label for="password" style="display:inline;">Password</label>
-
-        <i id="view_registration_password" class="fa-solid fa-eye-low-vision fa-2xs" style="cursor:pointer;"></i>
-        <input name = "password" type="password" placeholder="********" id="reg_password" onfocus="this.placeholder = ''" onblur="this.placeholder ='********'" required>
+        <label for="password">Password</label>
+        <div id="passwordBox2">
+          <input name = "password" type="password" placeholder="********" id="reg_password" onfocus="this.placeholder = ''" onblur="this.placeholder ='********'" required>
+          <i id="view_registration_password" class="fa-solid fa-eye-low-vision fa-2xs" style="cursor:pointer;"></i>
+        </div>
+        
         
         <button>Submit</button>
       </form>
