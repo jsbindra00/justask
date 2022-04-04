@@ -32,6 +32,7 @@ class JustAskHTTPServer(FlaskView):
             current_user = ClientModel.query.filter_by(**{SEARCH_PRED.name : session[SEARCH_PRED.name]}).first()
             setattr(current_user, client_attribute.name, arg)
             if auto_commit: db.session.commit()
+
     def GetUser(self, client_attributes):
         return ClientModel.query.filter_by(**client_attributes).first()
 
@@ -77,93 +78,50 @@ class JustAskHTTPServer(FlaskView):
     @route("/testing", endpoint="testing")
     def ROUTE_TESTING(self):
         return render_template("testing.html")
-
-    # def PROFILE_CHANGE_ASSIGNMENT(self, change_exists, client_attribute, form_input, default):
-    #     if change_exists:
-    #         self.UpdateSessionInformation(client_attribute, form_input, updateDB=True) 
-    #         return form_input
-    #     return default
-
-    # def CHANGE_PROFILE_INFORMATION(self, default_args):
-    #     print("CHANGING PROFILE INFORMATION")
-    #     form_firstname = request.form.get("FIRSTNAME")
-    #     form_lastname = request.form.get("LASTNAME")
-    #     form_username = request.form.get("USERNAME")
-    #     form_email = request.form.get("EMAIL")
-
-    #     # I don't understand why these need to be stored
-    #     # The change I made is: If a change happened, then existence is true otherwise its false
-    #     default_args["FIRSTNAME_EXISTS"] = bool(form_firstname)
-    #     default_args["LASTNAME_EXISTS"] = bool(form_lastname)
-    #     default_args["USERNAME_EXISTS"] = bool(form_username) and ClientModel.query.filter_by(USERNAME = form_username).all() == []
-    #     default_args["EMAIL_EXISTS"] = bool(form_email) and ClientModel.query.filter_by(EMAIL = form_email).all() == [] and Utility.IsEmailAddress(form_email)
-        
-    #     default_args[ClientAttribute.FIRSTNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["FIRSTNAME_EXISTS"], ClientAttribute.FIRSTNAME, form_firstname, default_args[ClientAttribute.FIRSTNAME.name])
-    #     default_args[ClientAttribute.LASTNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["LASTNAME_EXISTS"], ClientAttribute.LASTNAME, form_lastname, default_args[ClientAttribute.LASTNAME.name])
-    #     default_args[ClientAttribute.USERNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["USERNAME_EXISTS"], ClientAttribute.USERNAME, form_username, default_args[ClientAttribute.USERNAME.name])
-    #     default_args[ClientAttribute.EMAIL.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["EMAIL_EXISTS"], ClientAttribute.EMAIL, form_email, default_args[ClientAttribute.EMAIL.name])
-
-    #     return default_args
     
-    # def CHANGE_PASSWORD_INFORMATION(self, default_args):
-    #     old_password = request.form.get("old-password")
-    #     new_password = request.form.get("new-password")
-    #     new_password_confirm = request.form.get("new-password-confirm")
-    #     # check if old password entry matches password in db.
-    #     if new_password != new_password_confirm:
-    #         return "pw not confirmed"
+    def PROFILE_CHANGE_ASSIGNMENT(self, change_exists, client_attribute, form_input, default):
+        if change_exists:
+            self.UpdateSessionInformation(client_attribute, form_input, updateDB=True) 
+            return form_input
+        return default
 
-    #     if old_password != self.GetSessionInformation(ClientAttribute.PASSWORD):
-    #         return "pw mismatch"
-        
-    #     if not Utility.IsStrongPassword(new_password):
-    #         return "Weak Password"
-
-    #     new_password = Utility.EncryptSHA256(new_password)
-    #     self.UpdateSessionInformation(ClientAttribute.PASSWORD, new_password, updateDB=True, auto_commit=True)
-    #     default_args[ClientAttribute.PASSWORD.name] = new_password
-    #     return default_args
-    
     def CHANGE_PROFILE_INFORMATION(self, default_args):
-        print("CHANGING PROFILE INFORMATION")
-        form_email = request.form.get("EMAIL")
-        print(form_email)
-        email_exists = ClientModel.query.filter_by(EMAIL=form_email).all() != []
-        if not email_exists:
-            self.UpdateSessionInformation(ClientAttribute.EMAIL, form_email, updateDB=True)
-            default_args[ClientAttribute.EMAIL.name] = form_email            
-        else:
-            # email exists.
-            pass
+        #print("CHANGING PROFILE INFORMATION")
+        form_firstname = request.form.get("FIRSTNAME")
+        form_lastname = request.form.get("LASTNAME")
         form_username = request.form.get("USERNAME")
-        username_exists = ClientModel.query.filter_by(USERNAME = form_username).all() != []
-    
-        if not username_exists:
-            self.UpdateSessionInformation(ClientAttribute.USERNAME, form_username, updateDB=True)
-            default_args[ClientAttribute.USERNAME.name] = form_username
-        else:
-            # username exists already
-            pass
-        default_args["EMAIL_EXISTS"] = email_exists 
-        default_args["USERNAME_EXISTS"] = username_exists
+        form_email = request.form.get("EMAIL")
+
+        # I don't understand why these need to be stored
+        # The change I made is: If a change happened, then existence is true otherwise its false
+        default_args["FIRSTNAME_EXISTS"] = bool(form_firstname)
+        default_args["LASTNAME_EXISTS"] = bool(form_lastname)
+        default_args["USERNAME_EXISTS"] = bool(form_username) and ClientModel.query.filter_by(USERNAME = form_username).all() == []
+        default_args["EMAIL_EXISTS"] = bool(form_email) and ClientModel.query.filter_by(EMAIL = form_email).all() == [] and Utility.IsEmailAddress(form_email)
+        
+        default_args[ClientAttribute.FIRSTNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["FIRSTNAME_EXISTS"], ClientAttribute.FIRSTNAME, form_firstname, default_args[ClientAttribute.FIRSTNAME.name])
+        default_args[ClientAttribute.LASTNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["LASTNAME_EXISTS"], ClientAttribute.LASTNAME, form_lastname, default_args[ClientAttribute.LASTNAME.name])
+        default_args[ClientAttribute.USERNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["USERNAME_EXISTS"], ClientAttribute.USERNAME, form_username, default_args[ClientAttribute.USERNAME.name])
+        default_args[ClientAttribute.EMAIL.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["EMAIL_EXISTS"], ClientAttribute.EMAIL, form_email, default_args[ClientAttribute.EMAIL.name])
 
         return default_args
-  
+    
     def CHANGE_PASSWORD_INFORMATION(self, default_args):
-        old_password = request.form.get("old-password")
+        old_password = Utility.EncryptSHA256(request.form.get("old-password"))
         new_password = request.form.get("new-password")
         new_password_confirm = request.form.get("new-password-confirm")
         # check if old password entry matches password in db.
         if new_password != new_password_confirm:
-            return "pw not confirmed"
+            return default_args
 
         if old_password != self.GetSessionInformation(ClientAttribute.PASSWORD):
-            return "pw mismatch"
+            return default_args
         
         if not Utility.IsStrongPassword(new_password):
-            return "Weak Password"
+            return default_args
 
-        self.UpdateSessionInformation(ClientAttribute.PASSWORD, Utility.EncryptSHA256(new_password), updateDB=True, auto_commit=True)
+        new_password = Utility.EncryptSHA256(new_password)
+        self.UpdateSessionInformation(ClientAttribute.PASSWORD, new_password, updateDB=True)
         default_args[ClientAttribute.PASSWORD.name] = new_password
         return default_args
 
@@ -210,57 +168,16 @@ class JustAskHTTPServer(FlaskView):
         self.UpdateSessionInformation(ClientAttribute.ABOUT_ME, user.ABOUT_ME)
 
         return redirect("/profile")
-        
-    # @route("/", endpoint="/")
-    # @route("/login/", endpoint="login", methods=['POST', 'GET'])
-    # def ROUTE_LOGIN(self):
-    #     if request.method == "GET" and not self.IsUserLoggedIn(): return redirect("landingpage")
-    #     form_email = request.form.get("email")
-    #     form_password = request.form.get("password")
-    #     form_fields = [form_email, form_password]
-    #     user = self.GetUser({ClientAttribute.EMAIL.name : form_email, ClientAttribute.PASSWORD.name : Utility.EncryptSHA256(form_password)})
-    #     if not self.LOGIN_VALIDATION(form_fields, user == None):
-    #         return render_template("landingpage.html")
-    #     return self.LOGIN_CONFIRMATION(user)
-
-    # @route("/registration/",endpoint="registration", methods = ["GET", "POST"])
-    # def ROUTE_REGISTRATION(self):
-    #     if self.IsUserLoggedIn() and request.method == "GET": return redirect("/profile")
-    #     new_user_details = {
-    #         ClientAttribute.EMAIL.name : request.form.get("email"), 
-    #         ClientAttribute.USERNAME.name : request.form.get("username"), 
-    #         ClientAttribute.FIRSTNAME.name : request.form.get("firstname"), 
-    #         ClientAttribute.LASTNAME.name : request.form.get("lastname"), 
-    #         ClientAttribute.PASSWORD.name : Utility.EncryptSHA256(request.form.get("password")),
-    #         ClientAttribute.ACTIVE_SESSION.name : "",
-    #         ClientAttribute.ADMIN.name : 0,
-    #         ClientAttribute.PROFILE_PICTURE.name : "",
-
-    #         # Why socail medias? Also, Empty fields means that we need to select the fields that need to be validated for non-emptiness
-    #         ClientAttribute.INSTAGRAM_PAGE.name : "",
-    #         ClientAttribute.FACEBOOK_PAGE.name : "",
-    #         ClientAttribute.TWITTER_PAGE.name : "",
-    #         ClientAttribute.LINKEDIN_PAGE.name : ""
-    #         }
-        
-    #     user_exists = self.UserExists(username=new_user_details[ClientAttribute.USERNAME.name], email=new_user_details[ClientAttribute.EMAIL.name])
-    #     if not self.REGISTERATION_VALIDATION(list(new_user_details.values()), user_exists, new_user_details[ClientAttribute.EMAIL.name], new_user_details[ClientAttribute.PASSWORD.name]):
-    #         return redirect("/landingpage") 
-        
-    #     new_user_details[ClientAttribute.PASSWORD.name] = Utility.EncryptSHA256(new_user_details[ClientAttribute.PASSWORD.name])
-    #     user = self.CreateUser(new_user_details)
-    #     return self.LOGIN_CONFIRMATION(user)
 
     @route("/", endpoint="/")
     @route("/login/", endpoint="login", methods=['POST', 'GET'])
     def ROUTE_LOGIN(self):
         if request.method == "GET" and not self.IsUserLoggedIn(): return redirect("landingpage")
         form_email = request.form.get("email")
-        form_password = Utility.EncryptSHA256(request.form.get("password"))
-        if not form_email or not form_password: return render_template("login.html")
-        user = self.GetUser({ClientAttribute.EMAIL.name : form_email, ClientAttribute.PASSWORD.name : form_password})
-
-        if not self.LOGIN_VALIDATION([form_email, form_password], user == None):
+        form_password = request.form.get("password")
+        form_fields = [form_email, form_password]
+        user = self.GetUser({ClientAttribute.EMAIL.name : form_email, ClientAttribute.PASSWORD.name : Utility.EncryptSHA256(form_password)})
+        if not self.LOGIN_VALIDATION(form_fields, user == None):
             return render_template("landingpage.html")
         return self.LOGIN_CONFIRMATION(user)
 
@@ -273,7 +190,7 @@ class JustAskHTTPServer(FlaskView):
             ClientAttribute.USERNAME.name : request.form.get("username"), 
             ClientAttribute.FIRSTNAME.name : request.form.get("firstname"), 
             ClientAttribute.LASTNAME.name : request.form.get("lastname"), 
-            ClientAttribute.PASSWORD.name : Utility.EncryptSHA256(request.form.get("password")),
+            ClientAttribute.PASSWORD.name : request.form.get("password"),
             ClientAttribute.ACTIVE_SESSION.name : "",
             ClientAttribute.ADMIN.name : 0,
             ClientAttribute.PROFILE_PICTURE.name : "",
@@ -284,11 +201,18 @@ class JustAskHTTPServer(FlaskView):
             ClientAttribute.ABOUT_ME.name : ""
 
             }
-        for key,value in new_user_details.items():
-            if value is None:
-                return "404"
-
-        if self.UserExists(username=new_user_details[ClientAttribute.USERNAME.name], email=new_user_details[ClientAttribute.EMAIL.name]): redirect("/landingpage")
+        test_list = [
+            new_user_details[ClientAttribute.EMAIL.name], 
+            new_user_details[ClientAttribute.USERNAME.name], 
+            new_user_details[ClientAttribute.FIRSTNAME.name], 
+            new_user_details[ClientAttribute.LASTNAME.name], 
+            new_user_details[ClientAttribute.PASSWORD.name]
+        ]
+        user_exists = self.UserExists(username=new_user_details[ClientAttribute.USERNAME.name], email=new_user_details[ClientAttribute.EMAIL.name])
+        if not self.REGISTERATION_VALIDATION(test_list, user_exists, new_user_details[ClientAttribute.EMAIL.name], new_user_details[ClientAttribute.PASSWORD.name]):
+            return redirect("/landingpage") 
+        
+        new_user_details[ClientAttribute.PASSWORD.name] = Utility.EncryptSHA256(new_user_details[ClientAttribute.PASSWORD.name])
         user = self.CreateUser(new_user_details)
         return self.LOGIN_CONFIRMATION(user)
 
