@@ -341,6 +341,29 @@ class FlaskTest_Profile(unittest.TestCase):
                 assert session["USERNAME"] == users[order[3]]["username"]
                 test_data_dict = {}
     
+    def test_change_email_username_dublication(self):
+        with self.client:
+            test_data = dict(email='Correct12@gmail.com', firstname='Corr', lastname = 'Ect', username = 'Correct12', password = 'CorrectPassword1234')
+            r = self.client.post(self.REGISTER_URL + "/", data= test_data)
+            email_present = ClientModel.query.filter_by(EMAIL=test_data["email"]).first()
+            assert email_present is not None
+            assert r.location == self.PROFILE_URL
+
+            profile_change = {"FIRSTNAME" : "", "LASTNAME" : "", "EMAIL"  : "", "USERNAME" : '', "submit-profile" : ""}
+            profile_change["EMAIL"] = self.setup_data["email"]
+            self.client.post(self.PROFILE_URL, data= profile_change)
+            assert session["EMAIL"] == test_data["email"]
+            assert session["FIRSTNAME"] == test_data["firstname"]
+            assert session["LASTNAME"] == test_data["lastname"]
+            assert session["USERNAME"] == test_data["username"]
+            profile_change["EMAIL"] = ""
+            profile_change["USERNAME"] = self.setup_data["username"]
+            self.client.post(self.PROFILE_URL, data= profile_change)
+            assert session["EMAIL"] == test_data["email"]
+            assert session["FIRSTNAME"] == test_data["firstname"]
+            assert session["LASTNAME"] == test_data["lastname"]
+            assert session["USERNAME"] == test_data["username"]
+
     def test_empty_fields_profile_change(self):
         with self.client:
             empty_test_data = {"FIRSTNAME" : "", "LASTNAME" : "", "EMAIL"  : "", "USERNAME" : '', "submit-profile" : ""}
@@ -434,6 +457,37 @@ class FlaskTest_Profile(unittest.TestCase):
                 test_data["new-password-confirm"] = case
                 response = self.client.post(self.PROFILE_URL, data = test_data)
                 assert session["PASSWORD"] == Utility.EncryptSHA256(self.setup_data["password"])
+    
+    def test_register_change_profile(self):
+        test_data = dict(email='Correct12@gmail.com', firstname='Corr', lastname = 'Ect', username = 'Correct12', password = 'CorrectPassword1234')
+        r = self.client.post(self.REGISTER_URL + "/", data= test_data)
+        email_present = ClientModel.query.filter_by(EMAIL=test_data["email"]).first()
+        assert email_present is not None
+        assert r.location == self.PROFILE_URL
+
+        login_cred = dict(email=test_data["email"],password=test_data["password"])
+        r = self.client.post(self.LOGIN_URL + "/", data= login_cred)
+        assert r.location == self.PROFILE_URL
+
+        with self.client:
+            profile_change = {"FIRSTNAME" : "Newton", "LASTNAME" : "Born", "EMAIL"  : "dollarnb@mail.co.uk", "USERNAME" : 'nb6', "submit-profile" : ""}
+            self.client.post(self.PROFILE_URL, data= profile_change)
+            assert session["EMAIL"] == profile_change["EMAIL"]
+            assert session["FIRSTNAME"] == profile_change["FIRSTNAME"]
+            assert session["LASTNAME"] == profile_change["LASTNAME"]
+            assert session["USERNAME"] == profile_change["USERNAME"]
+            password_change = {"old-password" : test_data["password"], "new-password" : "6NewestPassport", "new-password-confirm" : "6NewestPassport", "submit-password" : ""}
+            self.client.post(self.PROFILE_URL, data = password_change)
+            assert session["PASSWORD"] == Utility.EncryptSHA256(password_change["new-password"])
+
+            login_cred = dict(email=profile_change["EMAIL"],password=password_change["new-password"])
+            r = self.client.post(self.LOGIN_URL + "/", data= login_cred)
+            assert r.location == self.PROFILE_URL
+            assert session["EMAIL"] == profile_change["EMAIL"]
+            assert session["FIRSTNAME"] == profile_change["FIRSTNAME"]
+            assert session["LASTNAME"] == profile_change["LASTNAME"]
+            assert session["USERNAME"] == profile_change["USERNAME"]
+            assert session["PASSWORD"] == Utility.EncryptSHA256(password_change["new-password"])
         
     # remove the setup data from db
     def tearDown(self):
