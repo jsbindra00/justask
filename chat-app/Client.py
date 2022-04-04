@@ -15,6 +15,7 @@ class ClientAttribute(IntEnum):
     TWITTER_PAGE=9
     FACEBOOK_PAGE=10
     LINKEDIN_PAGE=11
+    ABOUT_ME = 12
 
 class ClientModel(db.Model, ModelBase):
 
@@ -27,12 +28,13 @@ class ClientModel(db.Model, ModelBase):
     PASSWORD = db.Column(db.String(80), unique=False, nullable=False)
     ACTIVE_SESSION = db.Column(db.String(80), unique=False, nullable=False)
     ADMIN = db.Column(db.Integer, unique=False, nullable=False)
-
     PROFILE_PICTURE = db.Column(db.String(80), unique=False, nullable=False)
     INSTAGRAM_PAGE = db.Column(db.String(80), unique=False, nullable=False)
     TWITTER_PAGE = db.Column(db.String(80), unique=False, nullable=False)
     FACEBOOK_PAGE = db.Column(db.String(80), unique=False, nullable=False)
     LINKEDIN_PAGE = db.Column(db.String(80), unique=False, nullable=False)
+    ABOUT_ME = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+
 
 
     def __repr__(self):

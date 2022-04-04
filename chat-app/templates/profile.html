@@ -11,30 +11,45 @@ Profile
 
 
 <div id="profile-wrapper" style="width:100%; height:100%">
-    <div id="profile-picture-master-wrapper">
+    <div id="profile-picture-master-wrapper" class="settings-bar">
         <div id="profile-picture-child-wrapper">
-            <div id="profile-picture-wrapper">
+            <div id="profile-picture-wrapper" class="settings-bar">
+                <img class="icon" id="profile-picture" src="../static/assets/profile-picture-default.png">
+                <!-- <img src="{{ url_for('static', filename='profile-picture-default.png.js') }}"> -->
+
             </div>
-            <div id="profile-socials-wrapper">
-                <ul id="profile-socials">
-                    <li class="profile-social" id="instagram">
-                        <p>foo</p>
+            <div id="profile-socials-wrapper" class="settings-bar">
+                <ul style="height:100%;width:100%;" id="profile-socials">
+                    <li style="height:100%;" class="profile-social">
+                        <a href="{{instagram}}"><img width="30px" class="social-icon"
+                                src="../static/assets/instagram.png"></a>
                     </li>
                     <li class="profile-social" id="facebook">
-                        <p>foo</p>
-
+                        <a href="{{facebook}}"><img width="30px" class="social-icon"
+                                src="../static/assets/facebook.png"></a>
                     </li>
                     <li class="profile-social" id="twitter">
-                        <p>foo</p>
-
+                        <a href="{{twitter}}"><img width="30px" class="social-icon"
+                                src="../static/assets/twitter.png"></a>
                     </li>
                     <li class="profile-social" id="linkedin">
-                        <p>foo</p>
-
+                        <a href="{{linkedin}}"><img width="30px" class="social-icon"
+                                src="../static/assets/linkedin.png"></a>
                     </li>
                 </ul>
             </div>
-            <div id="profile-picture-about-me-wrapper">
+
+            <div id="profile-picture-about-me-wrapper" class="settings-bar">
+                <div id="about-me-wrapper">
+                    <div class="about-me" id="about-me">
+                        <textarea class="about-me" id="about-me-text-edit">
+                        </textarea>
+                    </div>
+                    <button>Submit</button>
+
+                </div>
+
+
 
             </div>
 
@@ -44,19 +59,24 @@ Profile
     <div id="profile-settings-master-wrapper">
         <div id="profile-settings-wrapper">
             <button class="collapse-button">
-                <h1 style="display:inline;">Personal Information</h1>
+                <h1 >Personal Information</h1>
                 <i class="fa-solid fa-plus fa-lg" style="float:right;top:50%;"></i>
             </button>
             <form class="settings">
                 <ul id="personal-information-settings" class="form-impl">
-                    <li>
+                    <li class = "setting">
                         <p>First Name</p>
+                        <input type="text">
                     </li>
-                    <li>
+                    <li class = "setting">
                         <p>Middle Name</p>
+                        <input type="text">
+
                     </li>
-                    <li>
+                    <li class = "setting">
                         <p>Last Name</p>
+                        <input type="text">
+
                     </li>
                 </ul>
                 <button>Submit</button>
@@ -65,14 +85,19 @@ Profile
 
             <button class="collapse-button">
                 <h1>Login Information</h1>
+                <i class="fa-solid fa-plus fa-lg" style="float:right;top:50%;"></i>
             </button>
             <form class="settings">
                 <ul id="login-information-settings" class="form-impl">
-                    <li>
+                    <li class = "setting">
                         <p>Email Address</p>
+                        <input type="text">
+
                     </li>
-                    <li>
+                    <li class = "setting">
                         <p>Username</p>
+                        <input type="text">
+
                     </li>
                 </ul>
                 <button>Submit</button>
@@ -81,17 +106,24 @@ Profile
 
             <button class="collapse-button">
                 <h1>Password Information</h1>
+                <i class="fa-solid fa-plus fa-lg" style="float:right;top:50%;"></i>
             </button>
             <form class="settings">
-                <ul id="password-information-settings"  class="form-impl">
-                    <li>
+                <ul id="password-information-settings" class="form-impl">
+                    <li class = "setting">
                         <p>Old Password</p>
+                        <input type="text">
+
                     </li>
-                    <li>
+                    <li class = "setting">
                         <p>New Password</p>
+                        <input type="text">
+
                     </li>
-                    <li>
+                    <li class = "setting">
                         <p>New Password Confirm</p>
+                        <input type="text">
+
                     </li>
                 </ul>
                 <button>Submit</button>
@@ -100,21 +132,30 @@ Profile
 
             <button class="collapse-button">
                 <h1>Social Media Information</h1>
+                <i class="fa-solid fa-plus fa-lg" style="float:right;top:50%;"></i>
             </button>
             <form class="settings">
                 <ul id="social-media-information-settings" class="form-impl">
 
-                    <li>
+                    <li class = "setting">
                         <p>Instagram</p>
+                        <input type="text">
+
                     </li>
-                    <li>
+                    <li class = "setting">
                         <p>Facebook</p>
+                        <input type="text">
+
                     </li>
-                    <li>
+                    <li class = "setting">
                         <p>Twitter</p>
+                        <input type="text">
+
                     </li>
-                    <li>
+                    <li class="setting">
                         <p>Linkedin</p>
+                        <input type="text">
+
                     </li>
                 </ul>
             </form>

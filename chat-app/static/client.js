@@ -202,7 +202,6 @@ function ClientAcknowledgeMessageHistoryCache(packet){
         msg = ConstructMessage(current_msg_json.FROM_USER, current_msg_json.DATE_SENT, current_msg_json.MESSAGE_ID, current_msg_json.PAYLOAD, current_msg_json.NUM_UPVOTES);
         AppendMessage(msg)
     }
-    alert(message_history.length)
 }
 
 

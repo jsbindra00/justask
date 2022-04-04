@@ -195,6 +195,8 @@ class JustAskHTTPServer(FlaskView):
         self.UpdateSessionInformation(ClientAttribute.FACEBOOK_PAGE, user.FACEBOOK_PAGE)
         self.UpdateSessionInformation(ClientAttribute.LINKEDIN_PAGE, user.LINKEDIN_PAGE)
         self.UpdateSessionInformation(ClientAttribute.TWITTER_PAGE, user.TWITTER_PAGE)
+        self.UpdateSessionInformation(ClientAttribute.ABOUT_ME, user.ABOUT_ME)
+
         return redirect("/profile")
         
     # @route("/", endpoint="/")
@@ -266,7 +268,8 @@ class JustAskHTTPServer(FlaskView):
             ClientAttribute.INSTAGRAM_PAGE.name : "",
             ClientAttribute.FACEBOOK_PAGE.name : "",
             ClientAttribute.TWITTER_PAGE.name : "",
-            ClientAttribute.LINKEDIN_PAGE.name : ""
+            ClientAttribute.LINKEDIN_PAGE.name : "",
+            ClientAttribute.ABOUT_ME.name : ""
 
             }
         for key,value in new_user_details.items():
