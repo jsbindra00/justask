@@ -33,7 +33,7 @@ class ClientModel(db.Model, ModelBase):
     TWITTER_PAGE = db.Column(db.String(80), unique=False, nullable=False)
     FACEBOOK_PAGE = db.Column(db.String(80), unique=False, nullable=False)
     LINKEDIN_PAGE = db.Column(db.String(80), unique=False, nullable=False)
-    ABOUT_ME = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+    ABOUT_ME = db.Column(db.String(120), unique=False, nullable=False)
 
 
 
