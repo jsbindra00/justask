@@ -85,31 +85,58 @@ class JustAskHTTPServer(FlaskView):
             return form_input
         return default
 
-    def CHANGE_PROFILE_INFORMATION(self, default_args):
+    def CHANGE_PERSONAL_INFORMATION(self, default_args):
+        form_firstname = request.form.get("firstname")
+        form_lastname = request.form.get("lastname")
+
+        default_args["FIRSTNAME_EXISTS"] = bool(form_firstname)
+        default_args["LASTNAME_EXISTS"] = bool(form_lastname)
+
+        default_args[ClientAttribute.FIRSTNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["FIRSTNAME_EXISTS"], ClientAttribute.FIRSTNAME, form_firstname, default_args[ClientAttribute.FIRSTNAME.name])
+        default_args[ClientAttribute.LASTNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["LASTNAME_EXISTS"], ClientAttribute.LASTNAME, form_lastname, default_args[ClientAttribute.LASTNAME.name])
+
+        return default_args
+        
+    def CHANGE_LOGIN_INFORMATION(self, default_args):
         #print("CHANGING PROFILE INFORMATION")
-        form_firstname = request.form.get("FIRSTNAME")
-        form_lastname = request.form.get("LASTNAME")
-        form_username = request.form.get("USERNAME")
-        form_email = request.form.get("EMAIL")
+        form_username = request.form.get("username")
+        form_email = request.form.get("email")
 
         # I don't understand why these need to be stored
         # The change I made is: If a change happened, then existence is true otherwise its false
-        default_args["FIRSTNAME_EXISTS"] = bool(form_firstname)
-        default_args["LASTNAME_EXISTS"] = bool(form_lastname)
         default_args["USERNAME_EXISTS"] = bool(form_username) and ClientModel.query.filter_by(USERNAME = form_username).all() == []
         default_args["EMAIL_EXISTS"] = bool(form_email) and ClientModel.query.filter_by(EMAIL = form_email).all() == [] and Utility.IsEmailAddress(form_email)
         
-        default_args[ClientAttribute.FIRSTNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["FIRSTNAME_EXISTS"], ClientAttribute.FIRSTNAME, form_firstname, default_args[ClientAttribute.FIRSTNAME.name])
-        default_args[ClientAttribute.LASTNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["LASTNAME_EXISTS"], ClientAttribute.LASTNAME, form_lastname, default_args[ClientAttribute.LASTNAME.name])
         default_args[ClientAttribute.USERNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["USERNAME_EXISTS"], ClientAttribute.USERNAME, form_username, default_args[ClientAttribute.USERNAME.name])
         default_args[ClientAttribute.EMAIL.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["EMAIL_EXISTS"], ClientAttribute.EMAIL, form_email, default_args[ClientAttribute.EMAIL.name])
 
         return default_args
+
+    def CHANGE_MEDIA_INFORMATION(self, default_args):
+        #print("CHANGING PROFILE INFORMATION")
+        form_instagram = request.form.get("instagram")
+        form_facebook = request.form.get("facebook")
+        form_twitter = request.form.get("twitter")
+        form_linkedin = request.form.get("linkedin")
+
+        # I don't understand why these need to be stored
+        # The change I made is: If a change happened, then existence is true otherwise its false
+        default_args["INSTAGRAM_EXISTS"] = bool(form_instagram)
+        default_args["FACEBOOK_EXISTS"] = bool(form_facebook)
+        default_args["TWITTER_EXISTS"] = bool(form_twitter)
+        default_args["LINKEDIN_EXISTS"] = bool(form_linkedin)
+        
+        default_args[ClientAttribute.INSTAGRAM_PAGE.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["INSTAGRAM_EXISTS"], ClientAttribute.INSTAGRAM_PAGE, form_instagram, default_args[ClientAttribute.INSTAGRAM_PAGE.name])
+        default_args[ClientAttribute.FACEBOOK_PAGE.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["FACEBOOK_EXISTS"], ClientAttribute.FACEBOOK_PAGE, form_facebook, default_args[ClientAttribute.FACEBOOK_PAGE.name])
+        default_args[ClientAttribute.TWITTER_PAGE.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["TWITTER_EXISTS"], ClientAttribute.TWITTER_PAGE, form_twitter, default_args[ClientAttribute.TWITTER_PAGE.name])
+        default_args[ClientAttribute.LINKEDIN_PAGE.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["LINKEDIN_EXISTS"], ClientAttribute.LINKEDIN_PAGE, form_linkedin, default_args[ClientAttribute.LINKEDIN_PAGE.name])
+
+        return default_args
     
     def CHANGE_PASSWORD_INFORMATION(self, default_args):
-        old_password = Utility.EncryptSHA256(request.form.get("old-password"))
-        new_password = request.form.get("new-password")
-        new_password_confirm = request.form.get("new-password-confirm")
+        old_password = Utility.EncryptSHA256(request.form.get("old_password"))
+        new_password = request.form.get("new_password")
+        new_password_confirm = request.form.get("new_password_confirm")
         # check if old password entry matches password in db.
         if new_password != new_password_confirm:
             return default_args
@@ -135,17 +162,14 @@ class JustAskHTTPServer(FlaskView):
         
 
         if "personal-information-submit" in request.form:
-            return "PERSONAL"
+            default_args = self.CHANGE_PERSONAL_INFORMATION(default_args)
         elif "login-information-submit" in request.form:
-            return "LOGIN"
+            default_args = self.CHANGE_LOGIN_INFORMATION(default_args)
         elif "password-information-submit" in request.form:
-            return "PASSWORD"
+            default_args = self.CHANGE_PASSWORD_INFORMATION(default_args)
         elif "social-media-information-submit" in request.form:
-            return "SOCIALS"
+            default_args = self.CHANGE_PROFILE_INFORMATION(default_args)
 
-
-        if "submit-profile" in request.form: default_args = self.CHANGE_PROFILE_INFORMATION(default_args)
-        elif "submit-password" in request.form: default_args = self.CHANGE_PASSWORD_INFORMATION(default_args)
         try: db.session.commit()
         except Exception as e: print(e)
         return render_template("profile.html", **default_args)
