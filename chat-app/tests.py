@@ -287,60 +287,57 @@ class FlaskTest_LandPage(unittest.TestCase):
         self.app_context.pop()
         
 
-# class FlaskTest_Profile(unittest.TestCase):
+class FlaskTest_Profile(unittest.TestCase):
     
-#     def setUp(self):
-#         # URLs
-#         self.HOME_URL_CHECK = "http://127.0.0.1:5000"
-#         self.REGISTER_URL_CHECK = "http://127.0.0.1:5000/registration"
-#         self.LOGIN_URL_CHECK = "http://127.0.0.1:5000/login"
-#         self.PROFILE_URL_CHECK= "http://127.0.0.1:5000/profile"
-        
-#         self.HOME_URL = "http://127.0.0.1:5000/"
-#         self.REGISTER_URL = "http://127.0.0.1:5000/registration/"
-#         self.LOGIN_URL = "http://127.0.0.1:5000/login/"
-#         self.PROFILE_URL= "http://127.0.0.1:5000/profile/"
+    def setUp(self):
+        # URLs
+        self.HOME_URL = "http://127.0.0.1:5000/"
+        self.LANDPAGE_URL = self.HOME_URL + "landingpage"
+        self.REGISTER_URL = self.HOME_URL + "registration"
+        self.LOGIN_URL = self.HOME_URL + "login"
+        self.PROFILE_URL= self.HOME_URL + "profile"
 
-#         #setup application
-#         Session()
-#         self.application = JustAsk()
-#         self.app_context = app.app_context()
-#         self.app_context.push()
-#         db.create_all()
-#         self.application.Start()
-#         app.testing = True
-#         self.client = app.test_client()
+        #setup application
 
-#         # initialise user to perform tests on
-#         self.setup_data = dict(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password = 'password1234')
-#         self.setup_data_client = ClientModel(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password =  Utility.EncryptSHA256('password1234'), active_session = '0')
-#         db.session.add(self.setup_data_client)
-#         db.session.commit()
-#         login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
-#         self.client.post(self.LOGIN_URL, data= login_cred)
+        Session()
+        self.application = JustAsk()
+        self.app_context = app.app_context()
+        self.app_context.push()
+        db.create_all()
+        #self.application.Start()
+        app.testing = True
+        self.client = app.test_client()
 
-#         # login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
-#         # r = self.client.post(self.LOGIN_URL, data= login_cred)
+        # initialise user to perform tests on
+        self.setup_data = dict(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password = 'Password1234')
+        self.setup_data_client = ClientModel(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password =  Utility.EncryptSHA256('Password1234'), active_session = '0')
+        db.session.add(self.setup_data_client)
+        db.session.commit()
+        login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
+        self.client.post(self.LOGIN_URL + "/", data= login_cred)
 
-#     def test_change_profile_info(self):
-#         # User logs into profile page, and wants to change email to a new one.
-#         with self.client:
-#             data = {"firstname" : "Jan", "lastname" : "Ponds", "email"  : "ab@gmail.com", "username" : 'JP', "submit-profile" : ""}
-#             #empty_test_data = {"firstname" : "", "lastname" : "", "email"  : "", "username" : '', "submit-profile" : ""}
-#             users = [data, self.setup_data]
-#             perm_list = [seq for seq in itertools.product([0,1], repeat=5)]
-#             test_data_dict = {}
-#             for order in perm_list:
-#                 test_data_dict["email"] = users[order[0]]["email"]
-#                 test_data_dict["firstname"] = users[order[1]]["firstname"]
-#                 test_data_dict["lastname"] = users[order[2]]["lastname"]
-#                 test_data_dict["username"] = users[order[3]]["username"]
-#                 r = self.client.post(self.PROFILE_URL_CHECK, data= data)
-#                 assert session["email"] == users[order[0]]["email"]
-#                 assert session["firstname"] == users[order[1]]["firstname"]
-#                 assert session["firstname"] == users[order[2]]["lastname"]
-#                 assert session["firstname"] == users[order[3]]["username"]
-#                 test_data_dict = {}
+        # login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
+        # r = self.client.post(self.LOGIN_URL, data= login_cred)
+
+    def test_change_profile_info(self):
+        # User logs into profile page, and wants to change email to a new one.
+        with self.client:
+            data = {"firstname" : "Jan", "lastname" : "Ponds", "email"  : "ab@gmail.com", "username" : 'JP', "submit-profile" : ""}
+            #empty_test_data = {"firstname" : "", "lastname" : "", "email"  : "", "username" : '', "submit-profile" : ""}
+            users = [data, self.setup_data]
+            perm_list = [seq for seq in itertools.product([0,1], repeat=5)]
+            test_data_dict = {}
+            for order in perm_list:
+                test_data_dict["email"] = users[order[0]]["email"]
+                test_data_dict["firstname"] = users[order[1]]["firstname"]
+                test_data_dict["lastname"] = users[order[2]]["lastname"]
+                test_data_dict["username"] = users[order[3]]["username"]
+                r = self.client.post(self.PROFILE_URL + "/", data= data)
+                assert session["email"] == users[order[0]]["email"]
+                assert session["firstname"] == users[order[1]]["firstname"]
+                assert session["firstname"] == users[order[2]]["lastname"]
+                assert session["firstname"] == users[order[3]]["username"]
+                test_data_dict = {}
     
 #     def test_empty_fields_profile_change(self):
 #         with self.client:
@@ -433,10 +430,10 @@ class FlaskTest_LandPage(unittest.TestCase):
 #             response = self.client.post(self.PROFILE_URL_CHECK, data = test_data, follow_redirects=True)
 #             assert session["password"] == Utility.EncryptSHA256(self.setup_data["password"])
         
-#     # remove the setup data from db
-#     def tearDown(self):
-#         db.drop_all()
-#         self.app_context.pop()
+    # remove the setup data from db
+    def tearDown(self):
+        db.drop_all()
+        self.app_context.pop()
 
 # class FlaskTest_Sessions(unittest.TestCase):
     
