@@ -3,6 +3,9 @@
     padding:Opx;
     box-sizing:border-box;
 }
+#container-wrapper{
+    width: 80%;
+}
 .poll {
     position:absolute;
     top:50%;
@@ -13,21 +16,25 @@
     border-radius:10px;
     box-shadow: Opx Opx 20px 5px rgba(35, 3);
     display: none;
+    border: 1px solid rgb(129,96,217,0.3);
 }
 .poll .question {
     padding:20px;
     color:#111;
     font-size:18px;
     border-bottom:1px solid #eee;
+    background-color:rgb(129,96,217,0.4);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
 }
 .poll .answers {
-    padding:20px 20px 10px; 
+    padding:20px 20px 10px 10px; 
 }
 .poll .answers .answer {
     position:relative;
     width:100%;
     height:40px;
-    padding:Opx 10px;
     line-height:40px;
     color:#111;
     margin-bottom:10px;
@@ -35,9 +42,10 @@
     border-radius:10px;
     cursor:pointer; 
     overflow:hidden;
+    padding-left: 10px;
 }
 .poll .answers .answer.selected {
-    border:2px solid #8f9fe8;
+    border:2px solid rgb(129,96,217);
 }
 .poll .answers .answer.disabledbutton {
     pointer-events: none;
@@ -58,7 +66,7 @@
     left:0px;
     width:50%;
     height:100%;
-    background: #ccd8f1;
+    background: rgb(129,96,217,0.2);
     z-index:-1;
     transition:width 300ms ease-in-out;
 }
@@ -68,7 +76,7 @@
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    padding-top: 80px; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -82,11 +90,14 @@
 .modal-content {
     background-color: rgb(95, 68, 168);
     margin: auto;
-    padding: 20px;
+    padding: 15px;
     border: 1px solid #888;
-    width: 800px;
+    width: 60%;
+    min-width: 600px;
     border-radius: 8px;
     max-width: 50%;
+    padding-top: 5px;
+    margin-bottom: 10px;
 }
 
 
@@ -95,11 +106,12 @@
     color: #aaaaaa;
     float: right;
     font-size: 28px;
-    font-weight: bold;
+    text-align: right;
+    font-weight: normal;
 }
 .close:hover,
 .close:focus {
-    color: #000;
+    color: rgb(255, 255, 255);
     text-decoration: none;
     cursor: pointer;
 }
@@ -107,39 +119,26 @@
     /* The modal internals*/
     /* Add styles to the form container */
 .form-container {
-    max-width: 99%;
-    padding: 10px;
+    max-width: 100%;
+    padding: 10px, 4px;
     align-items: center;
-    margin: 25px 0 18px 0;
-    background-color:  rgb(179,160,232);
+    margin: 15px 0 10px 0;
+    background-color:  rgb(179,160,232, 0.7);
     border-radius: 8px;
-    margin-top:40px;
+    font-size: 14px;
+    text-align: center;
 }
 
     /* Full-width input fields */
 .form-container input[type=text], .form-container textarea {
     width: 90%;
     padding: 15px;
-    margin: 16px 0 16px 20px;
+    margin: 16px 20px;
     border: none;
     background: rgb(187,170,234);
     border-radius: 5px;
     resize: none;
 }
-.answerDiv{
-    width: 90%;
-    padding: 15px;
-    margin: 16px 0 16px 20px;
-    border: none;
-    background: rgb(187,170,234);
-    border-radius: 5px;
-    resize: none;
-}
-.answerDiv:focus{
-    background-color: rgb(255, 255, 255, 0.5);
-    outline: none;
-}
-
 
     /* When the inputs get focus, do something */
 .form-container input[type=text]:focus, .form-container textarea:focus {
@@ -147,9 +146,17 @@
     outline: none;
 }
 .form-container ::placeholder{
-    color:#174368;
+    color: white;
     opacity: 0.8;
 }
+
+#question_input{
+    background-color:rgb(95, 68, 168, 0.4);
+} 
+
+#question_input:focus{
+    background-color:rgb(95, 68, 168, 0.25);
+} 
     /* Set a style for the submit button */
 .form-container .btn, .Mbutton {
     background-color: rgb(95, 68, 168);
@@ -160,15 +167,20 @@
     width: 20%;
     margin-top:15px;
     margin-bottom:20px;
-    margin-left: 20px;
     opacity: 0.8;
     border-radius: 8px;
 }
 .Mbutton{
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 150px;
+    background-color: rgb(129,96,217);
+    color: rgb(255, 255, 255);
+    width: 100%;
+}
+
+.Mbutton:hover{
+    color: rgb(129,96,217);
+    background-color: rgb(255, 255, 255,0.7);
+    border: 1px solid transparent rgb(129,96,217);
+    box-shadow: 1px 1px 10px 0.1px rgb(129 96 217);
 }
 
     /* Add some hover effects to buttons */
@@ -179,3 +191,105 @@
 ::placeholder{
     color:#4884b6;
 }
+
+#post{
+    float:left;
+    margin-left: 25px;
+}
+#add-option, #delete-option{
+    float: right;
+    margin-right: 22px;
+}
+
+#delete-option{
+    float: right;
+    margin-right: 20px;
+}
+
+#media-wrapper
+{
+    display:flex;
+    flex-direction:row-reverse;
+    height:100%;
+    background-color: white;
+    overflow:hidden
+}
+
+#session-overview-master-wrapper{
+    background-color: rgb(129,96,217,0.6);
+    height:100%;
+    width:20%;
+    float: right;
+    order: -1;
+}
+#session-overview-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    list-style-type: none;
+    margin:0;
+    height:100%;
+    width:100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    justify-content: space-between;
+    min-width: 200px;
+}
+
+#session-id{
+    height:30px;
+    padding:5px;
+    margin-top:-30px;
+    font-weight: 600;
+    color: white;
+}
+
+#session-ID-wrapper{
+    border-bottom: 2px solid rgb(256,256,256,0.5);
+}
+
+#leave-session-wrapper{
+    bottom: 0px;
+    width:100%;
+    text-align: center;
+    margin-bottom: 15px;
+}
+#leave-session{
+    background-color: rgb(95, 68, 168,0.2);
+    color: white;
+    border-radius: 0px;
+    font-size: 14px;
+    padding: 10px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    align-self: center;
+    margin-top: 5px;
+    width: 100%;
+    vertical-align: bottom;
+
+}
+
+#leave-session:hover {
+    background: rgb(95, 68, 168,0.6);
+}
+
+#session-clients-wrapper{
+    height: 60%;
+    background: rgb(256, 256, 256,0.1);
+    width: 80%;
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 0px;
+}
+
+#session-clients{
+    color:rgb(95, 68, 168);
+    font-size: 10px;
+}
+#session-clients-wrapper h3{
+    font-size: 18px;
+    color: rgb(95, 68, 168);
+}
+
