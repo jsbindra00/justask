@@ -55,7 +55,7 @@
 {
     padding-right: 5px;
 }
-.message-wrapper-master, .message-wrapper-master-child{
+.message-wrapper-master{
     display:flex;
     flex-direction: row;
     width: 100%;

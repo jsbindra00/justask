@@ -1,6 +1,6 @@
 
 
-const socket = io.connect("192.168.0.29:5000");
+const socket = io.connect("http://127.0.0.1:5000");
 var roomID = ""
 
 var ACTIVE_SORT;
@@ -27,6 +27,12 @@ function MessageExists(message_id){
 function HasMessageBeenVotedByUser (message_id, vote_amount) {
 
 
+function ClientRequestJoin(){
+    socket.emit('REQ_JOIN', {
+        username: "{{ username }}",
+        room: "{{ room }}"
+    });
+}
 
 
     for (var j=0; j<voted_messages.length; ++j) {

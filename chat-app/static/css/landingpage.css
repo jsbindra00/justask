@@ -289,3 +289,7 @@ margin: 20px;
 #sessionidgenerator:hover{
   color: rgb(206, 206, 206, 0.7);
 }
+#passwordfield{
+  display: inline-block;
+  background-color: #000000;
+}

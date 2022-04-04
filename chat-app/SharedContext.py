@@ -5,7 +5,7 @@ import os
 
 
 
-#bFilepath = "./"
+#dbFilepath = "./"
 dbFilepath = os.path.abspath(os.getcwd())
 
 testing = False

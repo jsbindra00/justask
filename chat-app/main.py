@@ -34,7 +34,7 @@ if __name__ == '__main__':
     # debugMode = Thread(target=DebugMode)
     # debugMode.start()
 
-    socketio.run(app, debug=True, host='192.168.0.29', port=port)
+    socketio.run(app, debug=True, host='127.0.0.1', port=port)
     # debugMode.join()
 
 

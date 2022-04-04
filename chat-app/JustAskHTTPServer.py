@@ -32,7 +32,6 @@ class JustAskHTTPServer(FlaskView):
             current_user = ClientModel.query.filter_by(**{SEARCH_PRED.name : session[SEARCH_PRED.name]}).first()
             setattr(current_user, client_attribute.name, arg)
             if auto_commit: db.session.commit()
-
     def GetUser(self, client_attributes):
         return ClientModel.query.filter_by(**client_attributes).first()
 
