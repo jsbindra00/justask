@@ -310,7 +310,8 @@ class FlaskTest_Profile(unittest.TestCase):
 
         # initialise user to perform tests on
         self.setup_data = dict(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password = 'Password1234')
-        self.setup_data_client = ClientModel(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password =  Utility.EncryptSHA256('Password1234'), active_session = '0')
+        self.setup_data_client =  ClientModel(EMAIL='JohnSmith12@gmail.com', FIRSTNAME='John', LASTNAME = 'Smith', USERNAME = 'John12', PASSWORD =  Utility.EncryptSHA256('Password1234'),
+         ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '')
         db.session.add(self.setup_data_client)
         db.session.commit()
         login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
@@ -328,52 +329,53 @@ class FlaskTest_Profile(unittest.TestCase):
             perm_list = [seq for seq in itertools.product([0,1], repeat=5)]
             test_data_dict = {}
             for order in perm_list:
-                test_data_dict["email"] = users[order[0]]["email"]
-                test_data_dict["firstname"] = users[order[1]]["firstname"]
-                test_data_dict["lastname"] = users[order[2]]["lastname"]
-                test_data_dict["username"] = users[order[3]]["username"]
-                r = self.client.post(self.PROFILE_URL + "/", data= data)
-                assert session["email"] == users[order[0]]["email"]
-                assert session["firstname"] == users[order[1]]["firstname"]
-                assert session["firstname"] == users[order[2]]["lastname"]
-                assert session["firstname"] == users[order[3]]["username"]
+                test_data_dict["EMAIL"] = users[order[0]]["email"]
+                test_data_dict["FIRSTNAME"] = users[order[1]]["firstname"]
+                test_data_dict["LASTNAME"] = users[order[2]]["lastname"]
+                test_data_dict["USERNAME"] = users[order[3]]["username"]
+                test_data_dict["submit-profile"] = ""
+                r = self.client.post(self.PROFILE_URL, data= test_data_dict)
+                assert session["EMAIL"] == users[order[0]]["email"]
+                assert session["FIRSTNAME"] == users[order[1]]["firstname"]
+                assert session["LASTNAME"] == users[order[2]]["lastname"]
+                assert session["USERNAME"] == users[order[3]]["username"]
                 test_data_dict = {}
     
-#     def test_empty_fields_profile_change(self):
-#         with self.client:
-#             empty_test_data = {"firstname" : "", "lastname" : "", "email"  : "", "username" : '', "submit-profile" : ""}
-#             r = self.client.post(self.PROFILE_URL_CHECK, data= empty_test_data)
-#             assert session["email"] == self.setup_data["email"]
-#             assert session["firstname"] == self.setup_data["firstname"]
-#             assert session["firstname"] == self.setup_data["lastname"]
-#             assert session["firstname"] == self.setup_data["username"]
+    def test_empty_fields_profile_change(self):
+        with self.client:
+            empty_test_data = {"FIRSTNAME" : "", "LASTNAME" : "", "EMAIL"  : "", "USERNAME" : '', "submit-profile" : ""}
+            r = self.client.post(self.PROFILE_URL, data= empty_test_data)
+            assert session["EMAIL"] == self.setup_data["email"]
+            assert session["FIRSTNAME"] == self.setup_data["firstname"]
+            assert session["LASTNAME"] == self.setup_data["lastname"]
+            assert session["USERNAME"] == self.setup_data["username"]
     
-#     def test_change_invalid_email(self):
-#         failure_start = [".johnny@mail.com", "/coin@kort.co.uk", "-main@main.com"]
-#         failure_at = ["usermail.com", "origincompany.co.uk"]
-#         failure_no_start = ["@right.com", "@optimal.co.uk"]
-#         failure_no_end = ["morning", "morning@", "morning@company", "morning@company.", "name@.com"]
-#         with self.client:
-#             test_data = {"firstname" : "", "lastname" : "", "email"  : "", "username" : '', "submit-profile" : ""}
-#             for case in failure_start:
-#                 test_data["email"] = case
-#                 r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
-#                 assert session["email"] == self.setup_data["email"]
+    # def test_change_invalid_email(self):
+    #     failure_start = [".johnny@mail.com", "/coin@kort.co.uk", "-main@main.com"]
+    #     failure_at = ["usermail.com", "origincompany.co.uk"]
+    #     failure_no_start = ["@right.com", "@optimal.co.uk"]
+    #     failure_no_end = ["morning", "morning@", "morning@company", "morning@company.", "name@.com"]
+    #     with self.client:
+    #         test_data = {"firstname" : "", "lastname" : "", "email"  : "", "username" : '', "submit-profile" : ""}
+    #         for case in failure_start:
+    #             test_data["email"] = case
+    #             r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
+    #             assert session["email"] == self.setup_data["email"]
             
-#             for case in failure_at:
-#                 test_data["email"] = case
-#                 r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
-#                 assert session["email"] == self.setup_data["email"]
+    #         for case in failure_at:
+    #             test_data["email"] = case
+    #             r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
+    #             assert session["email"] == self.setup_data["email"]
             
-#             for case in failure_no_start:
-#                 test_data["email"] = case
-#                 r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
-#                 assert session["email"] == self.setup_data["email"]
+    #         for case in failure_no_start:
+    #             test_data["email"] = case
+    #             r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
+    #             assert session["email"] == self.setup_data["email"]
             
-#             for case in failure_no_end:
-#                 test_data["email"] = case
-#                 r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
-#                 assert session["email"] == self.setup_data["email"]
+    #         for case in failure_no_end:
+    #             test_data["email"] = case
+    #             r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
+    #             assert session["email"] == self.setup_data["email"]
 
 #     def test_change_password(self):
 #         test_data = {"old-password" : self.setup_data["password"], "new-password" : "NewPassword123", "new-password-confirm" : "NewPassword123", "submit-password" : ""}
@@ -576,4 +578,3 @@ class FlaskTest_Profile(unittest.TestCase):
 if __name__ == "__main__":
     JustAsk.register(app)
     unittest.main()
-    
