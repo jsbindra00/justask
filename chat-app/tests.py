@@ -350,87 +350,90 @@ class FlaskTest_Profile(unittest.TestCase):
             assert session["LASTNAME"] == self.setup_data["lastname"]
             assert session["USERNAME"] == self.setup_data["username"]
     
-    # def test_change_invalid_email(self):
-    #     failure_start = [".johnny@mail.com", "/coin@kort.co.uk", "-main@main.com"]
-    #     failure_at = ["usermail.com", "origincompany.co.uk"]
-    #     failure_no_start = ["@right.com", "@optimal.co.uk"]
-    #     failure_no_end = ["morning", "morning@", "morning@company", "morning@company.", "name@.com"]
-    #     with self.client:
-    #         test_data = {"firstname" : "", "lastname" : "", "email"  : "", "username" : '', "submit-profile" : ""}
-    #         for case in failure_start:
-    #             test_data["email"] = case
-    #             r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
-    #             assert session["email"] == self.setup_data["email"]
+    def test_change_invalid_email(self):
+        failure_start = [".johnny@mail.com", "/coin@kort.co.uk", "-main@main.com"]
+        failure_at = ["usermail.com", "origincompany.co.uk"]
+        failure_no_start = ["@right.com", "@optimal.co.uk"]
+        failure_no_end = ["morning", "morning@", "morning@company", "morning@company.", "name@.com"]
+        with self.client:
+            test_data = {"FIRSTNAME" : "", "LASTNAME" : "", "EMAIL"  : "", "USERNAME" : '', "submit-profile" : ""}
+            for case in failure_start:
+                test_data["EMAIL"] = case
+                r = self.client.post(self.PROFILE_URL, data= test_data)
+                assert session["EMAIL"] == self.setup_data["email"]
             
-    #         for case in failure_at:
-    #             test_data["email"] = case
-    #             r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
-    #             assert session["email"] == self.setup_data["email"]
+            for case in failure_at:
+                test_data["EMAIL"] = case
+                r = self.client.post(self.PROFILE_URL, data= test_data)
+                assert session["EMAIL"] == self.setup_data["email"]
             
-    #         for case in failure_no_start:
-    #             test_data["email"] = case
-    #             r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
-    #             assert session["email"] == self.setup_data["email"]
+            for case in failure_no_start:
+                test_data["EMAIL"] = case
+                r = self.client.post(self.PROFILE_URL, data= test_data)
+                assert session["EMAIL"] == self.setup_data["email"]
             
-    #         for case in failure_no_end:
-    #             test_data["email"] = case
-    #             r = self.client.post(self.PROFILE_URL_CHECK, data= test_data)
-    #             assert session["email"] == self.setup_data["email"]
+            for case in failure_no_end:
+                test_data["EMAIL"] = case
+                r = self.client.post(self.PROFILE_URL, data= test_data)
+                assert session["EMAIL"] == self.setup_data["email"]
 
-#     def test_change_password(self):
-#         test_data = {"old-password" : self.setup_data["password"], "new-password" : "NewPassword123", "new-password-confirm" : "NewPassword123", "submit-password" : ""}
-#         response = self.client.post(self.PROFILE_URL_CHECK, data = test_data, follow_redirects=True)
-#         assert session["password"] == Utility.EncryptSHA256(test_data["new-password"])
-#         test_data["new-password"] = "NewPassword12310"
-#         test_data["new-password-confirm"] = "New12310testing"
-#         response = self.client.post(self.PROFILE_URL_CHECK, data = test_data, follow_redirects=True)
-#         assert session["password"] == Utility.EncryptSHA256(test_data["new-password"])
-#         #self.assertIn(b'you are logged in', response.data)
+    def test_change_password(self):
+        with self.client:
+            test_data = {"old-password" : self.setup_data["password"], "new-password" : "NewPassword123", "new-password-confirm" : "NewPassword123", "submit-password" : ""}
+            response = self.client.post(self.PROFILE_URL, data = test_data)
+            assert session["PASSWORD"] == Utility.EncryptSHA256(test_data["new-password"])
+            test_data["old-password"] = test_data["new-password"]
+            test_data["new-password"] = "New12310testing"
+            test_data["new-password-confirm"] = "New12310testing"
+            response = self.client.post(self.PROFILE_URL, data = test_data)
+            assert session["PASSWORD"] == Utility.EncryptSHA256(test_data["new-password"])
     
-#     def test_change_false_old_password(self):
-#         test_data = {"old-password" : "FalsePassword123", "new-password" : "NewPassword123", "new-password-confirm" : "NewPassword123", "submit-password" : ""}
-#         response = self.client.post(self.PROFILE_URL_CHECK, data = test_data, follow_redirects=True)
-#         assert session["password"] == Utility.EncryptSHA256(self.setup_data["password"])
+    def test_change_false_old_password(self):
+        with self.client:
+            test_data = {"old-password" : "FalsePassword123", "new-password" : "NewPassword123", "new-password-confirm" : "NewPassword123", "submit-password" : ""}
+            response = self.client.post(self.PROFILE_URL, data = test_data)
+            assert session["PASSWORD"] == Utility.EncryptSHA256(self.setup_data["password"])
 
-#     def test_change_false_confirmation_password(self):
-#         test_data = {"old-password" : self.setup_data["password"], "new-password" : "NewPassword123", "new-password-confirm" : "FalseConfirm123", "submit-password" : ""}
-#         response = self.client.post(self.PROFILE_URL_CHECK, data = test_data, follow_redirects=True)
-#         assert session["password"] == Utility.EncryptSHA256(self.setup_data["password"])
+    def test_change_false_confirmation_password(self):
+        with self.client:
+            test_data = {"old-password" : self.setup_data["password"], "new-password" : "NewPassword123", "new-password-confirm" : "FalseConfirm123", "submit-password" : ""}
+            response = self.client.post(self.PROFILE_URL, data = test_data)
+            assert session["PASSWORD"] == Utility.EncryptSHA256(self.setup_data["password"])
     
-#     def test_change_invalid_password(self):
-#         failure_length = ["", " ",
-#         "a", "1", "A",
-#         "ab", "a1", "aA", "A1", "AB", "12",
-#         "aA1", "baA1", "2baA1", "N2baA1", "pN2baA1"]
-#         failure_no_number = ["passworDwithLength", "onetwoThreeFour"]
-#         failure_no_capital = ["passwordwith1ength", "cap1talletter"]
-#         failure_no_lower = ["A11CAPITAL", "CAPSL0CK"]
+    def test_change_invalid_password(self):
+        failure_length = ["", " ",
+        "a", "1", "A",
+        "ab", "a1", "aA", "A1", "AB", "12",
+        "aA1", "baA1", "2baA1", "N2baA1", "pN2baA1"]
+        failure_no_number = ["passworDwithLength", "onetwoThreeFour"]
+        failure_no_capital = ["passwordwith1ength", "cap1talletter"]
+        failure_no_lower = ["A11CAPITAL", "CAPSL0CK"]
 
-#         test_data = {"old-password" : self.setup_data["password"], "new-password" : "", "new-password-confirm" : "", "submit-password" : ""}
+        test_data = {"old-password" : self.setup_data["password"], "new-password" : "", "new-password-confirm" : "", "submit-password" : ""}
+        with self.client:
+            for case in failure_length:
+                test_data["new-password"] = case
+                test_data["new-password-confirm"] = case
+                response = self.client.post(self.PROFILE_URL, data = test_data)
+                assert session["PASSWORD"] == Utility.EncryptSHA256(self.setup_data["password"])
 
-#         for case in failure_length:
-#             test_data["new-password"] = case
-#             test_data["new-password-confirm"] = case
-#             response = self.client.post(self.PROFILE_URL_CHECK, data = test_data, follow_redirects=True)
-#             assert session["password"] == Utility.EncryptSHA256(self.setup_data["password"])
+            for case in failure_no_number:
+                test_data["new-password"] = case
+                test_data["new-password-confirm"] = case
+                response = self.client.post(self.PROFILE_URL, data = test_data)
+                assert session["PASSWORD"] == Utility.EncryptSHA256(self.setup_data["password"])
 
-#         for case in failure_no_number:
-#             test_data["new-password"] = case
-#             test_data["new-password-confirm"] = case
-#             response = self.client.post(self.PROFILE_URL_CHECK, data = test_data, follow_redirects=True)
-#             assert session["password"] == Utility.EncryptSHA256(self.setup_data["password"])
+            for case in failure_no_capital:
+                test_data["new-password"] = case
+                test_data["new-password-confirm"] = case
+                response = self.client.post(self.PROFILE_URL, data = test_data)
+                assert session["PASSWORD"] == Utility.EncryptSHA256(self.setup_data["password"])
 
-#         for case in failure_no_capital:
-#             test_data["new-password"] = case
-#             test_data["new-password-confirm"] = case
-#             response = self.client.post(self.PROFILE_URL_CHECK, data = test_data, follow_redirects=True)
-#             assert session["password"] == Utility.EncryptSHA256(self.setup_data["password"])
-
-#         for case in failure_no_lower:
-#             test_data["new-password"] = case
-#             test_data["new-password-confirm"] = case
-#             response = self.client.post(self.PROFILE_URL_CHECK, data = test_data, follow_redirects=True)
-#             assert session["password"] == Utility.EncryptSHA256(self.setup_data["password"])
+            for case in failure_no_lower:
+                test_data["new-password"] = case
+                test_data["new-password-confirm"] = case
+                response = self.client.post(self.PROFILE_URL, data = test_data)
+                assert session["PASSWORD"] == Utility.EncryptSHA256(self.setup_data["password"])
         
     # remove the setup data from db
     def tearDown(self):
