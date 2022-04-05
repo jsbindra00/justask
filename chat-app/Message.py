@@ -38,7 +38,6 @@ class MessageModel(db.Model):
     IS_ANON = db.Column(db.Boolean, unique=False, nullable=False, primary_key=False)
 
 
-
     def __repr__(self):
         return 'MESSAGE {} {} {} {} {} {} {}'.format(self.message_id, self.message_flairs, self.date_sent, self.num_upvotes, self.payload, self.from_session_id, self.from_user) 
     def __init__(self, **kwargs):
