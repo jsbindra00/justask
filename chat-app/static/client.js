@@ -10,9 +10,9 @@ var voted_messages = []
 
 
 function SignOfNumber(num){
-    if(num < 0) return -1
+    if(num < 0) return -1;
     if (num == 0) return 0;
-    if (num > 0) return 1
+    if (num > 0) return num;
 }
 
 
@@ -96,7 +96,7 @@ function ClientRequestJoin(){
 }
 
 function ClientAcknowledgeJoin(data){
-
+    
     if (data.username !== "{{username}}") {
         const newNode = document.createElement('div');
         newNode.className = "acknowledge";

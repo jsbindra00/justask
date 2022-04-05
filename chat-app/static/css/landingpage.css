@@ -238,7 +238,7 @@ backdrop-filter:blur(30px);
 border: 1px solid rgba(255,255,255,0.1);
 position: absolute;
 transform: translate(-50%,-50%);
-top: 53%;
+top: 50%;
 left: 50%;
 border-radius: 10px;
 padding: 30px 35px 60px;
@@ -287,8 +287,4 @@ overflow: visible;
 }
 #sessionidgenerator:hover{
   color: rgb(206, 206, 206, 0.7);
-}
-#passwordfield{
-  display: inline-block;
-  background-color: #000000;
 }
