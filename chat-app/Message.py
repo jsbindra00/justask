@@ -20,6 +20,7 @@ class PacketAttributes(IntEnum):
     MESSAGE_HISTORY = 7
     TIME_SINCE_EPOCH = 8
     FROM_PARENT_ID = 9
+    IS_ANON = 10
 
 
 class MessageModel(db.Model):
@@ -34,6 +35,7 @@ class MessageModel(db.Model):
     from_user = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
     time_since_epoch = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
     FROM_PARENT_ID = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+    IS_ANON = db.Column(db.Boolean, unique=False, nullable=False, primary_key=False)
 
 
 
@@ -48,14 +50,28 @@ class MessageModel(db.Model):
         print("SAVED MESSAGES DB TO {}".format(filePath))
 
     def MessageToJSON(self):
+        if self.IS_ANON:
+            return {
+                PacketAttributes.MESSAGE_ID.name : self.message_id,
+                PacketAttributes.MESSAGE_FLAIRS.name : self.message_flairs,
+                PacketAttributes.DATE_SENT.name : self.date_sent,
+                PacketAttributes.NUM_UPVOTES.name: self.num_upvotes,
+                PacketAttributes.PAYLOAD.name : self.payload,
+                PacketAttributes.from_session_id.name : self.from_session_id,
+                PacketAttributes.FROM_USER.name : "Anonymous",
+                PacketAttributes.TIME_SINCE_EPOCH.name : self.time_since_epoch,
+                PacketAttributes.FROM_PARENT_ID.name : self.FROM_PARENT_ID,
+                PacketAttributes.IS_ANON.name : self.IS_ANON
+            }
         return {
-            PacketAttributes.MESSAGE_ID.name : self.message_id,
-            PacketAttributes.MESSAGE_FLAIRS.name : self.message_flairs,
-            PacketAttributes.DATE_SENT.name : self.date_sent,
-            PacketAttributes.NUM_UPVOTES.name: self.num_upvotes,
-            PacketAttributes.PAYLOAD.name : self.payload,
-            PacketAttributes.from_session_id.name : self.from_session_id,
-            PacketAttributes.FROM_USER.name : self.from_user,
-            PacketAttributes.TIME_SINCE_EPOCH.name : self.time_since_epoch,
-            PacketAttributes.FROM_PARENT_ID.name : self.FROM_PARENT_ID
-        }
+                PacketAttributes.MESSAGE_ID.name : self.message_id,
+                PacketAttributes.MESSAGE_FLAIRS.name : self.message_flairs,
+                PacketAttributes.DATE_SENT.name : self.date_sent,
+                PacketAttributes.NUM_UPVOTES.name: self.num_upvotes,
+                PacketAttributes.PAYLOAD.name : self.payload,
+                PacketAttributes.from_session_id.name : self.from_session_id,
+                PacketAttributes.FROM_USER.name : self.from_user,
+                PacketAttributes.TIME_SINCE_EPOCH.name : self.time_since_epoch,
+                PacketAttributes.FROM_PARENT_ID.name : self.FROM_PARENT_ID,
+                PacketAttributes.IS_ANON.name : self.IS_ANON
+            }
