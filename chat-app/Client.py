@@ -16,6 +16,7 @@ class ClientAttribute(IntEnum):
     FACEBOOK_PAGE=10
     LINKEDIN_PAGE=11
     ABOUT_ME = 12
+    ANONYMOUS = 13
 
 class ClientModel(db.Model, ModelBase):
 
@@ -34,6 +35,7 @@ class ClientModel(db.Model, ModelBase):
     FACEBOOK_PAGE = db.Column(db.String(80), unique=False, nullable=False)
     LINKEDIN_PAGE = db.Column(db.String(80), unique=False, nullable=False)
     ABOUT_ME = db.Column(db.String(120), unique=False, nullable=False)
+    ANONYMOUS = db.Column(db.Boolean,unique=False, nullable=False)
 
 
 
