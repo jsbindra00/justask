@@ -22,30 +22,30 @@ Profile
                 <p class="otherDetails">{{EMAIL}}</p><hr>
                 <strong style="float:left;color:white">About Me:</strong>
                 <br><div class="about-me-wrap"> <p class="otherDetails">{{ABOUT_ME}}</p></div>
-
-            </div>
-            <div id="profile-socials-wrapper" class="settings-bar">
+                <br><hr>
                 <ul style="height:100%;width:100%;" id="profile-socials">
                     <li style="height:100%;" class="profile-social">
-                        <a href="{{instagram}}"><img width="30px" class="social-icon"
-                                src="../static/assets/instagram.png"></a>
+                        <!-- <a href="{{instagram}}"><img width="30px" class="social-icon"
+                                src="../static/assets/instagram.png"></a> -->
+                        <a href="{{INSTAGRAM_PAGE}}" class="fa-brands fa-instagram"></a>
                     </li>
                     <li class="profile-social" id="facebook">
-                        <a href="{{facebook}}"><img width="30px" class="social-icon"
-                                src="../static/assets/facebook.png"></a>
+                        <!-- <a href="{{facebook}}"><img width="30px" class="social-icon"
+                                src="../static/assets/facebook.png"></a> -->
+                        <a href="{{FACEBOOK_PAGE}}" class="fa-brands fa-facebook-f"></a>
                     </li>
                     <li class="profile-social" id="twitter">
-                        <a href="{{twitter}}"><img width="30px" class="social-icon"
-                                src="../static/assets/twitter.png"></a>  
+                        <!-- <a href="{{twitter}}"><img width="30px" class="social-icon"
+                                src="../static/assets/twitter.png"></a>   -->
+                        <a href="{{TWITTER_PAGE}}" class="fa-brands fa-twitter"></a>
                     </li>
                     <li class="profile-social" id="linkedin">
-                        <a href="{{linkedin}}"><img width="30px" class="social-icon"
-                                src="../static/assets/linkedin.png"></a>
+                        <!-- <a href="{{linkedin}}"><img width="30px" class="social-icon"
+                                src="../static/assets/linkedin.png"></a> -->
+                        <a href="{{LINKEDIN_PAGE}}" class="fa-brands fa-linkedin-in"></a>
                     </li>
                 </ul>
             </div>
-
-
         </div>
     </div>
     <div id="profile-settings-master-wrapper">
@@ -131,22 +131,22 @@ Profile
 
                     <li class = "setting">
                         <p>Instagram</p>
-                        <input type="text" name="instagram" placeholder="{{INSTAGRAM}}">
+                        <input type="text" name="instagram" placeholder="{{INSTAGRAM_PAGE}}">
 
                     </li>
                     <li class = "setting">
                         <p>Facebook</p>
-                        <input type="text" name="facebook" placeholder = "{{FACEBOOK}}">
+                        <input type="text" name="facebook" placeholder = "{{FACEBOOK_PAGE}}">
 
                     </li>
                     <li class = "setting">
                         <p>Twitter</p>
-                        <input type="text" name="twitter" placeholder = "{{TWITTER}}">
+                        <input type="text" name="twitter" placeholder = "{{TWITTER_PAGE}}">
 
                     </li>
                     <li class="setting">
                         <p>Linkedin</p>
-                        <input type="text" name="linkedin" placeholder = "{{LINKEDIN}}">
+                        <input type="text" name="linkedin" placeholder = "{{LINKEDIN_PAGE}}">
 
                     </li>
                 </ul>

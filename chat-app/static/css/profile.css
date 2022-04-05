@@ -12,6 +12,7 @@
     flex-direction: column;
     padding:10px;
     height:100%;
+    margin:10px;
     
 }
 #profile-picture{
@@ -101,6 +102,8 @@
     justify-content: center;
     padding:6px;
     align-items: center;
+    margin-top: 20px;
+    margin-bottom: -5px;
 
 }
 #profile-socials li{
@@ -168,6 +171,8 @@
     overflow-y: auto; /* scroll only appears whenn necessary */
     height: 90%;
     padding: 20px 0px;
+    margin-top: -35px;
+    border-radius: 30px;
 }
 
 
@@ -314,10 +319,6 @@
     border:none;
   }
 
-  .settings ::placeholder{
-    
-  }
-
   .submit-form{
     float: right;
     /* margin-top: -40px; */
@@ -350,5 +351,39 @@
     margin: 15px 0px 0px;
 }
 
+.fa-brands{
+    padding: 15px;
+    font-size: 22px;
+    width: 50px;
+    text-align: center;
+    text-decoration: none;
+    /* margin: 5px 2px; */
+    border-radius: 50%;
+    
+}
 
+.fa-brands:hover{
+    opacity: 0.7;
+    text-decoration: none;
+    color: white;
+}
 
+.fa-facebook-f{
+    color: white;
+    background-color: rgb(72,103,170);
+}
+
+.fa-instagram{
+    color: white;
+    background-color: rgb(163,45,182);
+}
+
+.fa-twitter{
+    color: white;
+    background-color: rgb(28,153,230);
+}
+
+.fa-linkedin-in{
+    color: white;
+    background-color: rgb(0,120,177);
+}
