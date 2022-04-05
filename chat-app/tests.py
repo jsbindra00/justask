@@ -505,6 +505,7 @@ class FlaskTest_Sessions(unittest.TestCase):
         self.LOGIN_URL = self.HOME_URL + "login"
         self.PROFILE_URL= self.HOME_URL + "profile"
         self.SESSION_URL= self.HOME_URL + "session"
+        self.LEAVE_SESSION_URL = self.HOME_URL + "leave_session"
 
         #setup application
 
@@ -527,8 +528,8 @@ class FlaskTest_Sessions(unittest.TestCase):
          ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '', ABOUT_ME = '')
         db.session.add(self.setup_data_client_b)
         db.session.commit()
-        login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
-        self.client.post(self.LOGIN_URL + "/", data= login_cred)
+        self.login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
+        self.client.post(self.LOGIN_URL + "/", data= self.login_cred)
 
         # login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
         # r = self.client.post(self.LOGIN_URL, data= login_cred)
@@ -574,6 +575,7 @@ class FlaskTest_Sessions(unittest.TestCase):
     
     def test_leave_room_event(self):
         with self.client:
+            self.client.post(self.SESSION_URL, data = {"room" : "room1", "createsession" : ""})
             assert session["ACTIVE_SESSION"] != ""
             self.client.post(self.LEAVE_SESSION_URL)
             assert session["ACTIVE_SESSION"] == ""
@@ -582,67 +584,6 @@ class FlaskTest_Sessions(unittest.TestCase):
     def tearDown(self):
         db.drop_all()
         self.app_context.pop()
-
-# class FlaskTest_Chat(unittest.TestCase):
-
-#     def setUp(self):
-#          # URLs
-#         self.HOME_URL = "http://127.0.0.1:5000/"
-#         self.LANDPAGE_URL = self.HOME_URL + "landingpage"
-#         self.REGISTER_URL = self.HOME_URL + "registration"
-#         self.LOGIN_URL = self.HOME_URL + "login"
-#         self.PROFILE_URL= self.HOME_URL + "profile"
-#         self.SESSION_URL= self.HOME_URL + "session"
-#         self.CHAT_URL= self.HOME_URL + "chat"
-#         self.LEAVE_SESSION_URL= self.HOME_URL + "leave_session"
-
-#         #setup application
-
-#         Session()
-#         self.application = JustAsk()
-#         self.app_context = app.app_context()
-#         self.app_context.push()
-#         db.create_all()
-#         #self.application.Start()
-#         app.testing = True
-#         self.client = app.test_client()
-
-#         # initialise user to perform tests on
-#         self.setup_data = dict(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password = 'Password1234')
-#         self.setup_data_client =  ClientModel(EMAIL='JohnSmith12@gmail.com', FIRSTNAME='John', LASTNAME = 'Smith', USERNAME = 'John12', PASSWORD =  Utility.EncryptSHA256('Password1234'),
-#          ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '', ABOUT_ME = '')
-#         db.session.add(self.setup_data_client)
-#         db.session.commit()
-#         login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
-#         self.client.post(self.LOGIN_URL + "/", data= login_cred)
-#         self.client.post(self.SESSION_URL, data = {"room" : "room1", "createsession" : ""})
-
-#         # login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
-#         # r = self.client.post(self.LOGIN_URL, data= login_cred)
-
-#     def test_leave_room_event(self):
-#         with self.client:
-#             assert session["ACTIVE_SESSION"] != ""
-#             self.client.post(self.LEAVE_SESSION_URL)
-#             assert session["ACTIVE_SESSION"] == ""
-    
-#     # def test_my_custom_event(self):
-#     #     pass
-
-#     # def test_upvotes(self):
-#     #     pass
-
-#     def test_sent_messages(self):
-#         test_data = {"chatbar" : "hello_world", "post" : ""}
-#         self.client.post(self.CHAT_URL, data = test_data)
-#         data_check = MessageModel.query.filter_by(from_user=self.setup_data["username"]).first()
-#         print(data_check)
-#         #assert test_data["chatbar"] == data_check.PAYLOAD
-
-#     # remove the setup data from db
-#     def tearDown(self):
-#         db.drop_all()
-#         self.app_context.pop()
 
 if __name__ == "__main__":
     JustAsk.register(app)
