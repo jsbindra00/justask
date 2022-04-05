@@ -194,6 +194,7 @@ class JustAskHTTPServer(FlaskView):
         self.UpdateSessionInformation(ClientAttribute.LINKEDIN_PAGE, user.LINKEDIN_PAGE)
         self.UpdateSessionInformation(ClientAttribute.TWITTER_PAGE, user.TWITTER_PAGE)
         self.UpdateSessionInformation(ClientAttribute.ABOUT_ME, user.ABOUT_ME)
+        self.UpdateSessionInformation(ClientAttribute.ANONYMOUS, user.ANONYMOUS)
 
         return redirect("/profile")
 
@@ -226,7 +227,8 @@ class JustAskHTTPServer(FlaskView):
             ClientAttribute.FACEBOOK_PAGE.name : "",
             ClientAttribute.TWITTER_PAGE.name : "",
             ClientAttribute.LINKEDIN_PAGE.name : "",
-            ClientAttribute.ABOUT_ME.name : ""
+            ClientAttribute.ABOUT_ME.name : "",
+            ClientAttribute.ANONYMOUS.name : False
             }
             
         test_list = [
@@ -248,11 +250,17 @@ class JustAskHTTPServer(FlaskView):
     def ROUTE_MANAGE_SESSIONS(self):
         if request.method == "POST":
             roomID = request.form.get("room")
+            isAnon = session["ANONYMOUS"]
             matchingRoomClients = ClientModel.query.filter_by(ACTIVE_SESSION = roomID).all()
             
             if "joinsession" in request.form:
                 matchingRoomClients = ClientModel.query.filter_by(ACTIVE_SESSION = roomID).all()
-
+                
+                if request.form.get("isAnon") == "anon":
+                    isAnon = True
+                else:
+                    isAnon = False
+                    
                 if matchingRoomClients == []:
                     # todo make this nicer 
                     flash('Chatroom does not exist')
@@ -264,6 +272,7 @@ class JustAskHTTPServer(FlaskView):
                     return redirect(url_for("session"))
 
             self.UpdateSessionInformation(ClientAttribute.ACTIVE_SESSION, roomID, updateDB=True)
+            self.UpdateSessionInformation(ClientAttribute.ANONYMOUS, isAnon, updateDB=True)
         return redirect(url_for("chat"))
 
     @route("/chat", endpoint="chat",methods=["GET"])

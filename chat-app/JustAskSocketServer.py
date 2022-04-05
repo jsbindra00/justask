@@ -23,6 +23,10 @@ class JustAskSocketServer:
         socketio.on_event("REQ_MESSAGE_CACHE_UPDATE", self.REQUEST_MESSAGE_CACHE_UPDATE)
 
 
+    def isAnonymous(self):
+        if session["ANONYMOUS"] == True:
+            return "Anon"
+        return  session["USERNAME"]
 
     def REQUEST_MESSAGE_CACHE_UPDATE(self, data):
         message_history = {PacketAttributes.MESSAGE_HISTORY.name : [message.MessageToJSON() for message in MessageModel.query.filter_by(**{PacketAttributes.from_session_id.name:data[PacketAttributes.from_session_id.name]}).all()]}
@@ -30,8 +34,8 @@ class JustAskSocketServer:
         # convert messages to JSON.
 
     def REQUEST_SEND_MESSAGE(self,data):
-        data["time"] = datetime.now().strftime("%D %H:%M")   
-        data["username"] = session["USERNAME"]                    
+        data["username"] = self.isAnonymous()
+        data["time"] = datetime.now().strftime("%D %H:%M")  
         data["message_id"] = str(uuid.uuid4())    
         data["session_id"] = session["ACTIVE_SESSION"]
         data["vote_count"] = 0
@@ -56,9 +60,9 @@ class JustAskSocketServer:
     def REQUEST_JOIN(self,data):
         join_room(session['ACTIVE_SESSION'])
         data["time"] = datetime.now().strftime("[%H:%M:%S]")
-        data["username"] = session["USERNAME"]         
+        data["username"] = self.isAnonymous()
         data["ACTIVE_SESSION"] = session["ACTIVE_SESSION"]
-        socketio.emit('ACK_JOIN',data, room=session['ACTIVE_SESSION'], username=session["USERNAME"])
+        socketio.emit('ACK_JOIN',data, room=data["ACTIVE_SESSION"], username=data["username"])
 
     def REQUEST_LEAVE(self,data):
         leave_room(session['ACTIVE_SESSION'])
