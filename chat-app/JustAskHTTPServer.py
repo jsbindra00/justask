@@ -1,5 +1,5 @@
 from multiprocessing.connection import Client
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, flash
 from flask_session import Session
 from flask_classful import FlaskView, route
 from Client import ClientModel
@@ -248,11 +248,14 @@ class JustAskHTTPServer(FlaskView):
                 matchingRoomClients = ClientModel.query.filter_by(ACTIVE_SESSION = roomID).all()
 
                 if matchingRoomClients == []:
-                    # handle this.
-                    return "room id does not exist"
+                    # todo make this nicer 
+                    flash('Chatroom does not exist')
+                    return redirect(url_for("session"))
             elif "createsession" in request.form:
                 if matchingRoomClients != []:
-                    return "session id already exists"
+                    # todo make this nicer
+                    flash('Session id already exists')
+                    return redirect(url_for("session"))
 
             self.UpdateSessionInformation(ClientAttribute.ACTIVE_SESSION, roomID, updateDB=True)
         return redirect(url_for("chat"))

@@ -171,4 +171,11 @@ html,body, .wrapper{
     background: #6d7fcc;
 }
 
+.flashes{
+    background-color: #6d7fcc;
+    color:#fff;
+    margin: 0px;
+    padding: 5px 10px;
+}
+
 

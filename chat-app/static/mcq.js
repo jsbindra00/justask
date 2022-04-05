@@ -1,3 +1,13 @@
+class poll {
+    constructor(question, pollcount, answersWeight, selectedAnswer){
+        this.question = question;
+        //this.options = options;
+        pollcount = 0;
+        answersWeight = [0,0,0,0];
+        selectedAnswer = -1;
+    }
+
+}
 let poll = { 
     question:"",
     answers:[
