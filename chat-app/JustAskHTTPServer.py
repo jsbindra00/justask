@@ -62,7 +62,9 @@ class JustAskHTTPServer(FlaskView):
 
     @route("/signout", endpoint="signout")
     def ROUTE_SIGNOUT(self):
-        if self.IsUserLoggedIn():session.clear()
+        if self.IsUserLoggedIn():
+            if session["ACTIVE_SESSION"]: self.UpdateSessionInformation(ClientAttribute.ACTIVE_SESSION, "", updateDB=True)
+            session.clear()
         return redirect("/landingpage")
 
     @route("/landingpage", endpoint="landingpage")
