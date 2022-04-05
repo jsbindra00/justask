@@ -5,7 +5,6 @@ from flask_socketio import join_room, leave_room
 from datetime import datetime
 
 
-
 from Message import MessageModel, PacketAttributes
 from SharedContext import *
 
