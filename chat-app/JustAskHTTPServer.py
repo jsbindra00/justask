@@ -149,6 +149,12 @@ class JustAskHTTPServer(FlaskView):
         self.UpdateSessionInformation(ClientAttribute.PASSWORD, new_password, updateDB=True)
         default_args[ClientAttribute.PASSWORD.name] = new_password
         return default_args
+    
+    def CHANGE_ABOUTME_INFORMATION(self, default_args):
+        print("ok")
+        default_args[ClientAttribute.ABOUT_ME.name] = self.PROFILE_CHANGE_ASSIGNMENT(True, ClientAttribute.ABOUT_ME, request.form.get("about-me-text-edit"), default_args[ClientAttribute.ABOUT_ME.name])
+
+        return default_args
 
 
     @route("/profile", endpoint="profile",methods=["GET", "POST"])
@@ -167,11 +173,12 @@ class JustAskHTTPServer(FlaskView):
             default_args = self.CHANGE_PASSWORD_INFORMATION(default_args)
         elif "social-media-information-submit" in request.form:
             default_args = self.CHANGE_MEDIA_INFORMATION(default_args)
+        elif "about-me-submit" in request.form:
+            default_args = self.CHANGE_ABOUTME_INFORMATION(default_args)
 
         try: db.session.commit()
         except Exception as e: print(e)
         return render_template("profile.html", **default_args)
-
     
     def LOGIN_CONFIRMATION(self, user):
         self.UpdateSessionInformation(ClientAttribute.EMAIL, user.EMAIL)
