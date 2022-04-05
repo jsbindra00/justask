@@ -309,3 +309,11 @@
     color: rgb(95, 68, 168);
 }
 
+#question-list-wrapper{
+    height: 100%;
+    background-color: rgb(95, 68, 168, 0.8);
+    color: white;
+    width: 20%;
+    text-align: center;
+}
+
