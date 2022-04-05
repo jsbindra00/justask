@@ -167,7 +167,7 @@ class JustAskHTTPServer(FlaskView):
         elif "password-information-submit" in request.form:
             default_args = self.CHANGE_PASSWORD_INFORMATION(default_args)
         elif "social-media-information-submit" in request.form:
-            default_args = self.CHANGE_PROFILE_INFORMATION(default_args)
+            default_args = self.CHANGE_MEDIA_INFORMATION(default_args)
 
         try: db.session.commit()
         except Exception as e: print(e)
