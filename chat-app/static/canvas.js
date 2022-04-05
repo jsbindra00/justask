@@ -26,12 +26,15 @@ $(document).ready(function () {
     }
   };
 
+
+
   function OnUserScroll(e){
     delta = (e.originalEvent.wheelDelta / 120)*2;
     LINE_WIDTH += delta;
     if (LINE_WIDTH < 0) LINE_WIDTH = 0
     console.log(LINE_WIDTH)
-    AdjustLineWidth(LINE_WIDTH);
+    // AdjustLineWidth(LINE_WIDTH);
+   
   }
   $('#canvas-wrapper').bind('mousewheel', function(e){OnUserScroll(e);});
 
@@ -60,7 +63,6 @@ $(document).ready(function () {
 
   function AdjustLineWidth(line_width){canvas.freeDrawingBrush.width = parseInt(line_width, 10) || 1;}
   function AdjustColor(color){canvas.freeDrawingBrush.color = color;}
-
 
 
   function __ChangeBrush(target){
@@ -99,6 +101,11 @@ $(document).ready(function () {
   }
 
 
+  $('#brush-size-slider').on("input", function(event){
+    LINE_WIDTH = event.target.value;
+    AdjustLineWidth(LINE_WIDTH)
+  })
+
   $('html').keyup(function(e){ if(e.keyCode == 46) DeleteSelectedCanvasObjects()});
   $('html').click(CheckEraserEvent)
   __ChangeBrush($('#Circle'))
@@ -114,4 +121,9 @@ $(document).ready(function () {
     AdjustColor(this.value)
   });
 
+
+  
+
 })
+
+
