@@ -528,8 +528,8 @@ class FlaskTest_Sessions(unittest.TestCase):
          ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '', ABOUT_ME = '')
         db.session.add(self.setup_data_client_b)
         db.session.commit()
-        login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
-        self.client.post(self.LOGIN_URL + "/", data= login_cred)
+        self.login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
+        self.client.post(self.LOGIN_URL + "/", data= self.login_cred)
 
         # login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
         # r = self.client.post(self.LOGIN_URL, data= login_cred)
@@ -575,6 +575,7 @@ class FlaskTest_Sessions(unittest.TestCase):
     
     def test_leave_room_event(self):
         with self.client:
+            self.client.post(self.SESSION_URL, data = {"room" : "room1", "createsession" : ""})
             assert session["ACTIVE_SESSION"] != ""
             self.client.post(self.LEAVE_SESSION_URL)
             assert session["ACTIVE_SESSION"] == ""
