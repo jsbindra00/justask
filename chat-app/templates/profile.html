@@ -14,11 +14,15 @@ Profile
     <div id="profile-picture-master-wrapper" class="settings-bar">
         <div id="profile-picture-child-wrapper">
             <div id="profile-picture-wrapper" class="settings-bar">
-                <img class="icon" id="profile-picture" src="../static/assets/profile-picture-default.png">
+                <i class="fa-solid fa-circle-user fa-4x"></i>
+                <!-- <img class="icon" id="profile-picture" src="../static/assets/profile-picture-default.png"> -->
                 <!-- <img src="{{ url_for('static', filename='profile-picture-default.png.js') }}"> -->
                 <p class="mainDetails">{{FIRSTNAME}} {{LASTNAME}}</p><hr>
-                <p class="otherDetails">{{USERNAME}}</p2>
-                <p class="otherDetails">{{EMAIL}}</p2>
+                <p class="otherDetails">{{USERNAME}}</p>
+                <p class="otherDetails">{{EMAIL}}</p><hr>
+                <strong style="float:left;color:white">About Me:</strong>
+                <br><div class="about-me-wrap"> <p class="otherDetails">{{ABOUT_ME}}</p></div>
+
             </div>
             <div id="profile-socials-wrapper" class="settings-bar">
                 <ul style="height:100%;width:100%;" id="profile-socials">
@@ -32,26 +36,13 @@ Profile
                     </li>
                     <li class="profile-social" id="twitter">
                         <a href="{{twitter}}"><img width="30px" class="social-icon"
-                                src="../static/assets/twitter.png"></a>
+                                src="../static/assets/twitter.png"></a>  
                     </li>
                     <li class="profile-social" id="linkedin">
                         <a href="{{linkedin}}"><img width="30px" class="social-icon"
                                 src="../static/assets/linkedin.png"></a>
                     </li>
                 </ul>
-            </div>
-
-            
-            <div id="profile-picture-about-me-wrapper" class="settings-bar">
-                <form class="aobut-me-form" action="/profile" method="POST">
-                    <div id="about-me-wrapper">
-                    <div class="about-me" id="about-me">
-                        <p>About me</p>
-                        <textarea class="about-me" id="about-me-text-edit"></textarea>
-                    </div>
-                    <button class="submit-form-about" id="about-me-submit" name="about-me-submit">Submit</button>
-                </div>
-                </form>
             </div>
 
 
@@ -75,6 +66,10 @@ Profile
                         <input type="text" name="lastname" placeholder = "{{LASTNAME}}">
 
                     </li>
+                    <div class="about-me" id="about-me">
+                        <p>About me</p>
+                        <textarea class="about-me" id="about-me-text-edit" name="about-me-text-edit"></textarea>
+                    </div>
                 </ul>
                 <button class="submit-form" name="personal-information-submit">Submit</button>
             </form>

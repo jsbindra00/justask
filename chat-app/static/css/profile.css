@@ -6,7 +6,7 @@
     object-fit: contain;
 }
 #profile-picture-master-wrapper{
-    width:30%;
+    width:50%;
     background-color:rgb(250,250,250);
     display:flex;
     flex-direction: column;
@@ -20,7 +20,7 @@
 
 #profile-picture-child-wrapper{
     height:100%;
-    overflow-y:scroll;
+    /* overflow-y:scroll; */
 }
 #profile-socials-wrapper{
     /* background-color: rgb(255, 255, 255); */
@@ -33,15 +33,18 @@
     background:rgb(129,96,217);
 }
 
-
+.social-icon{
+    border-radius: 100px;
+}
 #social-icon{
     max-height: 100%;
     max-width: 100%;
     width:30px;
+
 }
 #profile-picture-wrapper{
     width: 100%;
-    height:400px;
+    height: fit-content;
     overflow:hidden;
     border-radius: 30px;
     margin-bottom: 20px;
@@ -62,6 +65,7 @@
 }
 
 #profile-picture-wrapper hr{
+    width: 80%;
     border-top: 1px solid rgb(179,160,232);
 }
 
@@ -72,6 +76,7 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+     
 }
 
 
@@ -103,19 +108,25 @@
 }
 
 #about-me-text-edit{
-    background-color: rgb(179,160,232);
+    background-color: rgb(204, 191, 239);
     width:100%;
-    margin-bottom: 10px;
     border-radius: 8px;
+    border: none;
     resize: vertical;
     height: 3em;
     max-height: 400px;
 }
 
 #about-me-text-edit:focus{
+    background-color: rgb(255, 255, 255, 0.5);
     outline: none;
 }
 
+#about-me{
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 400;
+}
 /* rgb(129,96,217); */
 .submit-form-about{
     color: white;
@@ -136,21 +147,8 @@
 }
 
 .about-me p{
-    font-size: 18px;
-    font-weight: 400;
     color: white;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 #profile-settings-master-wrapper{
@@ -159,14 +157,17 @@
 }
 
 #profile-settings-wrapper{
-    width:75%;
-
-    background-color: rgb(129,96,217);
+    width:85%;
+    background-color: rgb(129 96 217); 
     position:relative;
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
-    overflow-y:scroll;
+    overflow:scroll;
+    overflow-x: hidden;
+    overflow-y: auto; /* scroll only appears whenn necessary */
+    height: 90%;
+    padding: 20px 0px;
 }
 
 
@@ -302,6 +303,7 @@
     outline: none;
     float: right;
     border: 0;
+    padding: 5px 8px;
     
     /* border: none; */
   }
@@ -309,6 +311,7 @@
   .settings input:focus{
     background-color: rgb(255, 255, 255, 0.5);
     outline: none;
+    border:none;
   }
 
   .settings ::placeholder{
@@ -334,8 +337,18 @@
     box-shadow: 1px 1px 10px 0.1px rgb(129 96 217);
   } */
 
-  #login-information-settings input{
+ .fa-circle-user{
+     color: rgb(255, 255, 255, 0.8);
+ }
+
+.about-me-wrap{
+    border: 0.1px solid rgb(255,255,255,0.2);
+    width: 100%;
+    background: rgb(255,255,255,0.2);
+    border-radius: 10px;
+    height: 150px;
+    margin: 15px 0px 0px;
+}
 
 
-  }
-  
+

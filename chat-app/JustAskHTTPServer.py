@@ -93,6 +93,7 @@ class JustAskHTTPServer(FlaskView):
 
         default_args[ClientAttribute.FIRSTNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["FIRSTNAME_EXISTS"], ClientAttribute.FIRSTNAME, form_firstname, default_args[ClientAttribute.FIRSTNAME.name])
         default_args[ClientAttribute.LASTNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["LASTNAME_EXISTS"], ClientAttribute.LASTNAME, form_lastname, default_args[ClientAttribute.LASTNAME.name])
+        default_args[ClientAttribute.ABOUT_ME.name] = self.PROFILE_CHANGE_ASSIGNMENT(True, ClientAttribute.ABOUT_ME, request.form.get("about-me-text-edit"), default_args[ClientAttribute.ABOUT_ME.name])
 
         return default_args
         
@@ -173,9 +174,7 @@ class JustAskHTTPServer(FlaskView):
             default_args = self.CHANGE_PASSWORD_INFORMATION(default_args)
         elif "social-media-information-submit" in request.form:
             default_args = self.CHANGE_MEDIA_INFORMATION(default_args)
-        elif "about-me-submit" in request.form:
-            default_args = self.CHANGE_ABOUTME_INFORMATION(default_args)
-
+    
         try: db.session.commit()
         except Exception as e: print(e)
         return render_template("profile.html", **default_args)

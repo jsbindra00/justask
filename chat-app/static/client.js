@@ -171,19 +171,10 @@ function ConstructMessage(username,time,message_id,message,vote_count, time_sinc
         <a class="comment-button">Comment</a>
         `
     );
-    const flairsProperty = $('<li/>', {
-        "class" : "message-property",
-        "click" : function(){ViewMessageFlairs(message_id);}
-    }).append(
-        `
-        <i style="display:inline;" class="fa-solid fa-tags fa-lg"></i> 
-        <a class="flairs-button">Flairs</a>
-        `
-    );
     const messageProperties = $('<ul/>', 
     {
         "class" : "message-properties"
-    }).append(commentProperty, flairsProperty);
+    }).append(commentProperty);
 
     messagePropertiesWrapper.append(messageProperties)
     const messageResponse = $('<div/>',
