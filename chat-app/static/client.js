@@ -50,7 +50,8 @@ function ClientRequestJoin(){
 
 function RespondToMessage(message_id){
     CURRENTLY_RESPONDING_TO_MESSAGE_ID = message_id;
-    // alert("responding " + CURRENTLY_RESPONDING_TO_MESSAGE_ID);
+    $("#commenting-status").show();
+    //alert("responding " + CURRENTLY_RESPONDING_TO_MESSAGE_ID);
 }
 function ViewMessageFlairs(message_id){
     // alert("view flairs " +  message_id)
@@ -161,6 +162,7 @@ function ConstructMessage(username,time,message_id,message,vote_count, time_sinc
     const commentProperty = $('<li/>',
     {
         "class" : "message-property",
+        "id": "commenting_wrapper",
         "click" : function(){RespondToMessage(message_id);}
 
     }).append(
@@ -330,11 +332,14 @@ function ClientAcknowledgeMessageHistoryCache(packet){
 $(document).ready(function(){
     $('#message_input_form').submit(function(e){e.preventDefault(); ClientRequestSendMessage();});
     $('#leave-session').click(ClientRequestLeave);
-    $('#most-popular').click(function(){SortMessages(SortByAscendingUpvotesPredicate)})
-    $('#least-popular').click(function(){SortMessages(SortByDescendingUpvotesPredicate)})
+    $('#most-popular').click(function(){SortMessages(SortByDescendingUpvotesPredicate)})
+    $('#least-popular').click(function(){SortMessages(SortByAscendingUpvotesPredicate)})
     $('#newest').click(function(){SortMessages(SortByAscendingDatePredicate)})
     $('#oldest').click(function(){SortMessages(SortByDescendingDatePredicate)})
 
+    $("#message_input_form").click(function(){
+        $("#commenting-status").hide();
+    });
 
     
 

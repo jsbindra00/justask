@@ -76,7 +76,8 @@
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 80px; /* Location of the box */
+    padding-top: 60px; /* Location of the box */
+    padding-right: 60px; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -170,6 +171,21 @@
     opacity: 0.8;
     border-radius: 8px;
 }
+
+.answerDiv{
+    width: 90%;
+    padding: 15px;
+    margin: 16px 20px;
+    border: none;
+    background: rgb(187,170,234);
+    border-radius: 5px;
+    resize: none;
+}
+.answerDiv:focus{
+    background-color: rgb(255, 255, 255, 0.5);
+    outline: none;
+}
+
 .Mbutton{
     background-color: rgb(129,96,217);
     color: rgb(255, 255, 255);
