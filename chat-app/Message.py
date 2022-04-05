@@ -35,7 +35,7 @@ class MessageModel(db.Model):
     from_user = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
     time_since_epoch = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
     FROM_PARENT_ID = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
-    IS_ANON = db.Column(db.Bool(), unique=False, nullable=False, primary_key=False)
+    IS_ANON = db.Column(db.Boolean, unique=False, nullable=False, primary_key=False)
 
 
 
@@ -49,7 +49,7 @@ class MessageModel(db.Model):
         ModelBase.ProcessDatabase(MessageModel.query.all(), filePath)
         print("SAVED MESSAGES DB TO {}".format(filePath))
 
-    def MessageToJSON(self, isAnon):
+    def MessageToJSON(self):
         if self.IS_ANON:
             return {
                 PacketAttributes.MESSAGE_ID.name : self.message_id,
