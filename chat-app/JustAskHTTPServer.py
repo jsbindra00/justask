@@ -32,6 +32,7 @@ class JustAskHTTPServer(FlaskView):
             current_user = ClientModel.query.filter_by(**{SEARCH_PRED.name : session[SEARCH_PRED.name]}).first()
             setattr(current_user, client_attribute.name, arg)
             if auto_commit: db.session.commit()
+
     def GetUser(self, client_attributes):
         return ClientModel.query.filter_by(**client_attributes).first()
 
@@ -71,13 +72,10 @@ class JustAskHTTPServer(FlaskView):
 
     @route("/leave_session", endpoint="leave_session",methods=["POST", "GET"])
     def ROUTE_LEAVE_SESSION(self):
+        if request.method == "GET" and not self.IsUserLoggedIn(): return redirect("landingpage")
         if session["ACTIVE_SESSION"]: self.UpdateSessionInformation(ClientAttribute.ACTIVE_SESSION, "", updateDB=True)
         return redirect("/session")
-        
-    @route("/testing", endpoint="testing")
-    def ROUTE_TESTING(self):
-        return render_template("testing.html")
-    
+
     def PROFILE_CHANGE_ASSIGNMENT(self, change_exists, client_attribute, form_input, default):
         if change_exists:
             self.UpdateSessionInformation(client_attribute, form_input, updateDB=True) 
@@ -108,7 +106,6 @@ class JustAskHTTPServer(FlaskView):
         
         default_args[ClientAttribute.USERNAME.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["USERNAME_EXISTS"], ClientAttribute.USERNAME, form_username, default_args[ClientAttribute.USERNAME.name])
         default_args[ClientAttribute.EMAIL.name] = self.PROFILE_CHANGE_ASSIGNMENT(default_args["EMAIL_EXISTS"], ClientAttribute.EMAIL, form_email, default_args[ClientAttribute.EMAIL.name])
-
         return default_args
 
     def CHANGE_MEDIA_INFORMATION(self, default_args):
@@ -222,8 +219,8 @@ class JustAskHTTPServer(FlaskView):
             ClientAttribute.TWITTER_PAGE.name : "",
             ClientAttribute.LINKEDIN_PAGE.name : "",
             ClientAttribute.ABOUT_ME.name : ""
-
             }
+            
         test_list = [
             new_user_details[ClientAttribute.EMAIL.name], 
             new_user_details[ClientAttribute.USERNAME.name], 
@@ -238,11 +235,6 @@ class JustAskHTTPServer(FlaskView):
         new_user_details[ClientAttribute.PASSWORD.name] = Utility.EncryptSHA256(new_user_details[ClientAttribute.PASSWORD.name])
         user = self.CreateUser(new_user_details)
         return self.LOGIN_CONFIRMATION(user)
-
-    @route("/logout", endpoint="logout")
-    def ROUTE_LOGOUT():
-        session.clear()
-        return redirect("login")
 
     @route("/session", endpoint="session", methods=["GET", "POST"])
     def ROUTE_MANAGE_SESSIONS(self):
@@ -273,20 +265,13 @@ class JustAskHTTPServer(FlaskView):
 
     @route("/sketchpad", endpoint="sketchpad", methods=["GET", "POST"])
     def ROUTE_SKETCHPAD(self):
-        return render_template("sketchpad.html")
+        if request.method == "GET" and not self.IsUserLoggedIn(): return redirect("landingpage")
+        if request.method == "GET": return render_template("sketchpad.html")
     
     @route("/mcq", endpoint="mcq", methods=['POST', 'GET'])
     def ROUTE_MCQ(self):
+        if request.method == "GET" and not self.IsUserLoggedIn(): return redirect("landingpage")
         if request.method == "GET": return render_template("mcq.html")
-        
-        if "submit_question": # only for admins
-            # add a question
-            pass
-        if "answer_mcq": # anyone
-            # update the mcq
-            pass
-        # idk
-
 
     def LOGIN_VALIDATION(self, fields, invalid_existence_status):
         if self.EMPTY_FIELDS_CHECK(fields):
