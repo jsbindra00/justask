@@ -273,7 +273,10 @@ class JustAskHTTPServer(FlaskView):
     @route("/mcq", endpoint="mcq", methods=['POST', 'GET'])
     def ROUTE_MCQ(self):
         if request.method == "GET" and not self.IsUserLoggedIn(): return redirect("landingpage")
-        if request.method == "GET": return render_template("mcq.html")
+        username = self.GetSessionInformation(ClientAttribute.USERNAME)
+        active_session = self.GetSessionInformation(ClientAttribute.ACTIVE_SESSION)
+        if active_session: return render_template("mcq.html", username=username, room=active_session)
+        return render_template("session.html")
 
     def LOGIN_VALIDATION(self, fields, invalid_existence_status):
         if self.EMPTY_FIELDS_CHECK(fields):
