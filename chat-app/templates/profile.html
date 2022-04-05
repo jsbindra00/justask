@@ -16,7 +16,9 @@ Profile
             <div id="profile-picture-wrapper" class="settings-bar">
                 <img class="icon" id="profile-picture" src="../static/assets/profile-picture-default.png">
                 <!-- <img src="{{ url_for('static', filename='profile-picture-default.png.js') }}"> -->
-
+                <p class="mainDetails">{{FIRSTNAME}} {{LASTNAME}}</p><hr>
+                <p class="otherDetails">{{USERNAME}}</p2>
+                <p class="otherDetails">{{EMAIL}}</p2>
             </div>
             <div id="profile-socials-wrapper" class="settings-bar">
                 <ul style="height:100%;width:100%;" id="profile-socials">
@@ -42,15 +44,11 @@ Profile
             <div id="profile-picture-about-me-wrapper" class="settings-bar">
                 <div id="about-me-wrapper">
                     <div class="about-me" id="about-me">
-                        <textarea class="about-me" id="about-me-text-edit">
-                        </textarea>
+                        <p>About me</p>
+                        <textarea class="about-me" id="about-me-text-edit"></textarea>
                     </div>
-                    <button class="submit-form" id="about-me-submit">Submit</button>
-
+                    <button class="submit-form-about" id="about-me-submit" name="about-me-submit">Submit</button>
                 </div>
-
-
-
             </div>
 
 
