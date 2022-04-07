@@ -42,7 +42,7 @@ class FlaskTest_LandPage(unittest.TestCase):
     
         self.setup_data = dict(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password = 'Password1234')
         self.admin_client = ClientModel(EMAIL='JohnSmith12@gmail.com', FIRSTNAME='John', LASTNAME = 'Smith', USERNAME = 'John12', PASSWORD =  Utility.EncryptSHA256('Password1234'),
-         ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '', ABOUT_ME = '')
+         ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '', ABOUT_ME = '', ANONYMOUS = False)
         db.session.add(self.admin_client)
         db.session.commit()
 
@@ -311,7 +311,7 @@ class FlaskTest_Profile(unittest.TestCase):
         # initialise user to perform tests on
         self.setup_data = dict(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password = 'Password1234')
         self.setup_data_client =  ClientModel(EMAIL='JohnSmith12@gmail.com', FIRSTNAME='John', LASTNAME = 'Smith', USERNAME = 'John12', PASSWORD =  Utility.EncryptSHA256('Password1234'),
-         ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '', ABOUT_ME = '')
+         ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '', ABOUT_ME = '', ANONYMOUS = False)
         db.session.add(self.setup_data_client)
         db.session.commit() 
         login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
@@ -331,6 +331,7 @@ class FlaskTest_Profile(unittest.TestCase):
                 test_data_dict_1["firstname"] = users[order[1]][0]["firstname"]
                 test_data_dict_1["lastname"] = users[order[2]][0]["lastname"]
                 test_data_dict_2["username"] = users[order[3]][1]["username"]
+            
                 test_data_dict_1["personal-information-submit"] = ""
                 test_data_dict_2["login-information-submit"] = ""
                 self.client.post(self.PROFILE_URL, data= test_data_dict_1)
@@ -522,17 +523,14 @@ class FlaskTest_Sessions(unittest.TestCase):
         self.setup_data = dict(email='JohnSmith12@gmail.com', firstname='John', lastname = 'Smith', username = 'John12', password = 'Password1234')
         self.setup_data_b = dict(email='SamSmith12@gmail.com', firstname='Sam', lastname = 'Smith', username = 'Sam12', password = 'pasSword14')
         self.setup_data_client =  ClientModel(EMAIL='JohnSmith12@gmail.com', FIRSTNAME='John', LASTNAME = 'Smith', USERNAME = 'John12', PASSWORD =  Utility.EncryptSHA256('Password1234'),
-         ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '', ABOUT_ME = '')
+         ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '', ABOUT_ME = '', ANONYMOUS = False)
         db.session.add(self.setup_data_client)
         self.setup_data_client_b = ClientModel(EMAIL='SamSmith12@gmail.com', FIRSTNAME='Sam', LASTNAME = 'Smith', USERNAME = 'Sam12', PASSWORD = Utility.EncryptSHA256('pasSword14'), 
-         ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '', ABOUT_ME = '')
+         ACTIVE_SESSION = '', ADMIN = 0, PROFILE_PICTURE = '', INSTAGRAM_PAGE = '', TWITTER_PAGE = '', FACEBOOK_PAGE = '', LINKEDIN_PAGE = '', ABOUT_ME = '', ANONYMOUS = False)
         db.session.add(self.setup_data_client_b)
         db.session.commit()
         self.login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
         self.client.post(self.LOGIN_URL + "/", data= self.login_cred)
-
-        # login_cred = dict(email=self.setup_data["email"],password=self.setup_data["password"])
-        # r = self.client.post(self.LOGIN_URL, data= login_cred)
 
     def test_create_session(self):
         with self.client:
@@ -562,7 +560,7 @@ class FlaskTest_Sessions(unittest.TestCase):
         with self.client:
             test_data = {"room" : "room1", "joinsession" : ""}
             response = self.client.post(self.SESSION_URL, data = test_data)
-            assert response.location == None
+            assert response.location == self.SESSION_URL
     
     def test_create_same_session(self):
         with self.client:
@@ -571,7 +569,7 @@ class FlaskTest_Sessions(unittest.TestCase):
             login_cred = dict(email=self.setup_data_b["email"],password=self.setup_data_b["password"])
             self.client.post(self.LOGIN_URL + "/", data= login_cred)
             response = self.client.post(self.SESSION_URL, data = test_data)
-            assert response.location == None
+            assert response.location == self.SESSION_URL
     
     def test_leave_room_event(self):
         with self.client:
