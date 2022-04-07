@@ -183,7 +183,6 @@ function ConstructMessage(username,time,message_id,message,vote_count, time_sinc
     });
 
 
-
     const votingProperty = $('<div/>', {
         "class" : "message-property message-voting"
     });
@@ -316,8 +315,19 @@ function ClientAcknowledgeMessageHistoryCache(packet){
     }
 }
 
-
-
+// function attachflair(flair){
+//     if (flair == "question"){
+//         alert("q")
+//         return "Question"
+//     }else if (flair == "feedback"){
+//         alert("f")
+//         return "Feedback"
+//     }else if (flair == "discussion"){
+//         alert("d")
+//         return "Discussion"
+//     }
+//     return ""
+// }
 
 
 $(document).ready(function(){
@@ -331,6 +341,9 @@ $(document).ready(function(){
     $("#message_input_form").click(function(){
         $("#commenting-status").hide();
     });
+    $('.flair').on('click', function(){
+	$('.flair-options').toggle();
+	});
 
     
 

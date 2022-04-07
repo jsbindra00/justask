@@ -37,12 +37,15 @@
     cursor:text;
 }
 
-
-#widgets,#widgets-wrapper
+#widgets{
+    width: 15%;
+    padding-top: 3px;
+}
+#widgets-wrapper
 {
     display:flex;
     flex-direction: row;
-    width:100%;
+    width: 100%;
 }
 #post
 {
@@ -151,8 +154,8 @@
 #commenting-status{
     display: none;
     color: rgb(129,96,217);
-    width: 100%;
-    float: left;
+    width: 30%;
+    align-self: center;
 }
 
 .message-property.message-voting{
@@ -328,4 +331,31 @@
 #session-clients-wrapper h3{
     font-size: 18px;
     color: rgb(95, 68, 168);
+}
+#sendmessage{
+    margin-left: auto;
+}
+.flair-options{
+    display: none;
+    width: 50%;
+}
+.flair-option{
+    background-color: rgb(95, 68, 168,0.4);
+    color: white;
+    border-radius: 5px;
+    font-size: 10px;
+    padding: 1px 5px;
+    text-align: center;
+    border: none;
+}
+.flair-option:hover{
+    background-color: rgb(95, 68, 168,0.7);
+}
+
+.flair{
+    cursor: pointer;
+}
+.flair:hover{
+    color: rgb(129,96,217);
+    opacity: 0.8;
 }

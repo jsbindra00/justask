@@ -56,7 +56,12 @@ Chat
                 <div id="widgets">
                     <a><i class="fa-solid fa-paperclip fa-lg"></i></a>
                     <a><i class="fa-solid fa-paintbrush fa-lg"></i></a>
-                    <a><i class="fa-solid fa-tags fa-lg"></i></a>                   
+                    <a class="flair"><i class="fa-solid fa-tags fa-lg"></i></a>                   
+                </div>
+                <div class="flair-options">
+                    <button class="flair-option" id="question-flair" onclick="attachflair(question)">Question</button>
+                    <button class="flair-option" id="discussion-flair" onclick="attachflair(discussion)">Discussion</button>
+                    <button class="flair-option" id="feedback-flair" onclick="attachflair(feedback)">Feedback</button>
                 </div>
                 <div id="commenting-status">...replying to post</div>
                 <div id="sendmessage">
