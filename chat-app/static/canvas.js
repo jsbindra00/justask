@@ -113,7 +113,7 @@ $(document).ready(function () {
 
   $(window).resize(function () {AdjustCanvasDimensions();})
   AdjustCanvasDimensions();
-  $('.fa-solid.fa-spray-can.fa-lg').click(DeleteSelectedCanvasObjects)
+
 
   $(".brush").on('click', function(event){ChangeBrush(event);});
 
