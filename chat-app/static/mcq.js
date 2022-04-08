@@ -2,8 +2,8 @@ class poll {
     constructor(){
         this.question = "";
         this.options = [];
-        this.pollCount = 0;
-        this.answersWeight = [0,0,0,0,0,0];
+        this.pollCount = 25;
+        this.answersWeight = [2,10,7,5,6,0];
         this.selectedAnswer = -1;
         this.id = 0;
     }
@@ -38,7 +38,7 @@ function ClientRequestSendPoll(){
     {
         "style" : "cursor : pointer",
         "id"    : "Poll" + newPoll.id,
-        "html"  : "Poll " + (newPoll.id + 1),
+        "html"  : newPoll.question,
         "onclick": "ClientRequestPoll(\"" + newPoll.id + "\")",
     });
     $('#question-list-wrapper').append(pollDiv);
