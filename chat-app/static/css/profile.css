@@ -2,15 +2,14 @@
     display:flex;
     flex-direction: row;
     width:100%;
-    height:100%;
-    object-fit: contain;
+    height: 100%;
+    padding: 30px 60px;
 }
 #profile-picture-master-wrapper{
     width: 40%;
     background-color: rgb(250,250,250);
     display: flex;
     flex-direction: column;
-    padding: 10px 0px 10px 60px;
     height: 100%;
     margin: 0px;
 }
@@ -44,7 +43,7 @@
 }
 #profile-picture-wrapper{
     width: 100%;
-    height: fit-content;
+    height: 100%;
     overflow:hidden;
     border-radius: 30px;
     border-top-right-radius: 0px;
@@ -56,6 +55,7 @@
 
 #profile-picture-wrapper .mainDetails{
     margin-top: 10px;
+    margin-bottom: 10px;
     font-weight: 500;
     color: white;
 }
@@ -69,6 +69,8 @@
 
 #profile-picture-wrapper hr{
     width: 80%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
     border-top: 1px solid rgb(179,160,232);
 }
 
@@ -103,7 +105,6 @@
     flex-direction: row;
     justify-content: center;
     padding:6px;
-    align-items: center;
     margin-top: 20px;
     margin-bottom: -5px;
 
@@ -158,25 +159,23 @@
 
 
 #profile-settings-master-wrapper{
-    width:60%;
+    width:100%;
     background-color: rgb(250,250,250);
 }
 
 #profile-settings-wrapper{
-    width:90%;
+    width:100%;
     background-color: rgb(129 96 217); 
     position:relative;
     overflow:scroll;
     overflow-x: hidden;
     overflow-y: auto; /* scroll only appears whenn necessary */
-    height: 95.9%;
+    height: 100%;
     padding: 20px 30px;
     border-radius: 30px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     align-self: center;
-    margin-top: 10px;
-    margin-bottom: 20px;
 }
 
 
