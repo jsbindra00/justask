@@ -5,10 +5,6 @@
 {% endblock %}
 {% block content_name %}MCQ{% endblock %}
 {% block content %}
-
-
-
-
 <div id="media-wrapper">
     <div id="container-wrapper">
         <div id="question-list-wrapper"> question list</div>
@@ -53,8 +49,8 @@
                             <input type="text" id="answer3" placeholder="Option 4" name="question" required>
                         </div>
                         <button type="submit" id="post" class="btn">Post</button>
-                        <button type="submit" id="add-option" class="btn" onclick="add()">+</button>
-                        <button type="submit" id="delete-option" class="btn" onclick="del()">-</button>
+                        <button type="button" id="add-option" class="btn">+</button>
+                        <button type="button" id="delete-option" class="btn">-</button>
                         <!-- <a href=""><i class="fa-solid fa-pen"></i>whiteboard</a> -->
                         
                     </form>
@@ -65,10 +61,5 @@
 
     </div>
 </div>
-    
-
-
-
-
 <script src="../static/mcq.js"></script>
 {% endblock %}
