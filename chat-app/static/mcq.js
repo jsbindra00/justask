@@ -1,3 +1,7 @@
+
+
+const socket = io.connect("http://127.0.0.1:5000");
+var ACITVE_POLL = false
 class poll {
     constructor(){
         this.question = "";
@@ -6,14 +10,8 @@ class poll {
         this.answersWeight = [2,10,7,5,6,0];
         this.selectedAnswer = -1;
         this.id = 0;
-    }
-    
+    } 
 }
-
-let pollDOM = {
-    question:document.querySelector(".poll .question"),
-    answers:document.querySelector(".poll .answers")
-};
 let pollArray = [];
 
 function ClientRequestSendPoll(){
@@ -23,7 +21,6 @@ function ClientRequestSendPoll(){
     
     let quest = document.getElementById("question_input").value.trim();
     newPoll.question = quest;
-    //pollDOM.question.innerHTML = quest;
 
     let inputForm = document.getElementById("answerDiv").getElementsByTagName("input");
     let len = inputForm.length;
@@ -33,39 +30,15 @@ function ClientRequestSendPoll(){
         option = document.getElementById(id).value.trim();
         newPoll.options.push(option);
     }
-    pollArray.push(newPoll);
-    pollDiv = $('<div>',
-    {
-        "style" : "cursor : pointer",
-        "id"    : "Poll" + newPoll.id,
-        "html"  : newPoll.question,
-        "onclick": "ClientRequestPoll(\"" + newPoll.id + "\")",
-    });
-    $('#question-list-wrapper').append(pollDiv);
-    //window.localStorage.setItem('content', pollDiv[0].outerHTML)
-}
-function ClientRequestPoll(id){
-    id = parseInt(id);
-    
-    for (i = 0;i < pollArray.length; i++){
-        if (pollArray[i].id == id){
-            break;
-        }
+    if (newPoll != null) {
+        socket.emit('REQ_SEND_POLL', {
+            question : newPoll.question,
+            option1 : newPoll.options[0],
+            option2 : newPoll.options[1],
+            option3 : newPoll.options[2],
+            option4 : newPoll.options[3],
+        })
     }
-    let pollData = pollArray[i];
-    pollDOM.question.innerHTML = pollData.question;
-    document.getElementById("poll").style.display = "inline";
-    pollDOM.answers.innerHTML = pollData.options.map(function(answer, i){
-        return (
-        `
-            <div class="answer" id="option${i}" onclick="markAnswer(${pollData.id},${i})">
-                ${answer}
-                <span class="percentage-bar"></span>
-                <span class="percentage-value"></span>
-            </div>
-        `
-    );
-    }).join("");
 }
 function add(){
     var answerDiv = document.getElementById("answerDiv");
@@ -84,6 +57,7 @@ function add(){
         return alert("no more than 6 possible answers");
     }
 }
+
 function del(){
     var answers = document.getElementById("answerDiv").getElementsByTagName("input");
     var len = answers.length
@@ -95,45 +69,142 @@ function del(){
     }
 }
 
-function markAnswer(id,i){
-    for (j = 0;j < pollArray.length; j++){
-        if (pollArray[j].id == id){
-            var pollData = pollArray[j];
-            break;
+function ClientSendPollVote(i, data){
+    socket.emit('REQ_SEND_POLL_VOTE',{
+        mcq_id : data["mcq_id"],
+        index : i
+    });
+}
+function getPoll(id){
+    for (const poll of document.querySelectorAll(".poll")){
+        if (poll.id == id){
+            return poll;
         }
     }
-    pollData.selectedAnswer = +i;
-    var length = document.querySelectorAll(".poll .answers .answer").length
+}
+function ClientAcknowledgePollVote(data){
+    i = data["index"];
+    var current_poll = getPoll(data["mcq_id"])
+    var length = current_poll.querySelectorAll(".answers .answer").length
     try {
-        document.querySelector(".poll .answers. answer.selected").classList.remove("selected"); 
+        current_poll.querySelector(".answers. answer.selected").classList.remove("selected"); 
     } catch(msg){}
-    document.querySelectorAll(".poll .answers .answer")[+i].classList.add("selected");
-    showResults(pollData);
-    pollData.pollCount++;
+    current_poll.querySelectorAll(".answers .answer")[i-1].classList.add("selected");
+    showResults(data, current_poll);
     for(let k = 0; k< length; k++){
-        if (k == i){
+        if (k == (i-1)){
             continue;
         }
-        document.querySelectorAll(".poll .answers .answer")[+k].classList.add("disabledbutton");
+        current_poll.querySelectorAll(".answers .answer")[k].classList.add("disabledbutton");
     }
 }
-
-function showResults(pollData){
-
-    let answers = document.querySelectorAll(".poll .answers .answer");
-    for (let i=0; i<answers.length; i++){
+function showResults(data, current_poll){
+    selectedAnswer = data["index"]
+    let answers = current_poll.querySelectorAll(".answers .answer");
+    for (let i=1; i<=answers.length; i++){
         let percentage = 0;
-        //var id = "option" + i;
-        if(i == pollData.selectedAnswer){
-            percentage = Math.round((pollData.answersWeight[i]+1) * 100 / (pollData.pollCount+1));
-            pollData.answersWeight[i]++;
+        if(i == selectedAnswer){
+            percentage = Math.round((getVote(data,i)) * 100 / (getPollCount(data)));
+
         } else {
-            percentage = Math.round((pollData.answersWeight[i]) * 100/ (pollData.pollCount+1));
+            percentage = Math.round((getVote(data,i)) * 100/ (getPollCount(data)));
         }
-        answers[i].querySelector (".percentage-bar").style.width = percentage + "%";
-        answers[i].querySelector (".percentage-value").innerText = percentage + "%";
+        answers[i-1].querySelector (".percentage-bar").style.width = percentage + "%";
+        answers[i-1].querySelector (".percentage-value").innerText = percentage + "%";
     }
 }
+
+function ClientShowPoll(data){
+    if (ACITVE_POLL == false){
+        $('#' + data["mcq_id"]).show()
+        ACITVE_POLL = true
+    }
+    else{
+        for (const poll of document.querySelectorAll(".poll")){
+            if (poll.id != data["mcq_id"]){
+                $('#' + poll.id).hide()
+            }
+        }
+        $('#' + data["mcq_id"]).show()
+    }
+}
+function createPollDiv(data){
+    var pollDiv = document.createElement("div")
+    pollDiv.classList.add("poll")
+    pollDiv.setAttribute("id", data["mcq_id"])
+    $('#poll-wrapper').append(pollDiv)
+    let questionDiv = createQuestionDiv(data["question"])
+    let answerDiv = createAnswerDiv(data)
+    pollDiv.append(questionDiv, answerDiv)
+    
+   assignMarkAnswer(data)
+}
+function assignMarkAnswer(data){
+    for (let k=1; k <= 4; k++){
+        let answerID = "option" + k + data["mcq_id"];
+        var answerDiv = document.getElementById(answerID);
+        answerDiv.addEventListener("click", function(){
+            ClientSendPollVote(k, data)
+        });
+    }
+
+}
+function createQuestionDiv(question){
+    let div = document.createElement("div");
+    div.classList.add("question");
+    div.innerHTML = question;
+    return div
+}
+
+function createAnswerDiv(data){
+    let answers = document.createElement("div");
+    answers.classList.add("answers")
+
+    var options = [];
+    for (let i=1; i <=4; i++){
+        let entry = "option" + i;
+        options.push(data[entry])
+    }
+    answers.innerHTML = options.map(function(answer, i){
+        return (
+            `
+            <div class="answer" id="option${i+1}${data["mcq_id"]}">
+            ${answer}
+            <span class="percentage-bar"></span>
+            <span class="percentage-value"></span>
+            </div>
+            `
+            );
+        }).join("");
+    return answers
+
+}
+
+function ClientAcknowledgeSendPoll(data){
+    var question_list_div = document.createElement("div");
+    question_list_div.setAttribute("style", "cursor : pointer");
+    question_list_div.innerHTML = data["question"];
+    question_list_div.id = "P" + data["mcq_id"]
+    createPollDiv(data)
+    question_list_div.addEventListener("click", function() {
+        ClientShowPoll(data)
+    })
+    $('#question-list-wrapper').append(question_list_div);
+}
+
+function getVote(data, i){
+    return data["vote"+i];
+}
+
+function getPollCount(data){
+    var pollCount = 0;
+    for (let i = 1 ; i <= 4; i++){
+        pollCount= pollCount + data["vote" + i];
+    }
+    return pollCount;
+}
+
+
 // Get the modal
 var modal = document.getElementById("myModal");
 
@@ -163,8 +234,10 @@ window.onclick = function(event) {
     }
 }
 $(document).ready(function(){
-    //$('#question-list-wrapper').append(window.localStorage.getItem('content'));
     $('#message_input_form').submit(function(e){e.preventDefault(); ClientRequestSendPoll();});
     $('#add-option').click(function(){add();});
     $('#delete-option').click(function(){del();});
+
+    socket.on('ACK_SEND_POLL', ClientAcknowledgeSendPoll)
+    socket.on('ACK_POLL_VOTE', ClientAcknowledgePollVote)
 })

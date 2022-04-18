@@ -6,6 +6,7 @@ from datetime import datetime
 
 
 from Message import MessageModel, PacketAttributes
+from MCQ import MCQModel
 from SharedContext import *
 
 import uuid
@@ -21,6 +22,9 @@ class JustAskSocketServer:
         socketio.on_event("REQ_MESSAGE_VOTE_CHANGE", self.REQ_MESSAGE_VOTE_CHANGE)
         socketio.on_event("REQ_MESSAGE_CACHE_UPDATE", self.REQUEST_MESSAGE_CACHE_UPDATE)
 
+        
+        socketio.on_event("REQ_SEND_POLL", self.REQUEST_SEND_POLL)
+        socketio.on_event("REQ_SEND_POLL_VOTE", self.REQUEST_SEND_POLL_VOTE)
 
     def isAnonymous(self):
         if session["ANONYMOUS"] == True:
@@ -67,3 +71,33 @@ class JustAskSocketServer:
         leave_room(session['ACTIVE_SESSION'])
         socketio.emit('ACK_LEAVE', data, room=session['ACTIVE_SESSION'])
 
+    def REQUEST_SEND_POLL(self, data):
+        data["mcq_id"] = str(uuid.uuid4())
+        data["session_id"] = session["ACTIVE_SESSION"]
+        data["vote1"] = 0
+        data["vote2"] = 0
+        data["vote3"] = 0
+        data["vote4"] = 0
+        data["vote5"] = 0
+        data["vote6"] = 0
+        data["vote_count"] = 0
+
+        db.session.add(MCQModel(mcq_id= data["mcq_id"],room=data["session_id"], question=data["question"], option_1=data["option1"], option_2=data["option2"], option_3=data["option3"],option_4=data["option4"], option_1_vote=data["vote1"], option_2_vote=data["vote2"], option_3_vote=data["vote3"], option_4_vote=data["vote4"] ))
+        db.session.commit()
+        socketio.emit('ACK_SEND_POLL', data)
+    
+    def REQUEST_SEND_POLL_VOTE(self, data):
+        
+        poll = MCQModel.query.filter_by(mcq_id = data["mcq_id"]).first()
+        attr = "option_" + str(data["index"]) + "_vote"
+        setattr(poll, attr, int(getattr(poll, attr)+1))
+
+        db.session.commit()
+
+        new_data = {"index" : data["index"], "mcq_id" : data["mcq_id"]}
+        for i in range(4):
+            new_data["vote" + str(i+1)] = getattr(poll, "option_" + str(i+1) + "_vote")
+        print(new_data)
+        socketio.emit('ACK_POLL_VOTE', new_data)
+
+        

@@ -2,6 +2,7 @@
 
 {% block head %}
 <link rel="stylesheet" href="../static/css/mcq.css">
+<script src="https://cdn.socket.io/3.1.3/socket.io.min.js"></script>
 {% endblock %}
 {% block content_name %}MCQ{% endblock %}
 {% block content %}
@@ -9,9 +10,7 @@
     <div id="container-wrapper">
         <div id="question-list-wrapper"> question list</div>
 
-        <div class="poll" id="poll">
-        <div class="question"></div>
-        <div class="answers"></div>
+        <div id="poll-wrapper">
         </div>
     </div>
     <div id="session-overview-master-wrapper">
