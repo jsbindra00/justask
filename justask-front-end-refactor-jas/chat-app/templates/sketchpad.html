@@ -1,0 +1,71 @@
+
+
+{% extends "hubbase.html" %}
+
+
+{% block head %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.2.0/fabric.all.min.js"></script>
+<link rel="stylesheet" href="../static/css/sketchpad.css">
+
+<script src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous">
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/521/fabric.min.js"
+integrity="sha512-nPzvcIhv7AtvjpNcnbr86eT6zGtiudLiLyVssCWLmvQHgR95VvkLX8mMpqNKWs1TG3Hnf+tvHpnGmpPS3yJIgw=="
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.2.0/fabric.all.min.js">
+</script>
+{% endblock %}
+
+{% block content %}
+
+ <div id="canvas-master-wrapper">
+
+
+        <div id="canvas-wrapper">
+
+            <canvas style="border: 2px solid rgb(129,96,217); " height="485" width="632" id="c"></canvas>
+            <div id="drawing-mode-options">
+               
+            </div>
+        </div>
+
+        <div id="brush-palette">
+
+            <ul id="brushes">
+                <li class="brush">
+                    <i class="fa-solid fa-arrow-pointer fa-lg" id="Pointer"></i>
+                </li>
+                <li class="brush">
+                    <i class="fa-solid fa-paintbrush fa-lg" id="Pencil"></i>
+                </li>
+                <li class="brush" >
+                    <i class="fa-solid fa-circle fa-lg" id="Circle"></i>
+                </li>
+                <li class="brush" >
+                    <i class="fa-solid fa-spray-can fa-lg" id="Spray"></i>
+                </li>
+                <li class="brush not-fabric">
+                    <i class="fa-solid fa-eraser fa-lg not-fabric" id="Eraser"></i>
+                </li>
+
+                <li class="brush-manipulator">
+                    <input class="not-fabric" type="color" value="#005E7A" id="drawing-color">
+                </li>
+                <li id="brush-size-wrapper">
+                    <input id="brush-size-slider" type="range" min="0" max="100" step="5">
+                </li>
+                <script>
+
+                </script>
+
+            </ul>
+        </div>
+        <script src="../static/canvas.js"></script>
+
+    </div>
+
+    {% endblock %}
