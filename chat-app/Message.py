@@ -49,28 +49,19 @@ class MessageModel(db.Model):
         print("SAVED MESSAGES DB TO {}".format(filePath))
 
     def MessageToJSON(self):
-        if self.IS_ANON:
-            return {
-                PacketAttributes.MESSAGE_ID.name : self.message_id,
-                PacketAttributes.MESSAGE_FLAIRS.name : self.message_flairs,
-                PacketAttributes.DATE_SENT.name : self.date_sent,
-                PacketAttributes.NUM_UPVOTES.name: self.num_upvotes,
-                PacketAttributes.PAYLOAD.name : self.payload,
-                PacketAttributes.from_session_id.name : self.from_session_id,
-                PacketAttributes.FROM_USER.name : "Anonymous",
-                PacketAttributes.TIME_SINCE_EPOCH.name : self.time_since_epoch,
-                PacketAttributes.FROM_PARENT_ID.name : self.FROM_PARENT_ID,
-                PacketAttributes.IS_ANON.name : self.IS_ANON
-            }
+        from_user = "Anonymous" if self.IS_ANON else self.from_user
         return {
-                PacketAttributes.MESSAGE_ID.name : self.message_id,
-                PacketAttributes.MESSAGE_FLAIRS.name : self.message_flairs,
-                PacketAttributes.DATE_SENT.name : self.date_sent,
-                PacketAttributes.NUM_UPVOTES.name: self.num_upvotes,
-                PacketAttributes.PAYLOAD.name : self.payload,
-                PacketAttributes.from_session_id.name : self.from_session_id,
-                PacketAttributes.FROM_USER.name : self.from_user,
-                PacketAttributes.TIME_SINCE_EPOCH.name : self.time_since_epoch,
-                PacketAttributes.FROM_PARENT_ID.name : self.FROM_PARENT_ID,
-                PacketAttributes.IS_ANON.name : self.IS_ANON
-            }
+        PacketAttributes.MESSAGE_ID.name : self.message_id,
+        PacketAttributes.MESSAGE_FLAIRS.name : self.message_flairs,
+        PacketAttributes.DATE_SENT.name : self.date_sent,
+        PacketAttributes.NUM_UPVOTES.name: self.num_upvotes,
+        PacketAttributes.PAYLOAD.name : self.payload,
+        PacketAttributes.from_session_id.name : self.from_session_id,
+        PacketAttributes.FROM_USER.name : from_user,
+        PacketAttributes.TIME_SINCE_EPOCH.name : self.time_since_epoch,
+        PacketAttributes.FROM_PARENT_ID.name : self.FROM_PARENT_ID,
+        PacketAttributes.IS_ANON.name : self.IS_ANON
+    }
+
+
+

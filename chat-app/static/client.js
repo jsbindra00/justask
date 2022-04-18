@@ -50,8 +50,18 @@ function ClientRequestJoin(){
 
 function RespondToMessage(message_id){
     CURRENTLY_RESPONDING_TO_MESSAGE_ID = message_id;
-    $("#commenting-status").show();
-    //alert("responding " + CURRENTLY_RESPONDING_TO_MESSAGE_ID);
+    commenting_status = $('#commenting-status');
+
+    if(CURRENTLY_RESPONDING_TO_MESSAGE_ID != "" ){
+        if(!commenting_status.is(":visible")){
+            commenting_status.show()
+        }
+        else commenting_status.hide()
+    }
+    // CURRENTLY_RESPONDING_TO_MESSAGE_ID = ""
+    // if(CUREENTLY_RESPONDING_TO_MESSAGE_ID == "" && commenting_status.css("visibility") == "hidden")
+    // if ($("#commenting-status").css("visibility") == "visibile")
+    // $("#commenting-status").show();
 }
 function ViewMessageFlairs(message_id){
     // alert("view flairs " +  message_id)
@@ -124,16 +134,15 @@ function ClientRequestSendMessage(){
     message_input.focus();
 }
 
-function ConstructMessage(username,time,message_id,message,vote_count, time_since_epoch){
+function ConstructMessage(username,time,message_id,message,vote_count, time_since_epoch, from_parent_id){
 
-    master_wrapper_class = (CURRENTLY_RESPONDING_TO_MESSAGE_ID == ""? "message-wrapper-master" : "message-wrapper-master-child") 
+    master_wrapper_class = (from_parent_id == ""? "message-wrapper-master" : "message-wrapper-master-child") 
     
     const messageNodeWrapper = $('<div/>', {
         "class" : master_wrapper_class,
-        // "class" : "message-wrapper-master",
         "id" : message_id,
         "time_since_epoch" : time_since_epoch,
-        "FROM_PARENT_ID" : CURRENTLY_RESPONDING_TO_MESSAGE_ID
+        "FROM_PARENT_ID" : from_parent_id
     })
 
     const messageNode = $('<div/>',
@@ -225,19 +234,21 @@ function ConstructMessage(username,time,message_id,message,vote_count, time_sinc
 function AppendMessage(message)
 {
     if (CURRENTLY_RESPONDING_TO_MESSAGE_ID != ""){
-        $('#' + CURRENTLY_RESPONDING_TO_MESSAGE_ID).find(".message-response").append(message)
+        $('#' + CURRENTLY_RESPONDING_TO_MESSAGE_ID).find(".message-response").first().append(message)
+        CURRENTLY_RESPONDING_TO_MESSAGE_ID = "";
     } 
-
     else{
         // alert("appending to body")
         $('#messages').append(message);
     } 
     var messageBody = document.querySelector('#messages');
     messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+
+
     // SortMessages(ACTIVE_SORT)
 }
 function ClientAcknowledgeSendMessage(data){
-    messageNodeWrapper = ConstructMessage(data.username, data.time, data.message_id, data.message, data.vote_count, data.time_since_epoch)
+    messageNodeWrapper = ConstructMessage(data.username, data.time, data.message_id, data.message, data.vote_count, data.time_since_epoch, data.FROM_PARENT_ID)
     AppendMessage(messageNodeWrapper)
 }
 function ClientRequestLeave(){
@@ -301,18 +312,34 @@ function SortMessages(predicate){
     ACTIVE_SORT = predicate;
 }
 
+function ConstructMessageHistoryTree(messages_array, current_parent_id){
+    var i = 0;
+    while(i < messages_array.length)
+    {
+        current_msg_json = messages_array[i];
+        if(current_msg_json.FROM_PARENT_ID == current_parent_id)
+        {   
+            RespondToMessage(current_parent_id);
+            msg = ConstructMessage(current_msg_json.FROM_USER, current_msg_json.DATE_SENT, current_msg_json.MESSAGE_ID, current_msg_json.PAYLOAD, current_msg_json.NUM_UPVOTES, current_msg_json.TIME_SINCE_EPOCH, current_msg_json.FROM_PARENT_ID);
+            AppendMessage(msg);
+            messages_array.splice(i, 1);
+            i = i -1;
+            if(i < 0) i = 0;
+            ConstructMessageHistoryTree(messages_array, current_msg_json.MESSAGE_ID);
+            continue;
+        }
+        ++i;
+    }
+}
+
 
 function ClientRequestMessageCacheUpdate(){
     socket.emit("REQ_MESSAGE_CACHE_UPDATE", {from_session_id : roomID})
 
 }
+
 function ClientAcknowledgeMessageHistoryCache(packet){
-    message_history = packet.MESSAGE_HISTORY
-    for(var i = 0; i < message_history.length; ++i){
-        current_msg_json = message_history[i]
-        msg = ConstructMessage(current_msg_json.FROM_USER, current_msg_json.DATE_SENT, current_msg_json.MESSAGE_ID, current_msg_json.PAYLOAD, current_msg_json.NUM_UPVOTES, current_msg_json.TIME_SINCE_EPOCH);
-        AppendMessage(msg)
-    }
+    ConstructMessageHistoryTree(packet.MESSAGE_HISTORY, "");
 }
 
 // function attachflair(flair){
