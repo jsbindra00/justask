@@ -213,6 +213,7 @@
     padding-bottom: 20px;
     background-color: rgb(250, 250, 250);
     bottom:0;
+    margin:5px;
 }
 
 #session-overview-master-wrapper{
@@ -335,11 +336,16 @@
 #sendmessage{
     margin-left: auto;
 }
-.flair-options{
-    display: none;
+#flair-options, .active-message-flairs{
     width: 50%;
+    margin:10px;
+    display:flex;
+    flex-direction: row;
+    list-style-type: none;
+    margin:0;
+    padding:0;
 }
-.flair-option{
+.flair-option-wrapper, .active-message-flair{
     background-color: rgb(95, 68, 168,0.4);
     color: white;
     border-radius: 5px;
@@ -347,8 +353,10 @@
     padding: 1px 5px;
     text-align: center;
     border: none;
+    margin:3px;
+    cursor:pointer;
 }
-.flair-option:hover{
+.flair-option-wrapper:hover, .flair-option-wrapper.chosen{
     background-color: rgb(95, 68, 168,0.7);
 }
 

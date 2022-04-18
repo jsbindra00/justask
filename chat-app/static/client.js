@@ -8,7 +8,6 @@ var ACTIVE_SORT;
 var CURRENTLY_RESPONDING_TO_MESSAGE_ID = "";
 var voted_messages = []
 
-
 function SignOfNumber(num){
     if(num < 0) return -1;
     if (num == 0) return 0;
@@ -58,13 +57,7 @@ function RespondToMessage(message_id){
         }
         else commenting_status.hide()
     }
-    // CURRENTLY_RESPONDING_TO_MESSAGE_ID = ""
-    // if(CUREENTLY_RESPONDING_TO_MESSAGE_ID == "" && commenting_status.css("visibility") == "hidden")
-    // if ($("#commenting-status").css("visibility") == "visibile")
-    // $("#commenting-status").show();
-}
-function ViewMessageFlairs(message_id){
-    // alert("view flairs " +  message_id)
+
 }
 
 
@@ -124,9 +117,17 @@ function ClientRequestSendMessage(){
     let message_input = document.getElementById('chatbar');
     let message = message_input.value.trim();
     if (message.length) {
+        chosen_flair_options = []
+        chosen_flairs = $('.flair-option-wrapper.chosen');
+        for(let i = 0; i < chosen_flairs.length; ++i)
+        {
+            chosen_flair_options[i] = chosen_flairs.get(i).innerText;
+        }
+        
         socket.emit('REQ_SEND_MESSAGE', {
             message: message,
-            FROM_PARENT_ID : CURRENTLY_RESPONDING_TO_MESSAGE_ID
+            FROM_PARENT_ID : CURRENTLY_RESPONDING_TO_MESSAGE_ID,
+            FLAIRS : chosen_flair_options
         })
     }
 
@@ -134,7 +135,7 @@ function ClientRequestSendMessage(){
     message_input.focus();
 }
 
-function ConstructMessage(username,time,message_id,message,vote_count, time_since_epoch, from_parent_id){
+function ConstructMessage(username,time,message_id,message,vote_count, time_since_epoch, from_parent_id, message_flairs){
 
     master_wrapper_class = (from_parent_id == ""? "message-wrapper-master" : "message-wrapper-master-child") 
     
@@ -144,6 +145,7 @@ function ConstructMessage(username,time,message_id,message,vote_count, time_sinc
         "time_since_epoch" : time_since_epoch,
         "FROM_PARENT_ID" : from_parent_id
     })
+
 
     const messageNode = $('<div/>',
      {
@@ -156,6 +158,16 @@ function ConstructMessage(username,time,message_id,message,vote_count, time_sinc
         "class" : "message-header"
     }).append(`<p>${username}</p><p>at</p><p>${time}</p>`);
 
+    const flairOptions = $('<ul/>', {"class" : "active-message-flairs", "style" : "list-style-type:none;"});
+
+    for(let i = 0; i < message_flairs.length; ++i){
+        
+        flairOptions.append($('<li/>', {"class" : "active-message-flair", text: message_flairs[i]}))
+    }
+
+
+    messageHeader.append(flairOptions);
+    
     const messagePayload = $('<div/>',
     {
         "class" : "message-payload"
@@ -248,7 +260,7 @@ function AppendMessage(message)
     // SortMessages(ACTIVE_SORT)
 }
 function ClientAcknowledgeSendMessage(data){
-    messageNodeWrapper = ConstructMessage(data.username, data.time, data.message_id, data.message, data.vote_count, data.time_since_epoch, data.FROM_PARENT_ID)
+    messageNodeWrapper = ConstructMessage(data.username, data.time, data.message_id, data.message, data.vote_count, data.time_since_epoch, data.FROM_PARENT_ID, data.FLAIRS)
     AppendMessage(messageNodeWrapper)
 }
 function ClientRequestLeave(){
@@ -291,6 +303,22 @@ function SortByDescendingDatePredicate(message_a,message_b){
     return SortByDatePredicate(message_a,message_b) * -1;
 }
 
+function ViewFlairs(active_flairs_array, messages_array){
+    function MessageHasFlair(message, flair_name){
+        return true;
+    }
+    for(let i = 0; i < messages_array.length; ++i){
+        current_msg = messages_array[i];
+        for(let j = 0; j < active_flairs_array.length; ++j)
+        {
+            if(MessageHasFlair(current_msg, active_flairs_array[j]))
+            {
+                // append this message to body; it's visible.
+                
+            }
+        }
+    }
+}
 function SortMessages(predicate){
 
 
@@ -307,8 +335,6 @@ function SortMessages(predicate){
         parent.appendChild(to_sort[i]);
     }
 
-    
-
     ACTIVE_SORT = predicate;
 }
 
@@ -320,7 +346,7 @@ function ConstructMessageHistoryTree(messages_array, current_parent_id){
         if(current_msg_json.FROM_PARENT_ID == current_parent_id)
         {   
             RespondToMessage(current_parent_id);
-            msg = ConstructMessage(current_msg_json.FROM_USER, current_msg_json.DATE_SENT, current_msg_json.MESSAGE_ID, current_msg_json.PAYLOAD, current_msg_json.NUM_UPVOTES, current_msg_json.TIME_SINCE_EPOCH, current_msg_json.FROM_PARENT_ID);
+            msg = ConstructMessage(current_msg_json.FROM_USER, current_msg_json.DATE_SENT, current_msg_json.MESSAGE_ID, current_msg_json.PAYLOAD, current_msg_json.NUM_UPVOTES, current_msg_json.TIME_SINCE_EPOCH, current_msg_json.FROM_PARENT_ID, current_msg_json.FLAIRS);
             AppendMessage(msg);
             messages_array.splice(i, 1);
             i = i -1;
@@ -342,21 +368,12 @@ function ClientAcknowledgeMessageHistoryCache(packet){
     ConstructMessageHistoryTree(packet.MESSAGE_HISTORY, "");
 }
 
-// function attachflair(flair){
-//     if (flair == "question"){
-//         alert("q")
-//         return "Question"
-//     }else if (flair == "feedback"){
-//         alert("f")
-//         return "Feedback"
-//     }else if (flair == "discussion"){
-//         alert("d")
-//         return "Discussion"
-//     }
-//     return ""
-// }
 
+function ActivateFlair(event_info){
+    clicked_flair = $("#" + event_info.currentTarget.id)
+    clicked_flair.toggleClass("chosen");
 
+}
 $(document).ready(function(){
     $('#message_input_form').submit(function(e){e.preventDefault(); ClientRequestSendMessage();});
     $('#leave-session').click(ClientRequestLeave);
@@ -368,9 +385,10 @@ $(document).ready(function(){
     $("#message_input_form").click(function(){
         $("#commenting-status").hide();
     });
-    $('.flair').on('click', function(){
-	$('.flair-options').toggle();
-	});
+    $('.flair-option-wrapper').click(function(event){ActivateFlair(event);})
+    // $('.flair').on('click', function(){
+	// $('.flair-options').toggle();
+	// });
 
     
 

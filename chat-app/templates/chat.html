@@ -51,6 +51,18 @@ Chat
         </div>
 
         <div id="text-area-wrapper">
+            <ul id="flair-options">
+                <li class="flair-option-wrapper" id="question-flair">
+                    <a class="flair-option" >Question</a>
+                </li>
+                <li class="flair-option-wrapper" id="discussion-flair">
+                    <a class="flair-option" >Discussion</a>
+                </li>
+                <li class="flair-option-wrapper" id="feedback-flair">
+                    <a class="flair-option" >Feedback</a>
+                </li>
+            </ul>
+ 
             <textarea class="text-widget" id="chatbar" placeholder="Type a new message"> </textarea>
             <div id="widgets-wrapper" class="text-widget">
                 <div id="widgets">
@@ -58,11 +70,7 @@ Chat
                     <a><i class="fa-solid fa-paintbrush fa-lg"></i></a>
                     <a class="flair"><i class="fa-solid fa-tags fa-lg"></i></a>                   
                 </div>
-                <div class="flair-options">
-                    <button class="flair-option" id="question-flair" onclick="attachflair(question)">Question</button>
-                    <button class="flair-option" id="discussion-flair" onclick="attachflair(discussion)">Discussion</button>
-                    <button class="flair-option" id="feedback-flair" onclick="attachflair(feedback)">Feedback</button>
-                </div>
+
                 <div id="commenting-status">...replying to post</div>
                 <div id="sendmessage">
                     <form id="message_input_form" class="form-container" action="">

@@ -43,8 +43,9 @@ class JustAskSocketServer:
         data["session_id"] = session["ACTIVE_SESSION"]
         data["vote_count"] = 0
         data["time_since_epoch"] = time.time()
+        message_flairs =";".join(data["FLAIRS"]) 
         
-        db.session.add(MessageModel(message_id = data["message_id"], message_flairs="flairs", date_sent = data["time"], num_upvotes=0,payload=data["message"], from_session_id=session["ACTIVE_SESSION"], from_user = session["USERNAME"],time_since_epoch = data["time_since_epoch"],FROM_PARENT_ID = data["FROM_PARENT_ID"], IS_ANON = session["ANONYMOUS"]))
+        db.session.add(MessageModel(message_id = data["message_id"], FLAIRS=message_flairs, date_sent = data["time"], num_upvotes=0,payload=data["message"], from_session_id=session["ACTIVE_SESSION"], from_user = session["USERNAME"],time_since_epoch = data["time_since_epoch"],FROM_PARENT_ID = data["FROM_PARENT_ID"], IS_ANON = session["ANONYMOUS"]))
         db.session.commit()
         socketio.emit('ACK_SEND_MESSAGE',data, to=session['ACTIVE_SESSION'])
 
