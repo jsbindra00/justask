@@ -182,6 +182,7 @@ function createAnswerDiv(data){
 
 function ClientAcknowledgeSendPoll(data){
     var question_list_div = document.createElement("div");
+    question_list_div.className = "question-list";
     question_list_div.setAttribute("style", "cursor : pointer");
     question_list_div.innerHTML = data["question"];
     question_list_div.id = "P" + data["mcq_id"]
