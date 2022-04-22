@@ -247,11 +247,12 @@
     border-bottom: 2px solid rgb(256,256,256,0.5);
 }
 #sorting{
-    display: inline-block;
+    display: flex;
     position: relative;
     margin-bottom: 10px;
+    justify-content: space-between;
 }
-#sort-chat{
+.sortbuttons{
     display: inline-block;
     cursor: pointer;
     background-color: rgb(129,96,217,0.6);
@@ -261,13 +262,14 @@
     padding: 5px 10px;
     text-align: center;
     width: 100px;
+    font-weight: bold;
 }
-.sorters{
+.sorters, .filters{
     display: none;
     cursor: pointer;
     color: white;
 }
-.sorters a{
+.sorters a, .filters a{
     background-color: rgb(129,96,217);
     font-size: 14px;
     padding: 9.2px 30px;
@@ -277,20 +279,18 @@
     border-bottom-right-radius: 20px;
     margin-left: -20px;
 }
-#newest{
-    border-top-left-radius: -20px;
-    border-bottom-left-radius: -20px;
-}
-#sorting:hover #sort-chat{
+
+#sort-wrapper:hover #sort-chat, #filter-wrapper:hover #filter-chat{
     background-color: rgb(129,96,217);
 }
 
-#sorting:hover .sorters{
+#sort-wrapper:hover .sorters,  #filter-wrapper:hover .filters{
     display: inline-block;
 }
-.sorters a:hover{
+.sorters a:hover, .filters a:hover{
     background-color: rgb(129,96,217,0.6);
 }
+
 #leave-session-wrapper{
     bottom: 0px;
     width:100%;
@@ -338,12 +338,16 @@
 }
 #flair-options, .active-message-flairs{
     width: 50%;
-    margin:10px;
-    display:flex;
+    display: flex;
     flex-direction: row;
     list-style-type: none;
-    margin:0;
-    padding:0;
+    margin-left: auto;
+    margin-bottom: 0;
+    padding: 0;
+    justify-content: flex-end;
+}
+#flair-options{
+    margin-bottom: 4px;
 }
 .flair-option-wrapper, .active-message-flair{
     background-color: rgb(95, 68, 168,0.4);
