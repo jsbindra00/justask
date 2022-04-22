@@ -15,8 +15,8 @@
     background:#fff; 
     border-radius:10px;
     box-shadow: Opx Opx 20px 5px rgba(35, 3);
-    display: none;
     border: 1px solid rgb(129,96,217,0.3);
+    display: none;
 }
 .poll .question {
     padding:20px;
@@ -259,6 +259,10 @@
     margin-top:-30px;
     font-weight: 600;
     color: white;
+}
+#session-clients{
+    color:rgb(95, 68, 168);
+    font-size: 10px;
 }
 
 #session-ID-wrapper{

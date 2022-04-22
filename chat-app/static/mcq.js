@@ -14,6 +14,26 @@ class poll {
 }
 let pollArray = [];
 
+function ClientRequestJoinMCQ(){
+    socket.emit('REQ_JOIN',{
+        username: "{{ username }}",
+        room: "{{ room }}"
+    })
+}
+
+function ClientAcknowledgeJoinMCQ(data){
+    $('#session-clients').append(`<div class="session-client">${data.username}</div>`)
+    roomID = data.ACTIVE_SESSION
+    ClientRequestPollCache()
+}
+function ClientRequestPollCache(){
+    socket.emit('REQ_POLL_CACHE', {
+        room: roomID
+    })
+}
+function ClientAcknowledgePollCache(data){
+    console.log(data)
+}
 function ClientRequestSendPoll(){
     
     const newPoll = new poll();
@@ -233,11 +253,16 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
 $(document).ready(function(){
     $('#message_input_form').submit(function(e){e.preventDefault(); ClientRequestSendPoll();});
     $('#add-option').click(function(){add();});
     $('#delete-option').click(function(){del();});
 
+    
+    socket.on('connect', ClientRequestJoinMCQ)
     socket.on('ACK_SEND_POLL', ClientAcknowledgeSendPoll)
     socket.on('ACK_POLL_VOTE', ClientAcknowledgePollVote)
+    socket.on('ACK_JOIN', function(data){ClientAcknowledgeJoinMCQ(data)})
+    socket.on('ACK_POLL_CACHE_UPDATE', function(data){ClientAcknowledgePollCache(data)})
 })

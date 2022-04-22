@@ -15,7 +15,8 @@ class MessagePacket(IntEnum):
     OPTION_2_VOTE = 7
     OPTION_3_VOTE = 8
     OPTION_4_VOTE = 9
-    ROOM = 10
+    room = 10
+    POLL_HISTORY = 11
 
 
 class MCQModel(db.Model):
@@ -42,6 +43,22 @@ class MCQModel(db.Model):
         # pull all clients.
         ModelBase.ProcessDatabase(MCQModel.query.all(), filePath)
         print("SAVED MCQ DB TO {}".format(filePath))
+
+    def PollToJSON(self):
+     return {
+        MessagePacket.MCQ_ID.name : self.mcq_id,
+        MessagePacket.QUESTION.name : self.question,
+        MessagePacket.OPTION_1.name : self.option_1,
+        MessagePacket.OPTION_2.name: self.option_2,
+        MessagePacket.OPTION_3.name : self.option_3,
+        MessagePacket.room.name : self.room,
+        MessagePacket.OPTION_4.name : self.option_4,
+        MessagePacket.OPTION_1_VOTE.name : self.option_1_vote,
+        MessagePacket.OPTION_2_VOTE.name : self.option_2_vote,
+        MessagePacket.OPTION_3_VOTE.name : self.option_3_vote,
+        MessagePacket.OPTION_4_VOTE.name : self.option_4_vote,
+    }
+    
 
 
 

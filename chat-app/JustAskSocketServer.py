@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 from Message import MessageModel, PacketAttributes
-from MCQ import MCQModel
+from MCQ import MCQModel, MessagePacket
 from SharedContext import *
 
 import uuid
@@ -25,11 +25,16 @@ class JustAskSocketServer:
         
         socketio.on_event("REQ_SEND_POLL", self.REQUEST_SEND_POLL)
         socketio.on_event("REQ_SEND_POLL_VOTE", self.REQUEST_SEND_POLL_VOTE)
+        socketio.on_event('REQ_POLL_CACHE', self.REQUEST_POLL_CACHE)
 
     def isAnonymous(self):
         if session["ANONYMOUS"] == True:
             return "Anon"
         return  session["USERNAME"]
+    
+    def REQUEST_POLL_CACHE(self, data):
+        poll_history = {MessagePacket.POLL_HISTORY.name : [poll.PollToJSON() for poll in MCQModel.query.filter_by(**{MessagePacket.room.name:data[MessagePacket.room.name]}).all()]}
+        socketio.emit("ACK_POLL_CACHE_UPDATE", poll_history)
 
     def REQUEST_MESSAGE_CACHE_UPDATE(self, data):
         message_history = {PacketAttributes.MESSAGE_HISTORY.name : [message.MessageToJSON() for message in MessageModel.query.filter_by(**{PacketAttributes.from_session_id.name:data[PacketAttributes.from_session_id.name]}).all()]}
@@ -60,6 +65,12 @@ class JustAskSocketServer:
         db.session.commit()
         socketio.emit("ACK_VOTE_CHANGE", {"message_id" : data["message_id"], "vote_amount" : data["vote_amount"]}, to=data["session_id"])
 
+    # def REQUEST_JOIN_MCQ(self, data):
+    #     join_room(session['ACTIVE_SESSION'])
+    #     data["session_id"] = session["ACTIVE_SESSION"]
+    #     data["username"] = self.isAnonymous()
+    
+    #     socketio.emit('ACK_JOIN_MCQ', data, room=data["session_id"], username=data["username"])
 
     def REQUEST_JOIN(self,data):
         join_room(session['ACTIVE_SESSION'])
@@ -100,5 +111,6 @@ class JustAskSocketServer:
             new_data["vote" + str(i+1)] = getattr(poll, "option_" + str(i+1) + "_vote")
         print(new_data)
         socketio.emit('ACK_POLL_VOTE', new_data)
+
 
         
