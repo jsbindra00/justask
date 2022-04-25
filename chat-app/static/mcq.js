@@ -20,6 +20,19 @@ function ClientRequestPollCache(){
         room: roomID
     })
 }
+function ClientAcknowledgePollCache(data){
+    var poll_history = data.poll_history
+    for (let polls of data.poll_history){
+        if (hasUserVoted(poll_history, polls["mcq_id"], data["username"])[0]){
+            polls["index"] = hasUserVoted(poll_history, polls["mcq_id"], data["username"])[1]
+            ClientAcknowledgeSendPoll(polls)
+            ClientAcknowledgePollVote(polls)
+        }
+        else{
+            ClientAcknowledgeSendPoll(polls)
+        }
+    }
+}
 function hasUserVoted(poll_history, mcq_id, user){
     for (let polls of poll_history){
         if(polls["from_user"] == user && polls["mcq_id"] == mcq_id){
@@ -34,19 +47,6 @@ function hasUserVoted(poll_history, mcq_id, user){
     return [false, 0]
 
 }
-function ClientAcknowledgePollCache(data){
-    var poll_history = data.poll_history
-    for (let polls of data.poll_history){
-        if (hasUserVoted(poll_history, polls["mcq_id"], data["username"])[0]){
-            polls["index"] = hasUserVoted(poll_history, polls["mcq_id"], data["username"])[1]
-            ClientAcknowledgeSendPoll(polls)
-            ClientAcknowledgePollVote(polls)
-        }
-        else{
-            ClientAcknowledgeSendPoll(polls)
-        }
-    }
-}
 function ClientRequestSendPoll(){
     
     let quest = document.getElementById("question_input").value.trim();
@@ -59,7 +59,7 @@ function ClientRequestSendPoll(){
         option = document.getElementById(id).value.trim();
         options.push(option);
     }
-    if (newPoll != null) {
+    if (options != null) {
         socket.emit('REQ_SEND_POLL', {
             question : quest,
             option_1 : options[0],
@@ -67,34 +67,6 @@ function ClientRequestSendPoll(){
             option_3 : options[2],
             option_4 : options[3],
         })
-    }
-}
-function add(){
-    var answerDiv = document.getElementById("answerDiv");
-    let len = answerDiv.getElementsByTagName("input").length;
-    let newEntry = document.createElement("input");
-    id = "answer" + len;
-    placeholder = "Option " + (len +1);
-    newEntry.setAttribute("id", id);
-    newEntry.setAttribute("placeholder", placeholder);
-    newEntry.required = true;
-    newEntry.classList.add("answerDiv");
-    if (len < 6){
-        return(answerDiv.append(newEntry));
-    }
-    else{
-        return alert("no more than 6 possible answers");
-    }
-}
-
-function del(){
-    var answers = document.getElementById("answerDiv").getElementsByTagName("input");
-    var len = answers.length
-    if (len > 1){
-        return(answers[len-1].remove()); 
-    }
-    else{
-        return alert("One option required");
     }
 }
 
@@ -130,13 +102,13 @@ function ClientAcknowledgePollVote(data){
 }
 function showResults(data, current_poll){
     selectedAnswer = data["index"]
-
+    
     let answers = current_poll.querySelectorAll(".answers .answer");
     for (let i=1; i<=answers.length; i++){
         let percentage = 0;
         if(i == selectedAnswer){
             percentage = Math.round((getVote(data,i)) * 100 / (getPollCount(data)));
-
+            
         } else {
             percentage = Math.round((getVote(data,i)) * 100/ (getPollCount(data)));
         }
@@ -168,7 +140,7 @@ function createPollDiv(data){
     let answerDiv = createAnswerDiv(data)
     pollDiv.append(questionDiv, answerDiv)
     
-   assignMarkAnswer(data)
+    assignMarkAnswer(data)
 }
 function assignMarkAnswer(data){
     for (let k=1; k <= 4; k++){
@@ -178,7 +150,7 @@ function assignMarkAnswer(data){
             ClientSendPollVote(k, data)
         });
     }
-
+    
 }
 function createQuestionDiv(question){
     let div = document.createElement("div");
@@ -206,54 +178,81 @@ function createAnswerDiv(data){
             `
             );
         }).join("");
-    return answers
-}
-
-function ClientAcknowledgeSendPoll(data){
-    var question_list_div = document.createElement("div");
-    question_list_div.className = "question-list";
-    question_list_div.setAttribute("style", "cursor : pointer");
-    question_list_div.innerHTML = data["question"];
-    question_list_div.id = "P" + data["mcq_id"]
-    createPollDiv(data)
-    question_list_div.addEventListener("click", function() {
-        ClientShowPoll(data)
-    })
-    $('#question-list-wrapper').append(question_list_div);
-}
-
-function getVote(data, i){
-    return data["option_" + i +"_vote"];
-}
-
-function getPollCount(data){
-    var pollCount = 0;
-    for (let i = 1 ; i <= 4; i++){
-        pollCount= pollCount + data["option_" + i + "_vote"];
+        return answers
     }
-    return pollCount;
+    
+    function ClientAcknowledgeSendPoll(data){
+        const question_list_div = $('<div>',{
+            "class" : "question-list",
+            "stlye" : "cursor : pointer",
+            "id"    : "P" + data["mcq_id"]
+        }).append(`${data["question"]}`)
+        createPollDiv(data)
+        question_list_div.on("click", function() {
+            ClientShowPoll(data)
+        })
+        $('#question-list-wrapper').append(question_list_div);
+    }
+    
+    function getVote(data, i){
+        return data["option_" + i +"_vote"];
+    }
+    
+    function getPollCount(data){
+        var pollCount = 0;
+        for (let i = 1 ; i <= 4; i++){
+            pollCount= pollCount + data["option_" + i + "_vote"];
+        }
+        return pollCount;
+    }
+function add(){
+    var answerDiv = document.getElementById("answerDiv");
+    let len = answerDiv.getElementsByTagName("input").length;
+    let newEntry = document.createElement("input");
+    id = "answer" + len;
+    placeholder = "Option " + (len +1);
+    newEntry.setAttribute("id", id);
+    newEntry.setAttribute("placeholder", placeholder);
+    newEntry.required = true;
+    newEntry.classList.add("answerDiv");
+    if (len < 6){
+        return(answerDiv.append(newEntry));
+    }
+    else{
+        return alert("no more than 6 possible answers");
+    }
 }
 
-
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-modal.style.display = "block";
+function del(){
+    var answers = document.getElementById("answerDiv").getElementsByTagName("input");
+    var len = answers.length
+    if (len > 1){
+        return(answers[len-1].remove()); 
+    }
+    else{
+        return alert("One option required");
+    }
 }
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-modal.style.display = "none";
-}
-// When the user posts question, close the modal
+    
+    // Get the modal
+    var modal = document.getElementById("myModal");
+    
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+    
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+    
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    // When the user posts question, close the modal
 post.onclick  = function() {
 modal.style.display = "none";
 }

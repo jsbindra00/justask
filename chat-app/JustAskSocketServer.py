@@ -47,13 +47,11 @@ class JustAskSocketServer:
         data["vote2"] = 0
         data["vote3"] = 0
         data["vote4"] = 0
-        data["vote5"] = 0
-        data["vote6"] = 0
-        data["vote_count"] = 0
+        #data["vote_count"] = 0
 
         active_clients = [client.USERNAME for client in ClientModel.query.filter_by(ACTIVE_SESSION=data["session_id"]).all()]
         for active_user in active_clients:
-            db.session.add(MCQModel(mcq_id= data["mcq_id"],from_user=active_user,room=data["session_id"], question=data["question"], option_1=data["option1"], option_2=data["option2"], option_3=data["option3"],option_4=data["option4"], option_1_vote=data["vote1"], option_2_vote=data["vote2"], option_3_vote=data["vote3"], option_4_vote=data["vote4"] ))
+            db.session.add(MCQModel(mcq_id= data["mcq_id"],from_user=active_user,room=data["session_id"], question=data["question"], option_1=data["option_1"], option_2=data["option_2"], option_3=data["option_3"],option_4=data["option_4"], option_1_vote=data["vote1"], option_2_vote=data["vote2"], option_3_vote=data["vote3"], option_4_vote=data["vote4"] ))
         db.session.commit()
         socketio.emit('ACK_SEND_POLL', data)
     

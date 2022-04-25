@@ -15,9 +15,9 @@ class MessagePacket(IntEnum):
     option_2_vote = 7
     option_3_vote = 8
     option_4_vote = 9
-    room = 10
-    poll_history = 11
-    from_user = 12
+    room = 12
+    poll_history = 13
+    from_user = 14
 
 
 
@@ -30,7 +30,8 @@ class MCQModel(db.Model):
     option_1 = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
     option_2 = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
     option_3 = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
-    option_4 = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)
+    option_4 = db.Column(db.String(120), unique=False, nullable=False, primary_key=False)    
+    
     option_1_vote = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
     option_2_vote = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
     option_3_vote = db.Column(db.Integer, unique=False, nullable=False, primary_key=False)
@@ -55,12 +56,12 @@ class MCQModel(db.Model):
         MessagePacket.option_1.name : self.option_1,
         MessagePacket.option_2.name: self.option_2,
         MessagePacket.option_3.name : self.option_3,
-        MessagePacket.room.name : self.room,
         MessagePacket.option_4.name : self.option_4,
         MessagePacket.option_1_vote.name : self.option_1_vote,
         MessagePacket.option_2_vote.name : self.option_2_vote,
         MessagePacket.option_3_vote.name : self.option_3_vote,
         MessagePacket.option_4_vote.name : self.option_4_vote,
+        MessagePacket.room.name : self.room,
     }
     
 
