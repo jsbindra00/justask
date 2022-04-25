@@ -2,17 +2,6 @@
 
 const socket = io.connect("http://127.0.0.1:5000");
 var ACITVE_POLL = false
-class poll {
-    constructor(){
-        this.question = "";
-        this.options = [];
-        this.pollCount = 25;
-        this.answersWeight = [2,10,7,5,6,0];
-        this.selectedAnswer = -1;
-        this.id = 0;
-    } 
-}
-let pollArray = [];
 
 function ClientRequestJoinMCQ(){
     socket.emit('REQ_JOIN',{
@@ -60,27 +49,23 @@ function ClientAcknowledgePollCache(data){
 }
 function ClientRequestSendPoll(){
     
-    const newPoll = new poll();
-    newPoll.id = pollArray.length;
-    
     let quest = document.getElementById("question_input").value.trim();
-    newPoll.question = quest;
 
     let inputForm = document.getElementById("answerDiv").getElementsByTagName("input");
     let len = inputForm.length;
-
+    var options =[]
     for(let j = 0; j < len; j++){
         var id = "answer" + j;
         option = document.getElementById(id).value.trim();
-        newPoll.options.push(option);
+        options.push(option);
     }
     if (newPoll != null) {
         socket.emit('REQ_SEND_POLL', {
-            question : newPoll.question,
-            option_1 : newPoll.options[0],
-            option_2 : newPoll.options[1],
-            option_3 : newPoll.options[2],
-            option_4 : newPoll.options[3],
+            question : quest,
+            option_1 : options[0],
+            option_2 : options[1],
+            option_3 : options[2],
+            option_4 : options[3],
         })
     }
 }
@@ -137,6 +122,7 @@ function ClientAcknowledgePollVote(data){
     showResults(data, current_poll);
     for(let k = 0; k< length; k++){
         if (k == (i-1)){
+            current_poll.querySelectorAll(".answers .answer")[k].classList.add("disabledbutton2");
             continue;
         }
         current_poll.querySelectorAll(".answers .answer")[k].classList.add("disabledbutton");

@@ -51,6 +51,9 @@
     pointer-events: none;
     opacity: 0.4;
 }
+.poll .answers .answer.disabledbutton2 {
+    pointer-events: none;
+}
 .poll .answers .answer span.percentage-value {
     position:absolute;
     top:50%;
