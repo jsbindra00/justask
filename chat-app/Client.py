@@ -44,7 +44,6 @@ class ClientModel(db.Model, ModelBase):
     def __init__(self, **kwargs):
         super(ClientModel, self).__init__(**kwargs)
 
-    
     def SaveDatabase(filePath):
         # pull all clients.
         ModelBase.ProcessDatabase(ClientModel.query.all(), filePath)

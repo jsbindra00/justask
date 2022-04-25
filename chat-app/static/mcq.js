@@ -31,8 +31,32 @@ function ClientRequestPollCache(){
         room: roomID
     })
 }
+function hasUserVoted(poll_history, mcq_id, user){
+    for (let polls of poll_history){
+        if(polls["from_user"] == user && polls["mcq_id"] == mcq_id){
+            for (var i = 1; i <=4; i++){
+                if (polls["option_" + i + "_vote"] >0){
+                    break
+                }
+            }
+            return [true, i]
+        }
+    }
+    return [false, 0]
+
+}
 function ClientAcknowledgePollCache(data){
-    console.log(data)
+    var poll_history = data.poll_history
+    for (let polls of data.poll_history){
+        if (hasUserVoted(poll_history, polls["mcq_id"], data["username"])[0]){
+            polls["index"] = hasUserVoted(poll_history, polls["mcq_id"], data["username"])[1]
+            ClientAcknowledgeSendPoll(polls)
+            ClientAcknowledgePollVote(polls)
+        }
+        else{
+            ClientAcknowledgeSendPoll(polls)
+        }
+    }
 }
 function ClientRequestSendPoll(){
     
@@ -53,10 +77,10 @@ function ClientRequestSendPoll(){
     if (newPoll != null) {
         socket.emit('REQ_SEND_POLL', {
             question : newPoll.question,
-            option1 : newPoll.options[0],
-            option2 : newPoll.options[1],
-            option3 : newPoll.options[2],
-            option4 : newPoll.options[3],
+            option_1 : newPoll.options[0],
+            option_2 : newPoll.options[1],
+            option_3 : newPoll.options[2],
+            option_4 : newPoll.options[3],
         })
     }
 }
@@ -103,7 +127,7 @@ function getPoll(id){
     }
 }
 function ClientAcknowledgePollVote(data){
-    i = data["index"];
+    var i = data["index"];
     var current_poll = getPoll(data["mcq_id"])
     var length = current_poll.querySelectorAll(".answers .answer").length
     try {
@@ -120,6 +144,7 @@ function ClientAcknowledgePollVote(data){
 }
 function showResults(data, current_poll){
     selectedAnswer = data["index"]
+
     let answers = current_poll.querySelectorAll(".answers .answer");
     for (let i=1; i<=answers.length; i++){
         let percentage = 0;
@@ -179,10 +204,9 @@ function createQuestionDiv(question){
 function createAnswerDiv(data){
     let answers = document.createElement("div");
     answers.classList.add("answers")
-
     var options = [];
     for (let i=1; i <=4; i++){
-        let entry = "option" + i;
+        let entry = "option_" + i;
         options.push(data[entry])
     }
     answers.innerHTML = options.map(function(answer, i){
@@ -197,7 +221,6 @@ function createAnswerDiv(data){
             );
         }).join("");
     return answers
-
 }
 
 function ClientAcknowledgeSendPoll(data){
@@ -214,13 +237,13 @@ function ClientAcknowledgeSendPoll(data){
 }
 
 function getVote(data, i){
-    return data["vote"+i];
+    return data["option_" + i +"_vote"];
 }
 
 function getPollCount(data){
     var pollCount = 0;
     for (let i = 1 ; i <= 4; i++){
-        pollCount= pollCount + data["vote" + i];
+        pollCount= pollCount + data["option_" + i + "_vote"];
     }
     return pollCount;
 }
