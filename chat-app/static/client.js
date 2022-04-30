@@ -8,6 +8,9 @@ var ACTIVE_SORT;
 var CURRENTLY_RESPONDING_TO_MESSAGE_ID = "";
 var voted_messages = []
 
+
+var CURRENT_FILTERING_BY_FLAIR = "";
+
 function SignOfNumber(num){
     if(num < 0) return -1;
     if (num == 0) return 0;
@@ -108,7 +111,7 @@ function ClientAcknowledgeJoin(data){
     }
     $('#session-clients').append(`<div class="session-client">${data.username}</div>`)
     roomID = data.ACTIVE_SESSION;
-    ClientRequestMessageCacheUpdate()
+    ClientRequestMessageCacheUpdate("")
 
 }
 
@@ -303,25 +306,11 @@ function SortByDescendingDatePredicate(message_a,message_b){
     return SortByDatePredicate(message_a,message_b) * -1;
 }
 
-function ViewFlairs(active_flairs_array, messages_array){
-    function MessageHasFlair(message, flair_name){
-        return true;
-    }
-    for(let i = 0; i < messages_array.length; ++i){
-        current_msg = messages_array[i];
-        for(let j = 0; j < active_flairs_array.length; ++j)
-        {
-            if(MessageHasFlair(current_msg, active_flairs_array[j]))
-            {
-                // append this message to body; it's visible.
-                
-            }
-        }
-    }
-}
+
+
 function SortMessages(predicate){
 
-
+    
     // only get the first parents as we want 
     var to_sort = document.getElementsByClassName('message-wrapper-master')
     to_sort = Array.prototype.slice.call(to_sort, 0);
@@ -337,6 +326,9 @@ function SortMessages(predicate){
 
     ACTIVE_SORT = predicate;
 }
+
+
+
 
 function ConstructMessageHistoryTree(messages_array, current_parent_id){
     var i = 0;
@@ -359,15 +351,74 @@ function ConstructMessageHistoryTree(messages_array, current_parent_id){
 }
 
 
-function ClientRequestMessageCacheUpdate(){
-    socket.emit("REQ_MESSAGE_CACHE_UPDATE", {from_session_id : roomID})
+function ClientRequestMessageCacheUpdate(SENT_FROM_EVENT){
+    socket.emit("REQ_MESSAGE_CACHE_UPDATE", {from_session_id : roomID, SENT_FROM_EVENT : SENT_FROM_EVENT})
 
 }
 
 function ClientAcknowledgeMessageHistoryCache(packet){
+    var parent = $('#messages')
+    parent.empty();
+
     ConstructMessageHistoryTree(packet.MESSAGE_HISTORY, "");
+    if (packet.SENT_FROM_EVENT == "VIEW_FLAIRS"){
+        ClientAcknowledgeViewFlairs()
+    }
+
 }
 
+
+
+
+
+
+function ClientRequestViewFlairs(){
+    ClientRequestMessageCacheUpdate("VIEW_FLAIRS")
+}
+
+function ClientAcknowledgeViewFlairs(){
+    
+    var message_parents = $('.message-wrapper-master');
+
+    filtered_messages = []
+    
+    for(var i = 0; i < message_parents.length; ++i){
+        current_message = $(message_parents.get(i))
+        all_children = current_message.find("*");
+        active_message_flairs = $(all_children.closest('.active-message-flairs').get(0));
+
+        for(var j =0; j < active_message_flairs.length; ++j)
+        {
+            active_message_flair_text = active_message_flairs.get(j).innerText
+            if (active_message_flair_text.toLowerCase() == CURRENT_FILTERING_BY_FLAIR.toLowerCase()){
+                filtered_messages.push(current_message)
+                break;
+            }
+
+        }
+
+    }
+
+
+    
+    var parent = $('#messages')
+    parent.empty();
+
+    for(var i = 0, l = filtered_messages.length; i < l; i++) {
+        parent.append(filtered_messages[i]);
+    }
+}
+
+
+function SetActiveFilterByFlair(flair_name){
+    if (CURRENT_FILTERING_BY_FLAIR == flair_name){
+        CURRENT_FILTERING_BY_FLAIR = "";
+        ClientRequestMessageCacheUpdate()
+        return;
+    }
+    CURRENT_FILTERING_BY_FLAIR = flair_name
+    ClientRequestViewFlairs()
+}
 
 function ActivateFlair(event_info){
     clicked_flair = $("#" + event_info.currentTarget.id)
@@ -390,6 +441,11 @@ $(document).ready(function(){
 	// $('.flair-options').toggle();
 	// });
 
+    $('#question').click(function(){SetActiveFilterByFlair("Question")});
+    $('#discussion').click(function(){SetActiveFilterByFlair("Discussion")});
+    $('#feedback').click(function(){SetActiveFilterByFlair("Feedback")});
+
+
     
 
     socket.on('ACK_VOTE_CHANGE', function(data){ClientAcknowledgeVoteChange(data);});
@@ -398,6 +454,7 @@ $(document).ready(function(){
     socket.on('ACK_JOIN', function(data){ClientAcknowledgeJoin(data)});
     socket.on('ACK_LEAVE', ClientAcknowledgeLeave);
     socket.on('ACK_MESSAGE_CACHE_UPDATE', function(data){ClientAcknowledgeMessageHistoryCache(data);});
+    socket.on('ACK_VIEW_FLAIRS', function(data){ClientAcknowledgeViewFlairs(data);});
 
 
     
