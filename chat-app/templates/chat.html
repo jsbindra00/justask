@@ -21,7 +21,20 @@
 <!-- <link rel="stylesheet" href="./static/css/canvas.css"> -->
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.2.0/fabric.all.min.js"></script>
+<link rel="stylesheet" href="../static/css/sketchpad.css">
 
+<script src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous">
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/521/fabric.min.js"
+integrity="sha512-nPzvcIhv7AtvjpNcnbr86eT6zGtiudLiLyVssCWLmvQHgR95VvkLX8mMpqNKWs1TG3Hnf+tvHpnGmpPS3yJIgw=="
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.2.0/fabric.all.min.js">
+</script>
 
 
 {% endblock %}
@@ -36,27 +49,27 @@ Chat
 <div id="media-wrapper">
 
     <div id="chat-wrapper">
-        
+
         <div id="sorting">
-        <div id="sort-wrapper">
-            <div class="sortbuttons" id="sort-chat">sort by <i class="fa-solid fa-sort"></i>
+            <div id="sort-wrapper">
+                <div class="sortbuttons" id="sort-chat">sort by <i class="fa-solid fa-sort"></i>
+                </div>
+                <div class="sorters">
+                    <a id="most-popular">Most Popular</a>
+                    <a id="least-popular">Least Popular</a>
+                    <a id="newest">Newest</a>
+                    <a id="oldest">Oldest</a>
+                </div>
             </div>
-            <div class="sorters">
-                <a id="most-popular">Most Popular</a>
-                <a id="least-popular">Least Popular</a>
-                <a id="newest">Newest</a>
-                <a id="oldest">Oldest</a>
+            <div id="filter-wrapper">
+                <div class="sortbuttons" id="filter-chat">filter by <i class="fa-solid fa-filter"></i>
+                </div>
+                <div class="filters">
+                    <a id="question">Question</a>
+                    <a id="discussion">Discussion</a>
+                    <a id="feedback">Feedback</a>
+                </div>
             </div>
-        </div>
-        <div id="filter-wrapper">
-            <div class="sortbuttons" id="filter-chat">filter by <i class="fa-solid fa-filter"></i>
-            </div>
-            <div class="filters">
-                <a id="question">Question</a>
-                <a id="discussion">Discussion</a>
-                <a id="feedback">Feedback</a>
-            </div>
-        </div>
         </div>
 
         <div id="messages">
@@ -65,22 +78,22 @@ Chat
         <div id="text-area-wrapper">
             <ul id="flair-options">
                 <li class="flair-option-wrapper" id="question-flair">
-                    <a class="flair-option" >Question</a>
+                    <a class="flair-option">Question</a>
                 </li>
                 <li class="flair-option-wrapper" id="discussion-flair">
-                    <a class="flair-option" >Discussion</a>
+                    <a class="flair-option">Discussion</a>
                 </li>
                 <li class="flair-option-wrapper" id="feedback-flair">
-                    <a class="flair-option" >Feedback</a>
+                    <a class="flair-option">Feedback</a>
                 </li>
             </ul>
- 
+
             <textarea class="text-widget" id="chatbar" placeholder="Type a new message"> </textarea>
             <div id="widgets-wrapper" class="text-widget">
                 <div id="widgets">
                     <a><i class="fa-solid fa-paperclip fa-lg"></i></a>
                     <a><i class="fa-solid fa-paintbrush fa-lg"></i></a>
-                    <a class="flair"><i class="fa-solid fa-tags fa-lg"></i></a>                   
+                    <a class="flair"><i class="fa-solid fa-tags fa-lg"></i></a>
                 </div>
 
                 <div id="commenting-status">...replying to post</div>
@@ -95,29 +108,75 @@ Chat
 
         </div>
     </div>
+    <div id="canvas-wrapper-main">
+
+        <div id="canvas-master-wrapper">
+
+
+            <div id="canvas-wrapper">
+
+                <canvas style="border: 2px solid rgb(129,96,217); " height="485" width="632" id="c"></canvas>
+                <div id="brush-palette">
+
+                    <ul id="brushes">
+                        <li class="brush">
+                            <i class="fa-solid fa-arrow-pointer fa-lg" id="Pointer"></i>
+                        </li>
+                        <li class="brush">
+                            <i class="fa-solid fa-paintbrush fa-lg" id="Pencil"></i>
+                        </li>
+                        <li class="brush">
+                            <i class="fa-solid fa-circle fa-lg" id="Circle"></i>
+                        </li>
+                        <li class="brush">
+                            <i class="fa-solid fa-spray-can fa-lg" id="Spray"></i>
+                        </li>
+                        <li class="brush not-fabric">
+                            <i class="fa-solid fa-eraser fa-lg not-fabric" id="Eraser"></i>
+                        </li>
+    
+                        <li class="brush-manipulator">
+                            <input class="not-fabric" type="color" value="#005E7A" id="drawing-color">
+                        </li>
+                        <li id="brush-size-wrapper">
+                            <input id="brush-size-slider" type="range" min="0" max="100" step="5">
+                        </li>
+                        <script>
+    
+                        </script>
+    
+                    </ul>
+                </div>
+            </div>
+
+         
+            <script src="../static/canvas.js"></script>
+
+        </div>
+    </div>
 
     <div id="session-overview-master-wrapper">
 
         <div id="session-overview-wrapper">
-            
-                <div id="session-ID-wrapper">
-                    <strong>
-                        <p id="session-id">Session ID: {{ room }}</p>
-                    </strong>
-                </div>
 
-                <div id="session-clients-wrapper">
-                    <div id="session-clients-title-wrapper">
-                        <h3>Listeners Online</h3>
-                    </div>
-                    <div id="session-clients">
-                    </div>
-                </div>
+            <div id="session-ID-wrapper">
+                <strong>
+                    <p id="session-id">Session ID: {{ room }}</p>
+                </strong>
+            </div>
 
-                <div id="leave-session-wrapper">
-                    <a id="leave-session" href="/leave_session">Leave Session</a>
+            <div id="session-clients-wrapper">
+                <div id="session-clients-title-wrapper">
+                    <h3>Listeners Online</h3>
+                </div>
+                <div id="session-clients">
                 </div>
             </div>
+
+            <div id="leave-session-wrapper">
+                <a id="leave-session" href="/leave_session">Leave Session</a>
+            </div>
+        </div>
 
 
 
