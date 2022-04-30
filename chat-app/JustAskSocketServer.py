@@ -56,9 +56,8 @@ class JustAskSocketServer:
         socketio.emit('ACK_SEND_POLL', data)
     
     def REQUEST_MESSAGE_CACHE_UPDATE(self, data):
-        message_history = {PacketAttributes.MESSAGE_HISTORY.name : [message.MessageToJSON() for message in MessageModel.query.filter_by(**{PacketAttributes.from_session_id.name:data[PacketAttributes.from_session_id.name]}).all()]}
-        socketio.emit("ACK_MESSAGE_CACHE_UPDATE", message_history)
-        # convert messages to JSON.
+        data[PacketAttributes.MESSAGE_HISTORY.name] = [message.MessageToJSON() for message in MessageModel.query.filter_by(**{PacketAttributes.from_session_id.name:data[PacketAttributes.from_session_id.name]}).all()]
+        socketio.emit("ACK_MESSAGE_CACHE_UPDATE", data)
 
     def REQUEST_SEND_MESSAGE(self,data):
         data["username"] = self.isAnonymous()
