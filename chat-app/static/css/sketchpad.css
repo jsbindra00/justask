@@ -30,17 +30,21 @@
 }
 
 #brush-palette{
-
-    padding-top:20px;
-    padding-bottom:20px;
-    position:absolute;
+    width: 70px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    position: absolute;
     z-index: 100;
-    right:0;
-    background: rgb(255, 255, 255);
+    right: 0;
+    background: rgb(255, 255, 255, 0.9);
     transform: translate(-50%,-50%);
-    top:50%;
-    border-radius: 10px;
-    /* offset-x | offset-y | blur-radius | spread-radius | color */
-    box-shadow: -2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-
+    top: 50%;
+    border-radius: 8px;
+    box-shadow: 1px 2px 2px 1px rgb(0 0 0 / 20%);
 }
+
+
+#brush-size-slider{
+    transform: rotate(-90deg);
+    height: 110px;
+  }
